@@ -1,0 +1,268 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+  <Operation Class="PatchOperationSequence">
+    <operations>
+      <!-- <li Class="PatchOperationAttributeSet">
+				<xpath>/Defs/ThingDef[@Name="BaseBullet"]/projectile</xpath>
+				<attribute>Class</attribute>
+				<value>CombatExtended.ProjectilePropertiesWithEffectsCE</value>
+			</li>
+			<li Class="PatchOperationAttributeSet">
+				<xpath>/Defs/ThingDef[@Name="BaseFragment"]/projectile</xpath>
+				<attribute>Class</attribute>
+				<value>CombatExtended.ProjectilePropertiesWithEffectsCE</value>
+			</li>
+			<li Class="PatchOperationAttributeSet">
+				<xpath>/Defs/ThingDef[@Name="Base12GaugeBullet"]/projectile</xpath>
+				<attribute>Class</attribute>
+				<value>CombatExtended.ProjectilePropertiesWithEffectsCE</value>
+			</li> -->
+      <li Class="PatchOperationAttributeSet">
+        <xpath>/Defs/ThingDef[contains(@Name,"Base") and contains(@Name,"Bullet")]/projectile[@Class="CombatExtended.ProjectilePropertiesCE"]</xpath>
+        <attribute>Class</attribute>
+        <value>CombatExtended.ProjectilePropertiesWithEffectsCE</value>
+      </li>
+      <!-- <li Class="PatchOperationAttributeSet">
+				<xpath>/Defs/ThingDef[contains(defName, "Bullet_")]/projectile[@Class="CombatExtended.ProjectilePropertiesCE"]</xpath>
+				<attribute>Class</attribute>
+				<value>CombatExtended.ProjectilePropertiesWithEffectsCE</value>
+			</li> -->
+      <li Class="PatchOperationAttributeSet">
+        <xpath>/Defs/ThingDef[contains(defName, "Bullet_") or (contains(defName, "Projectile_") and contains(defName,"Arrow")) or contains(defName,"Fragment_")]/projectile[@Class="CombatExtended.ProjectilePropertiesCE"]</xpath>
+        <attribute>Class</attribute>
+        <value>CombatExtended.ProjectilePropertiesWithEffectsCE</value>
+      </li>
+      <!-- <li Class="PatchOperationAdd">
+				<xpath>/Defs/ThingDef[contains(@Name,"Base") and contains(@Name,"Bullet")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+				<value>
+					<effectWallHit>BulletRicochetA</effectWallHit>
+				</value>
+			</li>			 -->
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[contains(defName, "Bullet_") or (contains(defName, "Projectile_") and contains(defName,"Arrow")) or contains(defName,"Fragment_")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <effectStoneWallHit>BulletRicochetStoneWall</effectStoneWallHit>
+        </value>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[contains(defName, "Bullet_") or (contains(defName, "Projectile_") and contains(defName,"Arrow")) or contains(defName,"Fragment_")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <effectWoodWallHit>BulletRicochetWoodWall</effectWoodWallHit>
+        </value>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[contains(defName, "Bullet_") or (contains(defName, "Projectile_") and contains(defName,"Arrow")) or contains(defName,"Fragment_")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <effectGroundHit>BulletRicochetGround</effectGroundHit>
+        </value>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[contains(defName, "Bullet_") or (contains(defName, "Projectile_") and contains(defName,"Arrow")) or contains(defName,"Fragment_")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <effectBuildingBits>BulletHitWallBuildingBits</effectBuildingBits>
+        </value>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[contains(defName, "Bullet_") or (contains(defName, "Projectile_") and contains(defName,"Arrow")) or contains(defName,"Fragment_")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <effectPuff>BulletRicochetPuff</effectPuff>
+        </value>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[contains(defName, "Bullet_") or (contains(defName, "Projectile_") and contains(defName,"Arrow")) or contains(defName,"Fragment_")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <effectBloodHit>BulletHitBloodA</effectBloodHit>
+        </value>
+      </li>
+      <!-- UPDATE AMMO DATA WITH SOME NEW ATTRIBUTES -->
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[contains(label,"(FMJ)")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <ammoType>FMJ</ammoType>
+        </value>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[contains(label,"(AP)")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <ammoType>AP</ammoType>
+        </value>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[contains(label,"(HP)")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <ammoType>HP</ammoType>
+        </value>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[contains(label,"(HE)")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <ammoType>HE</ammoType>
+        </value>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[contains(label,"(Sabot)")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <ammoType>SABOT</ammoType>
+        </value>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[contains(label,"(Conc.)")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <ammoType>CONC</ammoType>
+        </value>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[contains(label,"(Ion)")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <ammoType>ION</ammoType>
+        </value>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[contains(label,"(AP-I)")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <ammoType>API</ammoType>
+        </value>
+      </li>
+      <!-- SHOTGUN PELLETS NEED SPECIAL TREATMENT -->
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[label="beanbag"]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <ammoType>BEAN</ammoType>
+        </value>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[label="charge shot (Slug)" or contains(label,"(Slug)")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <ammoType>SLUG</ammoType>
+        </value>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[contains(label,"pellet")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <ammoType>BUCK</ammoType>
+        </value>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[contains(label,"(EMP)") or contains(label,"(Ion slug)")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <ammoType>EMP</ammoType>
+        </value>
+      </li>
+      <!-- ADDING CALIBERS -->
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[contains(defName,"Bullet_12x64mm")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <caliber>CAL_12x64CH</caliber>
+        </value>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[contains(defName,"Bullet_5x35mm")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <caliber>CAL_5x35CH</caliber>
+        </value>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[contains(defName,"Bullet_6x24mm")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <caliber>CAL_6x24CH</caliber>
+        </value>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[contains(defName,"Bullet_8x35mm")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <caliber>CAL_8x35CH</caliber>
+        </value>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[contains(defName,"Bullet_30x29mm")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <caliber>CAL_30x29</caliber>
+        </value>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[contains(defName,"Bullet_40x46mm")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <caliber>CAL_40x46</caliber>
+        </value>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[contains(defName,"Bullet_145x114mm")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <caliber>CAL_145x114</caliber>
+        </value>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[contains(defName,"Bullet_50BMG")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <caliber>CAL_50</caliber>
+        </value>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[contains(defName,"Bullet_44Magnum")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <caliber>CAL_44M</caliber>
+        </value>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[contains(defName,"Bullet_45ACP")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <caliber>CAL_45ACP</caliber>
+        </value>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[contains(defName,"Bullet_9x19mm")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <caliber>CAL_9x19</caliber>
+        </value>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[contains(defName,"Bullet_303")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <caliber>CAL_303</caliber>
+        </value>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[contains(defName,"Bullet_545x39mm")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <caliber>CAL_545x39</caliber>
+        </value>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[contains(defName,"Bullet_556x45mm")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <caliber>CAL_556x45</caliber>
+        </value>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[contains(defName,"Bullet_762x39mm")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <caliber>CAL_762x39</caliber>
+        </value>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[contains(defName,"Bullet_762x51mm")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <caliber>CAL_762x51</caliber>
+        </value>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[contains(defName,"Bullet_762x54mm")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <caliber>CAL_762x54</caliber>
+        </value>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[contains(defName,"Bullet_12Gauge")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <caliber>CAL_12G</caliber>
+        </value>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[contains(defName,"Bullet_410")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <caliber>CAL_410B</caliber>
+        </value>
+      </li>
+    </operations>
+  </Operation>
+</Patch>

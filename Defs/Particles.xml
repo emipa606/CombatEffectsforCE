@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <ThingDef ParentName="MoteBase">
+    <defName>Mote_BloodSplash</defName>
+    <graphicData>
+      <texPath>Things/Pawn/Wounds/WoundFleshA</texPath>
+      <color>(131, 34, 34, 180)</color>
+    </graphicData>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <mote>
+      <fadeInTime>0.04</fadeInTime>
+      <solidTime>5.6</solidTime>
+      <fadeOutTime>3.4</fadeOutTime>
+      <growthRate>0.0</growthRate>
+      <collide>true</collide>
+      <speedPerTime>-22</speedPerTime>
+      <rotateTowardsMoveDirection>true</rotateTowardsMoveDirection>
+    </mote>
+  </ThingDef>
+  <ThingDef ParentName="MoteBase">
+    <defName>Mote_BulletPuff</defName>
+    <graphicData>
+      <texPath>Things/Filth/Ash/AshA</texPath>
+      <color>(131, 130, 130, 60)</color>
+    </graphicData>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <mote>
+      <fadeInTime>0.04</fadeInTime>
+      <solidTime>0.72</solidTime>
+      <fadeOutTime>1.0</fadeOutTime>
+      <growthRate>-0.7</growthRate>
+      <collide>true</collide>
+      <speedPerTime>0</speedPerTime>
+      <rotateTowardsMoveDirection>true</rotateTowardsMoveDirection>
+    </mote>
+  </ThingDef>
+  <ThingDef ParentName="MoteBase">
+    <defName>Mote_BuildingBits</defName>
+    <graphicData>
+      <texPath>Things/Mote/StoneBit</texPath>
+      <color>(131, 130, 130, 60)</color>
+    </graphicData>
+    <altitudeLayer>MoteLow</altitudeLayer>
+    <mote>
+      <fadeInTime>0.04</fadeInTime>
+      <solidTime>0.72</solidTime>
+      <fadeOutTime>1.0</fadeOutTime>
+      <growthRate>-0.7</growthRate>
+      <collide>true</collide>
+      <speedPerTime>-22</speedPerTime>
+      <rotateTowardsMoveDirection>true</rotateTowardsMoveDirection>
+    </mote>
+  </ThingDef>
+</Defs>
