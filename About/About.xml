@@ -7,6 +7,7 @@
   <supportedVersions>
     <li>1.0</li>
     <li>1.1</li>
+    <li>1.2</li>
   </supportedVersions>
   <modDependencies>
     <li>
@@ -19,7 +20,7 @@
   <loadAfter>
     <li>CETeam.CombatExtended</li>
   </loadAfter>
-  <description>Update of CalaveraLocas mod for RimWorld 1.1
+  <description>Update of CalaveraLocas mod
 https://steamcommunity.com/sharedfiles/filedetails/?id=1756442393
 
 [img]https://i.imgur.com/GYswkZ7.png[/img]
