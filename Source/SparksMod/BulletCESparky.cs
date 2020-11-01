@@ -21,8 +21,7 @@ namespace CombatExtended
                 List<Apparel> wornApparel = pawn.apparel.WornApparel;
                 for (int i = 0; i < wornApparel.Count; i++)
                 {
-                    ShieldBelt shieldBelt2 = wornApparel[i] as ShieldBelt;
-                    if (shieldBelt2 != null)
+                    if (wornApparel[i] is ShieldBelt shieldBelt2)
                     {
                         shieldBelt = shieldBelt2;
                         break;
@@ -33,14 +32,13 @@ namespace CombatExtended
             if (compSuppressable != null)
             {
                 Faction faction = pawn.Faction;
-                Thing thing = this.launcher;
-                if (faction != ((thing != null) ? thing.Faction : null) && (shieldBelt == null || (shieldBelt != null && shieldBelt.ShieldState == ShieldState.Resetting)))
+                Thing thing = launcher;
+                if (faction != (thing?.Faction) && (shieldBelt == null || (shieldBelt != null && shieldBelt.ShieldState == ShieldState.Resetting)))
                 {
-                    this.suppressionAmount = (float)this.def.projectile.GetDamageAmount(1f, null);
-                    ProjectilePropertiesCE projectilePropertiesCE = this.def.projectile as ProjectilePropertiesCE;
-                    float num = (projectilePropertiesCE == null) ? 0f : projectilePropertiesCE.GetArmorPenetration(1f, null);
-                    this.suppressionAmount *= 1f - Mathf.Clamp(pawn.GetStatValue(CE_StatDefOf.AverageSharpArmor, true) * 0.5f / num, 0f, 1f);
-                    compSuppressable.AddSuppression(this.suppressionAmount, this.OriginIV3);
+                    suppressionAmount = def.projectile.GetDamageAmount(1f, null);
+                    float num = (!(def.projectile is ProjectilePropertiesCE projectilePropertiesCE)) ? 0f : projectilePropertiesCE.GetArmorPenetration(1f, null);
+                    suppressionAmount *= 1f - Mathf.Clamp(pawn.GetStatValue(CE_StatDefOf.AverageSharpArmor, true) * 0.5f / num, 0f, 1f);
+                    compSuppressable.AddSuppression(suppressionAmount, OriginIV3);
                 }
             }
         }
@@ -48,8 +46,8 @@ namespace CombatExtended
         // Token: 0x06000259 RID: 601 RVA: 0x00014A1B File Offset: 0x00012C1B
         private void LogImpact(Thing hitThing, out LogEntry_DamageResult logEntry)
         {
-            logEntry = new BattleLogEntry_RangedImpact(this.launcher, hitThing, this.intendedTarget, this.equipmentDef, this.def, null);
-            if (!(this.launcher is AmmoThing))
+            logEntry = new BattleLogEntry_RangedImpact(launcher, hitThing, intendedTarget, equipmentDef, def, null);
+            if (!(launcher is AmmoThing))
             {
                 Find.BattleLog.Add(logEntry);
             }
@@ -72,19 +70,19 @@ namespace CombatExtended
             }
 
 
-            bool flag = this.launcher is AmmoThing;
-            Map map = base.Map;
+            bool flag = launcher is AmmoThing;
+            Map map = Map;
             LogEntry_DamageResult logEntry_DamageResult = null;
             
             bool isDeflectedByPawn = false;
 
-            if ((this.logMisses || (!this.logMisses && hitThing != null && (hitThing is Pawn || hitThing is Building_Turret))) && !flag)
+            if ((logMisses || (!logMisses && hitThing != null && (hitThing is Pawn || hitThing is Building_Turret))) && !flag)
             {
-                this.LogImpact(hitThing, out logEntry_DamageResult);
+                LogImpact(hitThing, out logEntry_DamageResult);
             }
             if (hitThing != null)
             {
-                float angleY = this.ExactRotation.eulerAngles.y; // This is the bullet heading angle in respect to the north vector around the up vector
+                float angleY = ExactRotation.eulerAngles.y; // This is the bullet heading angle in respect to the north vector around the up vector
 
                 if (hitThing is Building)
                 {                 
@@ -92,23 +90,23 @@ namespace CombatExtended
 
                     if (hitThing.def.MadeFromStuff == true)
                     {
-                        if (hitThing.Stuff.label == "wood" && this.projectileProperties.effectWoodWallHit != null) // Wooden wall
+                        if (hitThing.Stuff.label == "wood" && projectileProperties.effectWoodWallHit != null) // Wooden wall
                         {
-                            this.projectileProperties.effectWoodWallHit.children[0].angle = new FloatRange(shotAngle - 90f, shotAngle + 90f);
-                            Effecter eff = this.projectileProperties.effectWoodWallHit.Spawn();
+                            projectileProperties.effectWoodWallHit.children[0].angle = new FloatRange(shotAngle - 90f, shotAngle + 90f);
+                            Effecter eff = projectileProperties.effectWoodWallHit.Spawn();
                             eff.Trigger(hitThing, hitThing);
                         }
-                        else if (this.projectileProperties.effectWoodWallHit != null) // Non-Wood Wall
+                        else if (projectileProperties.effectWoodWallHit != null) // Non-Wood Wall
                         {
-                            this.projectileProperties.effectStoneWallHit.children[1].angle = new FloatRange(shotAngle - 90f, shotAngle + 90f);
-                            Effecter eff = this.projectileProperties.effectStoneWallHit.Spawn();
+                            projectileProperties.effectStoneWallHit.children[1].angle = new FloatRange(shotAngle - 90f, shotAngle + 90f);
+                            Effecter eff = projectileProperties.effectStoneWallHit.Spawn();
                             eff.Trigger(hitThing, hitThing);
                         }
                     }
-                    else if (this.projectileProperties.effectStoneWallHit != null) //Natural Stone
+                    else if (projectileProperties.effectStoneWallHit != null) //Natural Stone
                     {
-                        this.projectileProperties.effectStoneWallHit.children[1].angle = new FloatRange(shotAngle - 90f, shotAngle + 90f);
-                        Effecter eff = this.projectileProperties.effectStoneWallHit.Spawn();
+                        projectileProperties.effectStoneWallHit.children[1].angle = new FloatRange(shotAngle - 90f, shotAngle + 90f);
+                        Effecter eff = projectileProperties.effectStoneWallHit.Spawn();
                         eff.Trigger(hitThing, hitThing);
                     }
 
@@ -117,30 +115,32 @@ namespace CombatExtended
                     {
                         Color hitThingColor = hitThing.Stuff.graphic.color;
                         hitThingColor.a = 0.6f;
-                        this.projectileProperties.effectBuildingBits.children[0].moteDef.graphicData.color = hitThingColor;
+                        projectileProperties.effectBuildingBits.children[0].moteDef.graphicData.color = hitThingColor;
                     }                    
-                    this.projectileProperties.effectBuildingBits.children[0].angle = new FloatRange(shotAngle - 45f, shotAngle + 45f);
-                    Effecter effecter = this.projectileProperties.effectBuildingBits.Spawn();
+                    projectileProperties.effectBuildingBits.children[0].angle = new FloatRange(shotAngle - 45f, shotAngle + 45f);
+                    Effecter effecter = projectileProperties.effectBuildingBits.Spawn();
                     effecter.Trigger(hitThing, hitThing);
 
-                    effecter = this.projectileProperties.effectPuff.Spawn();
+                    effecter = projectileProperties.effectPuff.Spawn();
                     effecter.Trigger(this, hitThing);
 
                 }
-                int damageAmount = this.def.projectile.GetDamageAmount(1f, null);
-                DamageDefExtensionCE damageDefExtensionCE = this.def.projectile.damageDef.GetModExtension<DamageDefExtensionCE>() ?? new DamageDefExtensionCE();
-                ProjectilePropertiesCE projectilePropertiesCE = (ProjectilePropertiesCE)this.def.projectile;
-                DamageInfo dinfo = new DamageInfo(this.def.projectile.damageDef, (float)damageAmount, projectilePropertiesCE.GetArmorPenetration(1f, null), this.ExactRotation.eulerAngles.y, this.launcher, null, this.def, DamageInfo.SourceCategory.ThingOrUnknown, null);
+                int damageAmount = def.projectile.GetDamageAmount(1f, null);
+                DamageDefExtensionCE damageDefExtensionCE = def.projectile.damageDef.GetModExtension<DamageDefExtensionCE>() ?? new DamageDefExtensionCE();
+                ProjectilePropertiesCE projectilePropertiesCE = (ProjectilePropertiesCE)def.projectile;
+                bool flag2 = this.def.projectile.damageDef.armorCategory == DamageArmorCategoryDefOf.Sharp;
+                float armorPenetration = (!flag2) ? projectilePropertiesCE.armorPenetrationBlunt : projectilePropertiesCE.armorPenetrationSharp;
+                DamageInfo dinfo = new DamageInfo(def.projectile.damageDef, damageAmount, armorPenetration, ExactRotation.eulerAngles.y, launcher, null, def, DamageInfo.SourceCategory.ThingOrUnknown, null);
                 BodyPartDepth depth = (damageDefExtensionCE != null && damageDefExtensionCE.harmOnlyOutsideLayers) ? BodyPartDepth.Outside : BodyPartDepth.Undefined;
-                BodyPartHeight collisionBodyHeight = new CollisionVertical(hitThing).GetCollisionBodyHeight(this.ExactPosition.y);
+                BodyPartHeight collisionBodyHeight = new CollisionVertical(hitThing).GetCollisionBodyHeight(ExactPosition.y);
                 dinfo.SetBodyRegion(collisionBodyHeight, depth);
                 if (damageDefExtensionCE != null && damageDefExtensionCE.harmOnlyOutsideLayers)
                 {
                     dinfo.SetBodyRegion(BodyPartHeight.Undefined, BodyPartDepth.Outside);
                 }
-                if (flag && hitThing is Pawn)
+                if (flag && hitThing is Pawn pawn)
                 {
-                    logEntry_DamageResult = new BattleLogEntry_DamageTaken((Pawn)hitThing, DefDatabase<RulePackDef>.GetNamed("DamageEvent_CookOff", true), null);
+                    logEntry_DamageResult = new BattleLogEntry_DamageTaken(pawn, DefDatabase<RulePackDef>.GetNamed("DamageEvent_CookOff", true), null);
                     Find.BattleLog.Add(logEntry_DamageResult);
                 }
 
@@ -148,7 +148,7 @@ namespace CombatExtended
                 //Log.Message($"is it deflected? : {dmgRes.deflected}");
                 if (!dmgRes.deflected)
                 {
-                    if (hitThing is Pawn && this.projectileProperties.effectBloodHit != null)
+                    if (hitThing is Pawn && projectileProperties.effectBloodHit != null)
                     {
                         //Log.Message("Hit someone!");
                         //string m = $"It's meat color : {hitThing.def.race.meatColor.ToString()}";
@@ -156,8 +156,8 @@ namespace CombatExtended
                         if (hitThing.def.race.IsMechanoid)
                         {
                             Color bloodColor = new Color(0.04f, 0.04f, 0.04f, 0.7f);
-                            this.projectileProperties.effectBloodHit.children[0].moteDef.graphicData.color = bloodColor;
-                            ((CombatEffectsCE.MyGraphicData)((CombatEffectsCE.MotePropertiesFilthy)this.projectileProperties.effectBloodHit.children[0].moteDef.mote).filthTrace.graphicData).changeGraphicColor(bloodColor);
+                            projectileProperties.effectBloodHit.children[0].moteDef.graphicData.color = bloodColor;
+                            ((CombatEffectsCE.MyGraphicData)((CombatEffectsCE.MotePropertiesFilthy)projectileProperties.effectBloodHit.children[0].moteDef.mote).filthTrace.graphicData).ChangeGraphicColor(bloodColor);
                         }
                         else
                         {
@@ -173,10 +173,10 @@ namespace CombatExtended
                             //((SparksMod.MyGraphicData)this.projectileProperties.effectBloodHit.children[0].moteDef.graphicData).changeGraphicColor(bloodColor);
                             //((SparksMod.MyGraphicData)((SparksMod.MotePropertiesFilthy)this.projectileProperties.effectBloodHit.children[0].moteDef.mote).filthTrace.graphicData).changeGraphicColor(bloodColor);
 
-                            this.projectileProperties.effectBloodHit.children[0].moteDef.graphicData.color = bloodColor;
-                            ((CombatEffectsCE.MyGraphicData)((CombatEffectsCE.MotePropertiesFilthy)this.projectileProperties.effectBloodHit.children[0].moteDef.mote).filthTrace.graphicData).changeGraphicColor(bloodColor);
+                            projectileProperties.effectBloodHit.children[0].moteDef.graphicData.color = bloodColor;
+                            ((CombatEffectsCE.MyGraphicData)((CombatEffectsCE.MotePropertiesFilthy)projectileProperties.effectBloodHit.children[0].moteDef.mote).filthTrace.graphicData).ChangeGraphicColor(bloodColor);
                         }
-                        Effecter bloodEffect = ((ProjectilePropertiesWithEffectsCE)this.def.projectile).effectBloodHit.Spawn();
+                        Effecter bloodEffect = ((ProjectilePropertiesWithEffectsCE)def.projectile).effectBloodHit.Spawn();
                         bloodEffect.Trigger(hitThing, hitThing);
                     }
                 }
@@ -197,27 +197,27 @@ namespace CombatExtended
                         {
                             break;
                         }
-                        DamageInfo dinfo2 = new DamageInfo(secondaryDamage.def, (float)secondaryDamage.amount, projectilePropertiesCE.GetArmorPenetration(1f, null), this.ExactRotation.eulerAngles.y, this.launcher, null, this.def, DamageInfo.SourceCategory.ThingOrUnknown, null);
+                        DamageInfo dinfo2 = new DamageInfo(secondaryDamage.def, secondaryDamage.amount, projectilePropertiesCE.GetArmorPenetration(1f, null), ExactRotation.eulerAngles.y, launcher, null, def, DamageInfo.SourceCategory.ThingOrUnknown, null);
                         hitThing.TakeDamage(dinfo2).AssociateWithLog(logEntry_DamageResult);
                     }
                     goto IL_2A6;
                 }
             }
             
-            SoundDefOf.BulletImpact_Ground.PlayOneShot(new TargetInfo(base.Position, map, false));
-            if (this.castShadow)
+            SoundDefOf.BulletImpact_Ground.PlayOneShot(new TargetInfo(Position, map, false));
+            if (castShadow)
             {
-                MoteMaker.MakeStaticMote(this.ExactPosition, map, ThingDefOf.Mote_ShotHit_Dirt, 1f);
-                Effecter effect = this.projectileProperties.effectGroundHit.Spawn();
+                MoteMaker.MakeStaticMote(ExactPosition, map, ThingDefOf.Mote_ShotHit_Dirt, 1f);
+                Effecter effect = projectileProperties.effectGroundHit.Spawn();
                 effect.Trigger(this,this);
-                if (base.Position.GetTerrain(map).takeSplashes)
+                if (Position.GetTerrain(map).takeSplashes)
                 {
-                    MoteMaker.MakeWaterSplash(this.ExactPosition, map, Mathf.Sqrt((float)this.def.projectile.GetDamageAmount(this.launcher, null)) * 1f, 4f);
+                    MoteMaker.MakeWaterSplash(ExactPosition, map, Mathf.Sqrt(def.projectile.GetDamageAmount(launcher, null)) * 1f, 4f);
                 }
             }
             IL_2A6:
             // Either PENETRATION or RICOCHET or STOP can happen.
-            CombatEffectsCE.ImpactType impactType = CombatEffectsCE.ImpactHelper.determineImpactType(this, hitThing, ref energyRemaining, isDeflectedByPawn);
+            CombatEffectsCE.ImpactType impactType = CombatEffectsCE.ImpactHelper.DetermineImpactType(this, hitThing, ref energyRemaining, isDeflectedByPawn);
 
             // DECREASE ENERGY
             if (impactType == CombatEffectsCE.ImpactType.PEN && energyRemaining > 0f)
@@ -227,60 +227,59 @@ namespace CombatExtended
                     || projectileProperties.ammoType == CombatEffectsCE.AmmoType.SABOT)
                 {
                     shotSpeed *= 0.9f;
-                    impactSpeedChanged();
+                    ImpactSpeedChanged();
                     
                 }
                 else
                 {
                     shotSpeed *= 0.8f;
-                    impactSpeedChanged();
+                    ImpactSpeedChanged();
                 }
             }
 
             // EITHER STOP or GROUND HIT
-            this.landed = (impactType == CombatEffectsCE.ImpactType.STOP || (this.ticksToImpact <= 0) || energyRemaining <= 0f);
+            landed = (impactType == CombatEffectsCE.ImpactType.STOP || (ticksToImpact <= 0) || energyRemaining <= 0f);
 
-            this.ImpactBase(hitThing, this.landed);
+            ImpactBase(hitThing, landed);
         }
         
         private void ImpactBase(Thing hitThing, bool destroyBullet = true)
         {
             CompExplosiveCE compExplosiveCE = this.TryGetComp<CompExplosiveCE>();
-            if (compExplosiveCE != null && this.ExactPosition.ToIntVec3().IsValid)
+            if (compExplosiveCE != null && ExactPosition.ToIntVec3().IsValid)
             {
-                compExplosiveCE.Explode(this.launcher, this.ExactPosition, base.Map, 1f);
+                compExplosiveCE.Explode(launcher, ExactPosition, Map, 1f);
             }
-            if (Controller.settings.EnableAmmoSystem && compExplosiveCE == null && base.Position.IsValid && this.def.projectile.preExplosionSpawnChance > 0f && this.def.projectile.preExplosionSpawnThingDef != null && Rand.Value < this.def.projectile.preExplosionSpawnChance)
+            if (Controller.settings.EnableAmmoSystem && compExplosiveCE == null && Position.IsValid && def.projectile.preExplosionSpawnChance > 0f && def.projectile.preExplosionSpawnThingDef != null && Rand.Value < def.projectile.preExplosionSpawnChance)
             {
-                ThingDef preExplosionSpawnThingDef = this.def.projectile.preExplosionSpawnThingDef;
-                if (preExplosionSpawnThingDef.IsFilth && base.Position.Walkable(base.Map))
+                ThingDef preExplosionSpawnThingDef = def.projectile.preExplosionSpawnThingDef;
+                if (preExplosionSpawnThingDef.IsFilth && Position.Walkable(Map))
                 {
-                    FilthMaker.TryMakeFilth(base.Position, base.Map, preExplosionSpawnThingDef, 1);
+                    FilthMaker.TryMakeFilth(Position, Map, preExplosionSpawnThingDef, 1);
                 }
                 else if (Controller.settings.ReuseNeolithicProjectiles)
                 {
                     Thing thing = ThingMaker.MakeThing(preExplosionSpawnThingDef, null);                    
                     thing.stackCount = 1;
                     thing.SetForbidden(true, false);
-                    GenPlace.TryPlaceThing(thing, base.Position, base.Map, ThingPlaceMode.Near, null, null);
+                    GenPlace.TryPlaceThing(thing, Position, Map, ThingPlaceMode.Near, null, null);
                     LessonAutoActivator.TeachOpportunity(CE_ConceptDefOf.CE_ReusableNeolithicProjectiles, thing, OpportunityType.GoodToKnow);
                 }
             }
-            if (this.def.projectile.explosionRadius > 0f && this.ExactPosition.y < 3f)
+            if (def.projectile.explosionRadius > 0f && ExactPosition.y < 3f)
             {
-                foreach (Thing thing2 in GenRadial.RadialDistinctThingsAround(this.ExactPosition.ToIntVec3(), base.Map, 3f + this.def.projectile.explosionRadius, true))
+                foreach (Thing thing2 in GenRadial.RadialDistinctThingsAround(ExactPosition.ToIntVec3(), Map, 3f + def.projectile.explosionRadius, true))
                 {
-                    Pawn pawn = thing2 as Pawn;
-                    if (pawn != null)
+                    if (thing2 is Pawn pawn)
                     {
-                        this.ApplySuppression(pawn);
+                        ApplySuppression(pawn);
                     }
                 }
             }
 
             if (destroyBullet && !Destroyed)
             {
-                this.Destroy(DestroyMode.Vanish);
+                Destroy(DestroyMode.Vanish);
             }
         }
 
@@ -288,12 +287,12 @@ namespace CombatExtended
         {
             bool flag = false;
             bool justWallsRoofs = false;
-            float num = (float)(cell - this.OriginIV3).LengthHorizontalSquared;
-            if ((!this.def.projectile.alwaysFreeIntercept && this.minCollisionSqr <= 1f) ? (num < 1f) : (num < Mathf.Min(144f, this.minCollisionSqr / 4f)))
+            float num = (cell - OriginIV3).LengthHorizontalSquared;
+            if ((!def.projectile.alwaysFreeIntercept && minCollisionSqr <= 1f) ? (num < 1f) : (num < Mathf.Min(144f, minCollisionSqr / 4f)))
             {
                 justWallsRoofs = true;
             }
-            List<Thing> list = new List<Thing>(base.Map.thingGrid.ThingsListAtFast(cell)).Where(delegate (Thing t)
+            List<Thing> list = new List<Thing>(Map.thingGrid.ThingsListAtFast(cell)).Where(delegate (Thing t)
             {
                 if (!justWallsRoofs)
                 {
@@ -304,78 +303,77 @@ namespace CombatExtended
             if (!justWallsRoofs)
             {
                 List<IntVec3> list2 = new List<IntVec3>();
-                list2.AddRange(GenAdj.CellsAdjacentCardinal(cell, Rot4.FromAngleFlat(this.shotRotation), new IntVec2(5, 0)).ToList<IntVec3>());
+                list2.AddRange(GenAdj.CellsAdjacentCardinal(cell, Rot4.FromAngleFlat(shotRotation), new IntVec2(5, 0)).ToList<IntVec3>());
                 foreach (IntVec3 intVec in list2)
                 {
-                    if (intVec != cell && intVec.InBounds(base.Map))
+                    if (intVec != cell && intVec.InBounds(Map))
                     {
-                        list.AddRange(from x in base.Map.thingGrid.ThingsListAtFast(intVec)
+                        list.AddRange(from x in Map.thingGrid.ThingsListAtFast(intVec)
                                       where x is Pawn
                                       select x);
                         if (debugDrawIntercepts)
                         {
-                            base.Map.debugDrawer.FlashCell(intVec, 0.7f, null, 50);
+                            Map.debugDrawer.FlashCell(intVec, 0.7f, null, 50);
                         }
                     }
                 }
             }
-            if (this.LastPos.y > 2f)
+            if (LastPos.y > 2f)
             {
-                if (this.TryCollideWithRoof(cell))
+                if (TryCollideWithRoof(cell))
                 {
                     return true;
                 }
                 flag = true;
             }
-            foreach (Thing thing in from x in list.Distinct<Thing>() orderby (x.DrawPos - this.LastPos).sqrMagnitude select x)
+            foreach (Thing thing in from x in list.Distinct<Thing>() orderby (x.DrawPos - LastPos).sqrMagnitude select x)
             {
                 // Modify : Added check to check if we hit this thing already than keep searching. Probably I will end up removing the similar check from Impact()
-                if ((thing != this.launcher && thing != this.mount) || this.canTargetSelf)
+                if ((thing != launcher && thing != mount) || canTargetSelf)
                 {
-                    if (this.TryCollideWith(thing))
+                    if (TryCollideWith(thing))
                     {
                         return true;
                     }
-                    if (!justWallsRoofs && this.ExactPosition.y < 3f)
+                    if (!justWallsRoofs && ExactPosition.y < 3f)
                     {
-                        Pawn pawn = thing as Pawn;
-                        if (pawn != null)
+                        if (thing is Pawn pawn)
                         {
-                            this.ApplySuppression(pawn);
+                            ApplySuppression(pawn);
                         }
                     }
                 }
             }
-            return !flag && this.TryCollideWithRoof(cell);
+            return !flag && TryCollideWithRoof(cell);
         }
 
         private bool CheckForCollisionBetween()
         {
-            IntVec3 intVec = this.LastPos.ToIntVec3();
-            IntVec3 intVec2 = this.ExactPosition.ToIntVec3();
-            if (!intVec.InBounds(base.Map) || !intVec2.InBounds(base.Map))
+            IntVec3 intVec = LastPos.ToIntVec3();
+            IntVec3 intVec2 = ExactPosition.ToIntVec3();
+            if (!intVec.InBounds(Map) || !intVec2.InBounds(Map))
             {
                 return false;
             }
             if (debugDrawIntercepts)
             {
-                base.Map.debugDrawer.FlashLine(intVec, intVec2, 50, SimpleColor.White);
+                Map.debugDrawer.FlashLine(intVec, intVec2, 50, SimpleColor.White);
             }
             foreach (IntVec3 intVec3 in from x in GenSight.PointsOnLineOfSight(intVec, intVec2).Union(new IntVec3[]
             {
                 intVec,
                 intVec2
             }).Distinct<IntVec3>()
-                                        orderby (x.ToVector3Shifted() - this.LastPos).MagnitudeHorizontalSquared()
+                                        orderby (x.ToVector3Shifted() - LastPos).MagnitudeHorizontalSquared()
                                         select x)
             {
-                if (this.CheckCellForCollision(intVec3))
+                if (CheckCellForCollision(intVec3))
                 {
                     return true;
                 }
                 if (debugDrawIntercepts)
                 {
-                    base.Map.debugDrawer.FlashCell(intVec3, 1f, "o", 50);
+                    Map.debugDrawer.FlashCell(intVec3, 1f, "o", 50);
                 }
             }
             return false;
@@ -384,9 +382,9 @@ namespace CombatExtended
         public override void Tick()
         {
             // Lazy initialization
-            if (this.projectileProperties == null)
+            if (projectileProperties == null)
             {
-                this.projectileProperties = this.def.projectile as ProjectilePropertiesWithEffectsCE;
+                projectileProperties = def.projectile as ProjectilePropertiesWithEffectsCE;
             }
 
             // Try to bypass the ProjectileCE.Tick() which is overriden here.
@@ -397,57 +395,56 @@ namespace CombatExtended
             landed = real_landed_val;
 
             // This is the same check mention above
-            if (this.landed)
+            if (landed)
             {
-                if (!this.Destroyed)
+                if (!Destroyed)
                 {
-                    this.Destroy(DestroyMode.Vanish);
+                    Destroy(DestroyMode.Vanish);
                 }
                 return;
             }
-            this.LastPos = this.ExactPosition;            
-            this.ticksToImpact--; // this increments our position along the trajectory!
-            if (!this.ExactPosition.InBounds(base.Map))
+            LastPos = ExactPosition;            
+            ticksToImpact--; // this increments our position along the trajectory!
+            if (!ExactPosition.InBounds(Map))
             {
-                base.Position = this.LastPos.ToIntVec3();
-                this.Destroy(DestroyMode.Vanish);
+                Position = LastPos.ToIntVec3();
+                Destroy(DestroyMode.Vanish);
                 return;
             }
-            if (this.ticksToImpact >= 0 && !this.def.projectile.flyOverhead && this.CheckForCollisionBetween())
+            if (ticksToImpact >= 0 && !def.projectile.flyOverhead && CheckForCollisionBetween())
             {
                 return;
             }
-            base.Position = this.ExactPosition.ToIntVec3();
-            if (this.ticksToImpact == 60 && Find.TickManager.CurTimeSpeed == TimeSpeed.Normal && this.def.projectile.soundImpactAnticipate != null)
+            Position = ExactPosition.ToIntVec3();
+            if (ticksToImpact == 60 && Find.TickManager.CurTimeSpeed == TimeSpeed.Normal && def.projectile.soundImpactAnticipate != null)
             {
-                this.def.projectile.soundImpactAnticipate.PlayOneShot(this);
+                def.projectile.soundImpactAnticipate.PlayOneShot(this);
             }
-            if (this.ticksToImpact <= 0)
+            if (ticksToImpact <= 0)
             {
-                this.ImpactSomething();
+                ImpactSomething();
                 return;
             }
-            if (this.ambientSustainer != null)
+            if (ambientSustainer != null)
             {
-                this.ambientSustainer.Maintain();
+                ambientSustainer.Maintain();
             }
         }
 
         private bool TryCollideWith(Thing thing)
         {
             // if hit thing is it's own launcher and can't hit it self -> No hit!
-            if (thing == this.launcher && !this.canTargetSelf || thing == lastThingHit)
+            if (thing == launcher && !canTargetSelf || thing == lastThingHit)
             {
                 return false;
             }
-            float num;
             // IntersectRay method of a Bound intersects the bounding box with the ray and gives us the distance to that point. If it returns false or null .. the ray missed the bound entirely
-            if (!CE_Utility.GetBoundsFor(thing).IntersectRay(this.ShotLine, out num))
+            if (!CE_Utility.GetBoundsFor(thing).IntersectRay(ShotLine, out float num))
             {
                 return false;
             }
             // If distance square is greater than the distance square we traveled since last tick (this point and the last) -> No hit!
-            if (num * num > this.ExactMinusLastPos.sqrMagnitude)
+            if (num * num > ExactMinusLastPos.sqrMagnitude)
             {
                 return false;
             }
@@ -456,7 +453,7 @@ namespace CombatExtended
                 // Compute the chance that projectile hits the plant. Based on fillPercentage of plant and something.
                 // this.OriginIV3 is the origin of the shot the gun it self.
                 // I think [((thing.Position - this.OriginIV3).LengthHorizontal / 40f * this.AccuracyFactor] wanted a parentheses around (40f * this.AccuracyFactor) because now accuracy increases the chance
-                float num2 = this.def.projectile.alwaysFreeIntercept ? 1f : ((thing.Position - this.OriginIV3).LengthHorizontal / (40f * this.AccuracyFactor));
+                float num2 = def.projectile.alwaysFreeIntercept ? 1f : ((thing.Position - OriginIV3).LengthHorizontal / (40f * AccuracyFactor));
                 float chance = thing.def.fillPercent * num2;
                 if (Controller.settings.DebugShowTreeCollisionChance)
                 {
@@ -468,22 +465,22 @@ namespace CombatExtended
                 }
             }
             //GetPoint gives use the point the shotline ray hits the bounding box.
-            Vector3 point = this.ShotLine.GetPoint(num);
-            if (!point.InBounds(base.Map))
+            Vector3 point = ShotLine.GetPoint(num);
+            if (!point.InBounds(Map))
             {
                 Log.Error(string.Concat(new object[]
                 {
                 "TryCollideWith out of bounds point from ShotLine: obj ",
                 thing.ThingID,
                 ", proj ",
-                base.ThingID,
+                ThingID,
                 ", dist ",
                 num,
                 ", point ",
                 point
                     }), false);
             }
-            this.ExactPosition = point;
+            ExactPosition = point;
 
             // We inject the penetration and ricochet logic around here.
             //this.landed = true; // This move to the Impact() function.
@@ -497,78 +494,77 @@ namespace CombatExtended
             //    Log.Message($"{CombatEffectsCE.ImpactHelper.determineMaterial(thing)}");
             //}
 
-            this.Impact(thing);
+            Impact(thing);
             return true;
         }
 
         private bool TryCollideWithRoof(IntVec3 cell)
         {
-            if (!cell.Roofed(base.Map))
+            if (!cell.Roofed(Map))
             {
                 return false;
             }
-            float num;
-            if (!CE_Utility.GetBoundsFor(cell, cell.GetRoof(base.Map)).IntersectRay(this.ShotLine, out num))
+            if (!CE_Utility.GetBoundsFor(cell, cell.GetRoof(Map)).IntersectRay(ShotLine, out float num))
             {
                 return false;
             }
-            if (num * num > this.ExactMinusLastPos.sqrMagnitude)
+            if (num * num > ExactMinusLastPos.sqrMagnitude)
             {
                 return false;
             }
-            Vector3 point = this.ShotLine.GetPoint(num);
+            Vector3 point = ShotLine.GetPoint(num);
 
-            this.ExactPosition = point;
-            this.landed = true;
+            ExactPosition = point;
+            landed = true;
             if (debugDrawIntercepts)
             {
-                MoteMaker.ThrowText(cell.ToVector3Shifted(), base.Map, "x", Color.red, -1f);
+                MoteMaker.ThrowText(cell.ToVector3Shifted(), Map, "x", Color.red, -1f);
             }
-            this.Impact(null);
+            Impact(null);
             return true;
         }
 
         private void ImpactSomething()
         {
-            IntVec3 intVec = this.ExactPosition.ToIntVec3();
-            if (this.def.projectile.flyOverhead)
+            IntVec3 intVec = ExactPosition.ToIntVec3();
+            if (def.projectile.flyOverhead)
             {
-                RoofDef roofDef = base.Map.roofGrid.RoofAt(intVec);
+                RoofDef roofDef = Map.roofGrid.RoofAt(intVec);
                 if (roofDef != null)
                 {
                     if (roofDef.isThickRoof)
                     {
-                        this.def.projectile.soundHitThickRoof.PlayOneShot(new TargetInfo(intVec, base.Map, false));
-                        this.Destroy(DestroyMode.Vanish);
+                        def.projectile.soundHitThickRoof.PlayOneShot(new TargetInfo(intVec, Map, false));
+                        Destroy(DestroyMode.Vanish);
                         return;
                     }
-                    if (intVec.GetEdifice(base.Map) == null || intVec.GetEdifice(base.Map).def.Fillage != FillCategory.Full)
+                    if (intVec.GetEdifice(Map) == null || intVec.GetEdifice(Map).def.Fillage != FillCategory.Full)
                     {
-                        RoofCollapserImmediate.DropRoofInCells(intVec, base.Map, null);
+                        RoofCollapserImmediate.DropRoofInCells(intVec, Map, null);
                     }
                 }
             }
-            Thing firstPawn = intVec.GetFirstPawn(base.Map);
-            if (firstPawn != null && this.TryCollideWith(firstPawn))
+            Thing firstPawn = intVec.GetFirstPawn(Map);
+            if (firstPawn != null && TryCollideWith(firstPawn))
             {
                 return;
             }
-            List<Thing> list = (from t in base.Map.thingGrid.ThingsListAt(intVec)
+            List<Thing> list = (from t in Map.thingGrid.ThingsListAt(intVec)
                                 where t is Pawn || t.def.Fillage > FillCategory.None
                                 select t).ToList<Thing>();
             if (list.Count > 0)
             {
                 foreach (Thing thing in list)
                 {
-                    if (this.TryCollideWith(thing))
+                    if (TryCollideWith(thing))
                     {
                         return;
                     }
                 }
             }
-            this.ExactPosition = this.ExactPosition;
-            this.landed = true;
-            this.Impact(null);
+            ExactPosition = ExactPosition;
+            landed = true;
+            Impact(null);
         }
 
         /// -------------------------------------LAUNCH RELATED STUFF-------------------------------------------- ///
@@ -578,32 +574,32 @@ namespace CombatExtended
             this.shotAngle = shotAngle;
             this.shotHeight = shotHeight;
             this.shotRotation = shotRotation;
-            this.Launch(launcher, origin, equipment);
+            Launch(launcher, origin, equipment);
             if (shotSpeed > 0f)
             {
                 this.shotSpeed = shotSpeed;
             }
-            this.ticksToImpact = this.IntTicksToImpact;
+            ticksToImpact = IntTicksToImpact;
         }
 
         // Token: 0x060002A2 RID: 674 RVA: 0x0001646C File Offset: 0x0001466C
         public override void Launch(Thing launcher, Vector2 origin, Thing equipment = null)
         {
-            this.shotSpeed = this.def.projectile.speed;
+            shotSpeed = def.projectile.speed;
             this.launcher = launcher;
             this.origin = origin;
-            this.equipmentDef = ((equipment != null) ? equipment.def : null);
-            if (!this.def.projectile.soundAmbient.NullOrUndefined())
+            equipmentDef = (equipment?.def);
+            if (!def.projectile.soundAmbient.NullOrUndefined())
             {
                 SoundInfo info = SoundInfo.InMap(this, MaintenanceType.PerTick);
-                this.ambientSustainer = this.def.projectile.soundAmbient.TrySpawnSustainer(info);
+                ambientSustainer = def.projectile.soundAmbient.TrySpawnSustainer(info);
             }
         }
 
-        private void impactSpeedChanged()
+        private void ImpactSpeedChanged()
         {
-            this.origin = new Vector2(this.impactPosition.x,this.impactPosition.z);            
-            this.shotHeight = this.Height;
+            origin = new Vector2(impactPosition.x,impactPosition.z);            
+            shotHeight = Height;
             ticksToImpact = 0;
             intTicksToImpact = -1;
             startingTicksToImpactInt = -1;
@@ -618,17 +614,17 @@ namespace CombatExtended
         {
             get
             {
-                if (this.landed)
+                if (landed)
                 {
-                    return this.impactPosition;
+                    return impactPosition;
                 }
-                Vector2 vector = this.Vec2Position(-1f);
-                return new Vector3(vector.x, this.Height, vector.y);
+                Vector2 vector = Vec2Position(-1f);
+                return new Vector3(vector.x, Height, vector.y);
             }
             set
             {
-                this.impactPosition = new Vector3(value.x, value.y, value.z);
-                base.Position = this.impactPosition.ToIntVec3();                
+                impactPosition = new Vector3(value.x, value.y, value.z);
+                Position = impactPosition.ToIntVec3();                
             }
         }
 
@@ -636,8 +632,8 @@ namespace CombatExtended
 {
 	get
 	{
-		Vector2 drawPosV = this.DrawPosV2;
-		return new Vector3(drawPosV.x, this.def.Altitude, drawPosV.y);
+		Vector2 drawPosV = DrawPosV2;
+		return new Vector3(drawPosV.x, def.Altitude, drawPosV.y);
 	}
 }
 
@@ -645,7 +641,7 @@ namespace CombatExtended
         {
             get
             {
-                return this.Vec2Position(-1f) + new Vector2(0f, this.Height - this.shotHeight * ((this.StartingTicksToImpact - this.fTicks) / this.StartingTicksToImpact));
+                return Vec2Position(-1f) + new Vector2(0f, Height - shotHeight * ((StartingTicksToImpact - fTicks) / StartingTicksToImpact));
             }
         }
 
@@ -653,16 +649,16 @@ namespace CombatExtended
         {
             if (ticks < 0f)
             {
-                ticks = this.fTicks;                
+                ticks = fTicks;                
             }
             if (ticks != StartingTicksToImpact)
             {
-                return Vector2.Lerp(this.origin, this.Destination, ticks / this.StartingTicksToImpact);
+                return Vector2.Lerp(origin, Destination, ticks / StartingTicksToImpact);
             }
             else
             {
                 // I had to treat this special case because of 0/0 = NaN problems
-                return Vector2.Lerp(this.origin, this.Destination, 1f);
+                return Vector2.Lerp(origin, Destination, 1f);
             }
         }
 
@@ -670,7 +666,7 @@ namespace CombatExtended
         {
             get
             {
-                return this.IntTicksToImpact - this.ticksToImpact;
+                return IntTicksToImpact - ticksToImpact;
             }
         }
 
@@ -678,11 +674,11 @@ namespace CombatExtended
         {
             get
             {
-                if (this.ticksToImpact != 0)
+                if (ticksToImpact != 0)
                 {
-                    return (float)this.FlightTicks;
+                    return FlightTicks;
                 }
-                return this.StartingTicksToImpact;
+                return StartingTicksToImpact;
             }
         }
 
@@ -690,11 +686,11 @@ namespace CombatExtended
         {
             get
             {
-                if (this.intTicksToImpact < 0)
+                if (intTicksToImpact < 0)
                 {
-                    this.intTicksToImpact = Mathf.CeilToInt(this.StartingTicksToImpact);
+                    intTicksToImpact = Mathf.CeilToInt(StartingTicksToImpact);
                 }
-                return this.intTicksToImpact;
+                return intTicksToImpact;
             }
         }
 
@@ -702,50 +698,50 @@ namespace CombatExtended
         {
             get
             {
-                if (this.startingTicksToImpactInt < 0f)
+                if (startingTicksToImpactInt < 0f)
                 {
-                    if (this.shotHeight < 0.001f)
+                    if (shotHeight < 0.001f)
                     {
-                        if (this.shotAngle < 0f)
+                        if (shotAngle < 0f)
                         {
-                            this.destinationInt = this.origin;
-                            this.startingTicksToImpactInt = 0f;
-                            this.ImpactSomething();
+                            destinationInt = origin;
+                            startingTicksToImpactInt = 0f;
+                            ImpactSomething();
                             return 0f;
                         }
-                        this.startingTicksToImpactInt = (this.origin - this.Destination).magnitude / (Mathf.Cos(this.shotAngle) * this.shotSpeed) * 60f;
-                        return this.startingTicksToImpactInt;
+                        startingTicksToImpactInt = (origin - Destination).magnitude / (Mathf.Cos(shotAngle) * shotSpeed) * 60f;
+                        return startingTicksToImpactInt;
                     }
                     else
                     {
-                        this.startingTicksToImpactInt = this.GetFlightTime() * 60f;
+                        startingTicksToImpactInt = GetFlightTime() * 60f;
                     }
                 }
-                return this.startingTicksToImpactInt;
+                return startingTicksToImpactInt;
             }
         }
 
         private float GetFlightTime()
         {
-            return (Mathf.Sin(this.shotAngle) * this.shotSpeed + Mathf.Sqrt(Mathf.Pow(Mathf.Sin(this.shotAngle) * this.shotSpeed, 2f) + 2f * this.GravityFactor * this.shotHeight)) / this.GravityFactor;
+            return (Mathf.Sin(shotAngle) * shotSpeed + Mathf.Sqrt(Mathf.Pow(Mathf.Sin(shotAngle) * shotSpeed, 2f) + 2f * GravityFactor * shotHeight)) / GravityFactor;
         }
 
         private float GetHeightAtTicks(int ticks)
         {
-            float num = (float)ticks / 60f;
-            return (float)Math.Round((double)(this.shotHeight + this.shotSpeed * Mathf.Sin(this.shotAngle) * num - this.GravityFactor * num * num / 2f), 3);
+            float num = ticks / 60f;
+            return (float)Math.Round(shotHeight + shotSpeed * Mathf.Sin(shotAngle) * num - GravityFactor * num * num / 2f, 3);
         }
 
         public new float Height
         {
             get
             {
-                if (this.lastHeightTick != this.FlightTicks)
+                if (lastHeightTick != FlightTicks)
                 {
-                    this.heightInt = ((this.ticksToImpact > 0) ? this.GetHeightAtTicks(this.FlightTicks) : 0f);
-                    this.lastHeightTick = this.FlightTicks;
+                    heightInt = ((ticksToImpact > 0) ? GetHeightAtTicks(FlightTicks) : 0f);
+                    lastHeightTick = FlightTicks;
                 }
-                return this.heightInt;
+                return heightInt;
             }
         }
 
@@ -753,16 +749,15 @@ namespace CombatExtended
         {
             get
             {
-                if (this._gravityFactor < 0f)
+                if (_gravityFactor < 0f)
                 {
-                    this._gravityFactor = 9.8f;
-                    ProjectilePropertiesCE projectilePropertiesCE = this.def.projectile as ProjectilePropertiesCE;
-                    if (projectilePropertiesCE != null)
+                    _gravityFactor = 9.8f;
+                    if (def.projectile is ProjectilePropertiesCE projectilePropertiesCE)
                     {
-                        this._gravityFactor = projectilePropertiesCE.Gravity;
+                        _gravityFactor = projectilePropertiesCE.Gravity;
                     }
                 }
-                return this._gravityFactor;
+                return _gravityFactor;
             }
         }
 
@@ -770,16 +765,16 @@ namespace CombatExtended
         {
             get
             {
-                if (this.lastExactPos.x < -999f)
+                if (lastExactPos.x < -999f)
                 {
-                    Vector2 vector = this.Vec2Position((float)(this.FlightTicks - 1));
-                    this.lastExactPos = new Vector3(vector.x, this.GetHeightAtTicks(this.FlightTicks - 1), vector.y);
+                    Vector2 vector = Vec2Position(FlightTicks - 1);
+                    lastExactPos = new Vector3(vector.x, GetHeightAtTicks(FlightTicks - 1), vector.y);
                 }
-                return this.lastExactPos;
+                return lastExactPos;
             }
             set
             {
-                this.lastExactPos = value;
+                lastExactPos = value;
             }
         }
                
@@ -795,7 +790,7 @@ namespace CombatExtended
         private float startingTicksToImpactInt = -1f;
         private int intTicksToImpact = -1;
         private Ray shotLine;
-        private int lastShotLine = -1;
+        private readonly int lastShotLine = -1;
         private Vector3 lastExactPos = new Vector3(-1000f, 0f, 0f);
         private float _gravityFactor = -1f;
         private Sustainer ambientSustainer;
@@ -805,7 +800,7 @@ namespace CombatExtended
         private IntVec3 originInt = new IntVec3(0, -1000, 0);
         private int lastHeightTick = -1;
         private float heightInt;
-        private static List<IntVec3> checkedCells = new List<IntVec3>();
+        private static readonly List<IntVec3> checkedCells = new List<IntVec3>();
 
 
     }

@@ -20,34 +20,37 @@
   <loadAfter>
     <li>CETeam.CombatExtended</li>
   </loadAfter>
-  <description>Update of CalaveraLocas mod
+  <description>[img]https://i.imgur.com/WAEzk68.png[/img]
+Update of CalaveraLocas mod
 https://steamcommunity.com/sharedfiles/filedetails/?id=1756442393
 
-[img]https://i.imgur.com/GYswkZ7.png[/img]
+[img]https://i.imgur.com/7Gzt3Rg.png[/img]
 
-Support-chat:
-https://invite.gg/mlie
-
-Non-steam version:
-https://github.com/emipa606/CombatEffectsforCE
+[table]
+	[tr]
+		[td][url=https://invite.gg/Mlie][img]https://i.imgur.com/zdzzBrc.png[/img][/url][/td]
+		[td][url=https://github.com/emipa606/CombatEffectsforCE][img]https://i.imgur.com/kTkpTOE.png[/img][/url][/td]
+	[/tr]
+[/table]
 	
---- Original Description ---
+[img]https://i.imgur.com/NOW7jU1.png[/img]
+
 This mod adds sparks to bullets impacting hard surfaces and blood effects for hitting pawns.
 Now also allows bullets to penetrate materials.
 Only works with Combat Extended.
 IMPORTANT : Load it AFTER the Combat Extended mod.
 
-UPDATE June 10 :
+[b]UPDATE[/b] June 10 : 
 - Bugfixes (Hanging projectiles, NaN projectile position, inconsistent projectile position for logic and graphics)
 
-Plans:
--Add a few more effects (like dust/smoke puffs to impacts) - DONE
+Plans: 
+[strike]-Add a few more effects (like dust/smoke puffs to impacts) - DONE [/strike]
 - If possible add bullet ricochet and material penetration. :
 - - - Penetration initial implementation done. Details below.
 - Vanilla version.
 - Make options available to tone the effects up or down
 
-Penetration mechanics :
+[b]Penetration mechanics[/b] :
 Bullets have a chance to penetrate a build object based on caliber, ammo type and the material and condition of the object it hit.
 Every projectile type has a base chance to penetrate a given material.
 
@@ -72,5 +75,10 @@ Kinetic energy : WIP. Not enabled yet. But after each penetration or ricochet th
 
 Angle of Attack : WIP. Not enabled yet. Penetration chances as well as ricochet will additionally depend on the angle of incidence.
 
-Important : I had to patch and decorate a lot of ammo defs for this. For now only ammo used by 'CE' and 'CE Guns' are patched. The others may be incompatible.</description>
+Important : I had to patch and decorate a lot of ammo defs for this. For now only ammo used by 'CE' and 'CE Guns' are patched. The others may be incompatible.
+
+
+
+
+[img]https://media.giphy.com/media/Tcgk85vK91UEzLoc1R/giphy.gif[/img]</description>
 </ModMetaData>

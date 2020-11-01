@@ -9,27 +9,27 @@ namespace CombatEffectsCE
     public class MyGraphicData : GraphicData
     {
 
-        private void changeClusterGraphicsColor(Color newColor)
+        private void ChangeClusterGraphicsColor(Color newColor)
         {
-            ((CombatEffectsCE.MyGraphicCluster)this.Graphic).changeGraphicColor(newColor);
+            ((CombatEffectsCE.MyGraphicCluster)Graphic).ChangeGraphicColor(newColor);
             return;
         }
 
-        public void changeGraphicColor(Color newColor)
+        public void ChangeGraphicColor(Color newColor)
         {
-            if(this.color == newColor)
+            if(color == newColor)
             {
                 return;
             }
 
-            if (this.graphicClass == typeof(CombatEffectsCE.MyGraphicCluster))
+            if (graphicClass == typeof(CombatEffectsCE.MyGraphicCluster))
             {
-                changeClusterGraphicsColor(newColor);
+                ChangeClusterGraphicsColor(newColor);
                 return;
             }
 
             // If this is a Graphic_Cluster we mustnt change it's this.color or else we get an error
-            this.color = newColor;
+            color = newColor;
 
             //Log.Message("Correct function called");
             //if (this.cachedGraphic != null)
@@ -37,22 +37,22 @@ namespace CombatEffectsCE
             //    string m = this.cachedGraphic.ToString();
             //    Log.Message(m);
             //}            
-            ShaderTypeDef cutout = this.shaderType;
+            ShaderTypeDef cutout = shaderType;
             if (cutout == null)
             {
                 cutout = ShaderTypeDefOf.Cutout;
             }
             Shader shader = cutout.Shader;
                         
-            this.cachedGraphic = GraphicDatabase.Get(this.graphicClass, this.texPath, shader, this.drawSize, this.color, this.color, this, this.shaderParameters);
+            cachedGraphic = GraphicDatabase.Get(graphicClass, texPath, shader, drawSize, color, color, this, shaderParameters);
             
-            if (this.onGroundRandomRotateAngle > 0.01f)
+            if (onGroundRandomRotateAngle > 0.01f)
             {
-                this.cachedGraphic = new Graphic_RandomRotated(this.cachedGraphic, this.onGroundRandomRotateAngle);
+                cachedGraphic = new Graphic_RandomRotated(cachedGraphic, onGroundRandomRotateAngle);
             }
-            if (this.Linked)
+            if (Linked)
             {
-                this.cachedGraphic = GraphicUtility.WrapLinked(this.cachedGraphic, this.linkType);
+                cachedGraphic = GraphicUtility.WrapLinked(cachedGraphic, linkType);
             }
         }
 
@@ -100,25 +100,25 @@ namespace CombatEffectsCE
         // Token: 0x0600402B RID: 16427 RVA: 0x001E1354 File Offset: 0x001DF754
         private void Init()
         {
-            if (this.graphicClass == null)
+            if (graphicClass == null)
             {
-                this.cachedGraphic = null;
+                cachedGraphic = null;
                 return;
             }
-            ShaderTypeDef cutout = this.shaderType;
+            ShaderTypeDef cutout = shaderType;
             if (cutout == null)
             {
                 cutout = ShaderTypeDefOf.Cutout;
             }
             Shader shader = cutout.Shader;
-            this.cachedGraphic = GraphicDatabase.Get(this.graphicClass, this.texPath, shader, this.drawSize, this.color, this.colorTwo, this, this.shaderParameters);
-            if (this.onGroundRandomRotateAngle > 0.01f)
+            cachedGraphic = GraphicDatabase.Get(graphicClass, texPath, shader, drawSize, color, colorTwo, this, shaderParameters);
+            if (onGroundRandomRotateAngle > 0.01f)
             {
-                this.cachedGraphic = new Graphic_RandomRotated(this.cachedGraphic, this.onGroundRandomRotateAngle);
+                cachedGraphic = new Graphic_RandomRotated(cachedGraphic, onGroundRandomRotateAngle);
             }
-            if (this.Linked)
+            if (Linked)
             {
-                this.cachedGraphic = GraphicUtility.WrapLinked(this.cachedGraphic, this.linkType);
+                cachedGraphic = GraphicUtility.WrapLinked(cachedGraphic, linkType);
             }
         }
 
@@ -144,19 +144,19 @@ namespace CombatEffectsCE
         // Token: 0x0600402E RID: 16430 RVA: 0x001E148C File Offset: 0x001DF88C
         internal IEnumerable<string> ConfigErrors(ThingDef thingDef)
         {
-            if (this.graphicClass == null)
+            if (graphicClass == null)
             {
                 yield return "graphicClass is null";
             }
-            if (this.texPath.NullOrEmpty())
+            if (texPath.NullOrEmpty())
             {
                 yield return "texPath is null or empty";
             }
-            if (thingDef != null && thingDef.drawerType == DrawerType.RealtimeOnly && this.Linked)
+            if (thingDef != null && thingDef.drawerType == DrawerType.RealtimeOnly && Linked)
             {
                 yield return "does not add to map mesh but has a link drawer. Link drawers can only work on the map mesh.";
             }
-            if ((this.shaderType == ShaderTypeDefOf.Cutout || this.shaderType == ShaderTypeDefOf.CutoutComplex) && thingDef.mote != null && (thingDef.mote.fadeInTime > 0f || thingDef.mote.fadeOutTime > 0f))
+            if ((shaderType == ShaderTypeDefOf.Cutout || shaderType == ShaderTypeDefOf.CutoutComplex) && thingDef.mote != null && (thingDef.mote.fadeInTime > 0f || thingDef.mote.fadeOutTime > 0f))
             {
                 yield return "mote fades but uses cutout shader type. It will abruptly disappear when opacity falls under the cutout threshold.";
             }

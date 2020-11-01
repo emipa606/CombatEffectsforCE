@@ -35,12 +35,12 @@ namespace CombatExtended
             if (texture.width > texture.height)
             {
                 width = Math.Min(width, 64);
-                height = (int)((float)width * ((float)texture.height / (float)texture.width));
+                height = (int)(width * (texture.height / (float)texture.width));
             }
             else if (texture.height > texture.width)
             {
                 height = Math.Min(height, 64);
-                width = (int)((float)height * ((float)texture.width / (float)texture.height));
+                width = (int)(height * (texture.width / (float)texture.height));
             }
             else
             {
@@ -48,7 +48,7 @@ namespace CombatExtended
                 height = Math.Min(height, 64);
             }
             Color[] result = null;
-            Rect blitRect = new Rect(0f, 0f, (float)width, (float)height);
+            Rect blitRect = new Rect(0f, 0f, width, height);
             int[] rtSize = new int[]
             {
                 width,
@@ -84,7 +84,7 @@ namespace CombatExtended
         {
             System.Random random = new System.Random();
             double num = random.NextDouble() * 3.1415926535897931 * 2.0;
-            double num2 = Math.Sqrt(random.NextDouble()) * (double)radius;
+            double num2 = Math.Sqrt(random.NextDouble()) * radius;
             return new Vector2((float)(num2 * Math.Cos(num)), (float)(num2 * Math.Sin(num)));
         }
 
@@ -92,11 +92,11 @@ namespace CombatExtended
         public static float GetMoveSpeed(Pawn pawn)
         {
             float num = 60f / pawn.GetStatValue(StatDefOf.MoveSpeed, false);
-            num += (float)pawn.Map.pathGrid.CalculatedCostAt(pawn.Position, false, pawn.Position);
+            num += pawn.Map.pathGrid.CalculatedCostAt(pawn.Position, false, pawn.Position);
             Building edifice = pawn.Position.GetEdifice(pawn.Map);
             if (edifice != null)
             {
-                num += (float)edifice.PathWalkCostFor(pawn);
+                num += edifice.PathWalkCostFor(pawn);
             }
             if (pawn.CurJob != null)
             {
@@ -117,7 +117,7 @@ namespace CombatExtended
                         }
                         break;
                     case LocomotionUrgency.Sprint:
-                        num = (float)Mathf.RoundToInt(num * 0.75f);
+                        num = Mathf.RoundToInt(num * 0.75f);
                         break;
                 }
             }
@@ -154,8 +154,7 @@ namespace CombatExtended
         // Token: 0x060002DF RID: 735 RVA: 0x0001827C File Offset: 0x0001647C
         public static bool CanBeStabilized(this Hediff diff)
         {
-            HediffWithComps hediffWithComps = diff as HediffWithComps;
-            if (hediffWithComps == null)
+            if (!(diff is HediffWithComps hediffWithComps))
             {
                 return false;
             }
@@ -179,7 +178,7 @@ namespace CombatExtended
             moteThrown.exactRotation = Rand.Range(-3f, 4f);
             moteThrown.exactPosition = loc;
             moteThrown.airTimeLeft = 60f;
-            moteThrown.SetVelocity((float)Rand.Range(160, 200), Rand.Range(0.7f, 0.5f));
+            moteThrown.SetVelocity(Rand.Range(160, 200), Rand.Range(0.7f, 0.5f));
             GenSpawn.Spawn(moteThrown, loc.ToIntVec3(), map, WipeMode.Vanish);
         }
 
@@ -188,7 +187,7 @@ namespace CombatExtended
         {
             if (roof == null)
             {
-                return default(Bounds);
+                return default;
             }
             float num = 2f;
             if (roof.isNatural)
@@ -210,10 +209,10 @@ namespace CombatExtended
         {
             if (thing == null)
             {
-                return default(Bounds);
+                return default;
             }
             CollisionVertical collisionVertical = new CollisionVertical(thing);
-            float collisionWidth = CE_Utility.GetCollisionWidth(thing);
+            float collisionWidth = GetCollisionWidth(thing);
             Vector3 drawPos = thing.DrawPos;
             drawPos.y = collisionVertical.Max - collisionVertical.HeightRange.Span / 2f;
             return new Bounds(drawPos, new Vector3(collisionWidth, collisionVertical.HeightRange.Span, collisionWidth));
@@ -222,10 +221,9 @@ namespace CombatExtended
         // Token: 0x060002E3 RID: 739 RVA: 0x00018474 File Offset: 0x00016674
         public static float GetCollisionWidth(Thing thing)
         {
-            Pawn pawn = thing as Pawn;
-            if (pawn != null)
+            if (thing is Pawn pawn)
             {
-                return CE_Utility.GetCollisionBodyFactors(pawn).x;
+                return GetCollisionBodyFactors(pawn).x;
             }
             return 1f;
         }
@@ -313,12 +311,11 @@ namespace CombatExtended
             else
             {
                 IThingHolder owner2 = owner.Owner;
-                obj = ((owner2 != null) ? owner2.ParentHolder : null);
+                obj = (owner2?.ParentHolder);
             }
-            Pawn pawn = obj as Pawn;
-            if (pawn != null)
+            if (obj is Pawn pawn)
             {
-                CE_Utility.TryUpdateInventory(pawn);
+                TryUpdateInventory(pawn);
             }
         }
 

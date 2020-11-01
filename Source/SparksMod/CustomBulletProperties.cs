@@ -80,7 +80,7 @@ namespace CombatEffectsCE
 
     public static class ImpactHelper
     {
-        public static Material determineMaterial(Thing hitThing)
+        public static Material DetermineMaterial(Thing hitThing)
         {
             if (hitThing.def.MadeFromStuff)
             {
@@ -122,7 +122,7 @@ namespace CombatEffectsCE
             }
         }
 
-        public static CaliberCategory determinetCaliberCategory(Caliber caliber)
+        public static CaliberCategory DeterminetCaliberCategory(Caliber caliber)
         {
             if (small.Contains(caliber))
             {
@@ -144,7 +144,7 @@ namespace CombatEffectsCE
             return CaliberCategory.SMALL;
         }
 
-        public static float computeEnergyRemainingAfterPen(float exponent, float scale, float limit, float score)
+        public static float ComputeEnergyRemainingAfterPen(float exponent, float scale, float limit, float score)
         {
             /*
              * This is a power function. 'Exponents' smaller than one raise the function above the linear values that make sense (0,...,2]
@@ -162,7 +162,7 @@ namespace CombatEffectsCE
             }
         }
 
-        public static bool consideredAPType(AmmoType ammoType)
+        public static bool ConsideredAPType(AmmoType ammoType)
         {
             return (ammoType == AmmoType.AP || ammoType == AmmoType.API || ammoType == AmmoType.SLUG || ammoType == AmmoType.SABOT);
         }
@@ -174,7 +174,7 @@ namespace CombatEffectsCE
          * In theory this favors higher base penetration chances and explicitly favors AP type bullets.
          * The energy conservation function is skewed in favor of AP bullets by having a lower exponent for the power function.
          */
-        public static ImpactType determineImpactType(BulletCESparky bullet, Thing hitThing, ref float energy, bool deflectedByPawn = false)
+        public static ImpactType DetermineImpactType(BulletCESparky bullet, Thing hitThing, ref float energy, bool deflectedByPawn = false)
         {
             if (hitThing == null)
             {
@@ -185,7 +185,7 @@ namespace CombatEffectsCE
             }
 
             ProjectilePropertiesWithEffectsCE bulletProps = bullet.projectileProperties;
-            CaliberCategory calCat = determinetCaliberCategory(bulletProps.caliber);
+            CaliberCategory calCat = DeterminetCaliberCategory(bulletProps.caliber);
             if (hitThing is Pawn)
             {
                 if (deflectedByPawn)
@@ -209,14 +209,14 @@ namespace CombatEffectsCE
                         //Log.Message("Pawn hit, bullet went through.");
                         float exponent = 1f;
                         float maxEnergy = 0.8f;
-                        if (consideredAPType(bulletProps.ammoType))
+                        if (ConsideredAPType(bulletProps.ammoType))
                         {
                             exponent = 0.7f;
                             maxEnergy = 0.9f;
                         }
 
                         float limit = penChance; // Use penchance as a limit of total energy loss
-                        energy = energy * computeEnergyRemainingAfterPen(exponent, maxEnergy, limit, score);
+                        energy *= ComputeEnergyRemainingAfterPen(exponent, maxEnergy, limit, score);
                         return ImpactType.PEN;
                     }
                 }
@@ -226,7 +226,7 @@ namespace CombatEffectsCE
                 float percentage_HP = (float)hitThing.HitPoints / hitThing.MaxHitPoints;
                 //Log.Message($"Hit thing HP percentage : {percentage_HP}");
                     
-                Material thingMat = determineMaterial(hitThing);
+                Material thingMat = DetermineMaterial(hitThing);
                 if (thingMat == Material.UNDEFINED)
                 {
                     //Log.Message("Thing if made of UNDEFINED material.");
@@ -279,14 +279,14 @@ namespace CombatEffectsCE
 
                     float exponent = 1f;
                     float maxEnergy = 0.8f;
-                    if (consideredAPType(bulletProps.ammoType))
+                    if (ConsideredAPType(bulletProps.ammoType))
                     {
                         exponent = 0.5f;
                         maxEnergy = 0.9f;
                     }
 
                     float limit = penChance; // Use penchance as a limit of total energy loss
-                    energy = energy * computeEnergyRemainingAfterPen(exponent, maxEnergy, limit, score);
+                    energy *= ComputeEnergyRemainingAfterPen(exponent, maxEnergy, limit, score);
                     return ImpactType.PEN;
                 }
                 // TODO : The penetration should use the angle of impact. Also here should come the Ricoche computation}

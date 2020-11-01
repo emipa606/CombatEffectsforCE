@@ -20,68 +20,68 @@ namespace CombatEffectsCE
             //Graphic.MatSingle.color = Graphic.Color;
             //Graphic.MatSingle.SetColor(ShaderPropertyIDs.Color, Graphic.Color);
          
-            if (base.Destroyed)
+            if (Destroyed)
             {
                 return;
             }
-            if (!this.Flying && !this.Skidding)
+            if (!Flying && !Skidding)
             {
                 return;
             }
-            Vector3 vector = this.NextExactPosition(deltaTime);
+            Vector3 vector = NextExactPosition(deltaTime);
             IntVec3 intVec = new IntVec3(vector);
-            if (intVec != base.Position)
+            if (intVec != Position)
             {
-                if (!intVec.InBounds(base.Map))
+                if (!intVec.InBounds(Map))
                 {
-                    this.Destroy(DestroyMode.Vanish);
+                    Destroy(DestroyMode.Vanish);
                     return;
                 }
-                if (this.def.mote.collide && intVec.Filled(base.Map))
+                if (def.mote.collide && intVec.Filled(Map))
                 {
-                    this.WallHit();
+                    WallHit();
                     return;
                 }
             }
-            base.Position = intVec;
-            this.exactPosition = vector;
-            if (this.def.mote.rotateTowardsMoveDirection && this.velocity != default(Vector3))
+            Position = intVec;
+            exactPosition = vector;
+            if (def.mote.rotateTowardsMoveDirection && velocity != default)
             {
-                this.exactRotation = this.velocity.AngleFlat();
+                exactRotation = velocity.AngleFlat();
             }
             else
             {
-                this.exactRotation += this.rotationRate * deltaTime;
+                exactRotation += rotationRate * deltaTime;
             }
-            this.velocity += this.def.mote.acceleration * deltaTime;
-            if (this.def.mote.speedPerTime != 0f)
+            velocity += def.mote.acceleration * deltaTime;
+            if (def.mote.speedPerTime != 0f)
             {
-                this.Speed = Mathf.Max(this.Speed + this.def.mote.speedPerTime * deltaTime, 0f);
+                Speed = Mathf.Max(Speed + def.mote.speedPerTime * deltaTime, 0f);
             }
-            if (this.airTimeLeft > 0f)
+            if (airTimeLeft > 0f)
             {
-                this.airTimeLeft -= deltaTime;
-                if (this.airTimeLeft < 0f)
+                airTimeLeft -= deltaTime;
+                if (airTimeLeft < 0f)
                 {
-                    this.airTimeLeft = 0f;
+                    airTimeLeft = 0f;
                 }
-                if (this.airTimeLeft <= 0f && !this.def.mote.landSound.NullOrUndefined())
+                if (airTimeLeft <= 0f && !def.mote.landSound.NullOrUndefined())
                 {
-                    this.def.mote.landSound.PlayOneShot(new TargetInfo(base.Position, base.Map, false));
+                    def.mote.landSound.PlayOneShot(new TargetInfo(Position, Map, false));
                 }
             }
-            if (this.Skidding)
+            if (Skidding)
             {
-                this.Speed *= this.skidSpeedMultiplierPerTick;
-                this.rotationRate *= this.skidSpeedMultiplierPerTick;
-                if (this.Speed < 0.02f)
+                Speed *= skidSpeedMultiplierPerTick;
+                rotationRate *= skidSpeedMultiplierPerTick;
+                if (Speed < 0.02f)
                 {
-                    this.Speed = 0f;
+                    Speed = 0f;
                 }
                 float rng = UnityEngine.Random.Range(0f, 1f);
                 if (rng < 0.3f)
                 {
-                    FilthMaker.TryMakeFilth(intVec, this.Map, ((MotePropertiesFilthy)this.def.mote).filthTrace, 1);
+                    FilthMaker.TryMakeFilth(intVec, Map, ((MotePropertiesFilthy)def.mote).filthTrace, 1);
                 }
             }
         }
