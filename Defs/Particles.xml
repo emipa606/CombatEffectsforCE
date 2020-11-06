@@ -6,7 +6,7 @@
       <texPath>Things/Pawn/Wounds/WoundFleshA</texPath>
       <color>(131, 34, 34, 180)</color>
     </graphicData>
-    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <altitudeLayer>MoteLow</altitudeLayer>
     <mote>
       <fadeInTime>0.04</fadeInTime>
       <solidTime>5.6</solidTime>
