@@ -15,11 +15,11 @@ namespace CombatExtended
         {
             FilterMode filterMode = texture.filterMode;
             texture.filterMode = FilterMode.Point;
-            RenderTexture temporary = RenderTexture.GetTemporary(rtSize[0], rtSize[1], 0, RenderTextureFormat.Default, RenderTextureReadWrite.Default, 1);
+            var temporary = RenderTexture.GetTemporary(rtSize[0], rtSize[1], 0, RenderTextureFormat.Default, RenderTextureReadWrite.Default, 1);
             temporary.filterMode = FilterMode.Point;
             RenderTexture.active = temporary;
             Graphics.Blit(texture, temporary);
-            Texture2D texture2D = new Texture2D((int)blitRect.width, (int)blitRect.height);
+            var texture2D = new Texture2D((int)blitRect.width, (int)blitRect.height);
             texture2D.ReadPixels(blitRect, 0, 0);
             texture2D.Apply();
             RenderTexture.active = null;
@@ -34,22 +34,22 @@ namespace CombatExtended
             height = texture.height;
             if (texture.width > texture.height)
             {
-                width = Math.Min(width, 64);
+                width = Math.Min(width, blitMaxDimensions);
                 height = (int)(width * (texture.height / (float)texture.width));
             }
             else if (texture.height > texture.width)
             {
-                height = Math.Min(height, 64);
+                height = Math.Min(height, blitMaxDimensions);
                 width = (int)(height * (texture.width / (float)texture.height));
             }
             else
             {
-                width = Math.Min(width, 64);
-                height = Math.Min(height, 64);
+                width = Math.Min(width, blitMaxDimensions);
+                height = Math.Min(height, blitMaxDimensions);
             }
             Color[] result = null;
-            Rect blitRect = new Rect(0f, 0f, width, height);
-            int[] rtSize = new int[]
+            var blitRect = new Rect(0f, 0f, width, height);
+            var rtSize = new int[]
             {
                 width,
                 height
@@ -82,16 +82,16 @@ namespace CombatExtended
         // Token: 0x060002DA RID: 730 RVA: 0x00018090 File Offset: 0x00016290
         public static Vector2 GenRandInCircle(float radius)
         {
-            System.Random random = new System.Random();
-            double num = random.NextDouble() * 3.1415926535897931 * 2.0;
-            double num2 = Math.Sqrt(random.NextDouble()) * radius;
+            var random = new System.Random();
+            var num = random.NextDouble() * 3.1415926535897931 * 2.0;
+            var num2 = Math.Sqrt(random.NextDouble()) * radius;
             return new Vector2((float)(num2 * Math.Cos(num)), (float)(num2 * Math.Sin(num)));
         }
 
         // Token: 0x060002DB RID: 731 RVA: 0x000180E4 File Offset: 0x000162E4
         public static float GetMoveSpeed(Pawn pawn)
         {
-            float num = 60f / pawn.GetStatValue(StatDefOf.MoveSpeed, false);
+            var num = 60f / pawn.GetStatValue(StatDefOf.MoveSpeed, false);
             num += pawn.Map.pathGrid.CalculatedCostAt(pawn.Position, false, pawn.Position);
             Building edifice = pawn.Position.GetEdifice(pawn.Map);
             if (edifice != null)
@@ -127,7 +127,7 @@ namespace CombatExtended
         // Token: 0x060002DC RID: 732 RVA: 0x000181B8 File Offset: 0x000163B8
         public static float ClosestDistBetween(Vector2 origin, Vector2 destination, Vector2 target)
         {
-            return Mathf.Abs((destination.y - origin.y) * target.x - (destination.x - origin.x) * target.y + destination.x * origin.y - destination.y * origin.x) / (destination - origin).magnitude;
+            return Mathf.Abs(((destination.y - origin.y) * target.x) - ((destination.x - origin.x) * target.y) + (destination.x * origin.y) - (destination.y * origin.x)) / (destination - origin).magnitude;
         }
 
         // Token: 0x060002DD RID: 733 RVA: 0x00018220 File Offset: 0x00016420
@@ -173,7 +173,7 @@ namespace CombatExtended
             {
                 return;
             }
-            MoteThrown moteThrown = (MoteThrown)ThingMaker.MakeThing(casingMoteDef, null);
+            var moteThrown = (MoteThrown)ThingMaker.MakeThing(casingMoteDef, null);
             moteThrown.Scale = Rand.Range(0.5f, 0.3f) * size;
             moteThrown.exactRotation = Rand.Range(-3f, 4f);
             moteThrown.exactPosition = loc;
@@ -189,7 +189,7 @@ namespace CombatExtended
             {
                 return default;
             }
-            float num = 2f;
+            var num = 2f;
             if (roof.isNatural)
             {
                 num *= 2f;
@@ -200,7 +200,7 @@ namespace CombatExtended
             }
             num = Mathf.Max(0.1f, num - 2f);
             Vector3 center = cell.ToVector3Shifted();
-            center.y = 2f + num / 2f;
+            center.y = 2f + (num / 2f);
             return new Bounds(center, new Vector3(1f, num, 1f));
         }
 
@@ -211,10 +211,10 @@ namespace CombatExtended
             {
                 return default;
             }
-            CollisionVertical collisionVertical = new CollisionVertical(thing);
-            float collisionWidth = GetCollisionWidth(thing);
+            var collisionVertical = new CollisionVertical(thing);
+            var collisionWidth = GetCollisionWidth(thing);
             Vector3 drawPos = thing.DrawPos;
-            drawPos.y = collisionVertical.Max - collisionVertical.HeightRange.Span / 2f;
+            drawPos.y = collisionVertical.Max - (collisionVertical.HeightRange.Span / 2f);
             return new Bounds(drawPos, new Vector3(collisionWidth, collisionVertical.HeightRange.Span, collisionWidth));
         }
 
@@ -264,7 +264,7 @@ namespace CombatExtended
                 else
                 {
                     JobDefExtensionCE modExtension = curJob.def.GetModExtension<JobDefExtensionCE>();
-                    flag = ((modExtension != null) ? new bool?(modExtension.isCrouchJob) : null);
+                    flag = (modExtension != null) ? new bool?(modExtension.isCrouchJob) : null;
                 }
                 return flag ?? false;
             }
@@ -284,7 +284,7 @@ namespace CombatExtended
             {
                 return Mathf.Pow(shotSpeed, 2f) / gravityFactor * Mathf.Sin(2f * shotAngle);
             }
-            return shotSpeed * Mathf.Cos(shotAngle) / gravityFactor * (shotSpeed * Mathf.Sin(shotAngle) + Mathf.Sqrt(Mathf.Pow(shotSpeed * Mathf.Sin(shotAngle), 2f) + 2f * gravityFactor * shotHeight));
+            return shotSpeed * Mathf.Cos(shotAngle) / gravityFactor * ((shotSpeed * Mathf.Sin(shotAngle)) + Mathf.Sqrt(Mathf.Pow(shotSpeed * Mathf.Sin(shotAngle), 2f) + (2f * gravityFactor * shotHeight)));
         }
 
         // Token: 0x060002E8 RID: 744 RVA: 0x00018634 File Offset: 0x00016834

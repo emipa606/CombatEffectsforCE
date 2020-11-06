@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -11,7 +10,7 @@ namespace CombatEffectsCE
 
         private void ChangeClusterGraphicsColor(Color newColor)
         {
-            ((CombatEffectsCE.MyGraphicCluster)Graphic).ChangeGraphicColor(newColor);
+            ((MyGraphicCluster)Graphic).ChangeGraphicColor(newColor);
             return;
         }
 
@@ -22,7 +21,7 @@ namespace CombatEffectsCE
                 return;
             }
 
-            if (graphicClass == typeof(CombatEffectsCE.MyGraphicCluster))
+            if (graphicClass == typeof(MyGraphicCluster))
             {
                 ChangeClusterGraphicsColor(newColor);
                 return;

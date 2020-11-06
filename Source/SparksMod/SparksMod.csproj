@@ -57,12 +57,14 @@
     <Compile Include="BulletCESparky.cs" />
     <Compile Include="CE_Utility.cs" />
     <Compile Include="CustomBulletProperties.cs" />
+    <Compile Include="Mod.cs" />
     <Compile Include="MotePropertiesFilthy.cs" />
     <Compile Include="MoteFilthy.cs" />
     <Compile Include="MyGraphicCluster.cs" />
     <Compile Include="MyGraphicData.cs" />
     <Compile Include="ProjectilePropertiesWithEffectsCE.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

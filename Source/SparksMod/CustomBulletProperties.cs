@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Verse;
 using CombatExtended;
 
@@ -154,17 +152,17 @@ namespace CombatEffectsCE
              */
             if (exponent == 1f)
             {
-                return ((limit - score) / limit) * scale;
+                return (limit - score) / limit * scale;
             }
             else
             {
-                return (float)Math.Pow(((limit - score) / limit), exponent) * scale;
+                return (float)Math.Pow((limit - score) / limit, exponent) * scale;
             }
         }
 
         public static bool ConsideredAPType(AmmoType ammoType)
         {
-            return (ammoType == AmmoType.AP || ammoType == AmmoType.API || ammoType == AmmoType.SLUG || ammoType == AmmoType.SABOT);
+            return ammoType == AmmoType.AP || ammoType == AmmoType.API || ammoType == AmmoType.SLUG || ammoType == AmmoType.SABOT;
         }
 
         /*
@@ -197,25 +195,25 @@ namespace CombatEffectsCE
                 }
                 else
                 {
-                    int caliberIndex = caliberCategoryOrder.FindIndex(delegate (CaliberCategory cat) { return cat == calCat; } );
-                    float penChance = penChanceParamTable[7, caliberIndex, 0];
+                    var caliberIndex = caliberCategoryOrder.FindIndex(delegate (CaliberCategory cat) { return cat == calCat; } );
+                    var penChance = penChanceParamTable[7, caliberIndex, 0];
                     //Log.Message($"Pawn hit, not deflected. Penetration chance {penChance}");
 
-                    float score = Rand.Value;
+                    var score = Rand.Value;
                     penChance = penChance * (energy * 0.01f) * 0.01f;
                     if (penChance > 0f && (penChance >= 1f || score < penChance))
                     {
                         // Really energy loss should be computed around here. But for now I'll use a fix energy loss within the Bullet Impact function.
                         //Log.Message("Pawn hit, bullet went through.");
-                        float exponent = 1f;
-                        float maxEnergy = 0.8f;
+                        var exponent = 1f;
+                        var maxEnergy = 0.8f;
                         if (ConsideredAPType(bulletProps.ammoType))
                         {
                             exponent = 0.7f;
                             maxEnergy = 0.9f;
                         }
 
-                        float limit = penChance; // Use penchance as a limit of total energy loss
+                        var limit = penChance; // Use penchance as a limit of total energy loss
                         energy *= ComputeEnergyRemainingAfterPen(exponent, maxEnergy, limit, score);
                         return ImpactType.PEN;
                     }
@@ -223,7 +221,7 @@ namespace CombatEffectsCE
             }
             else if (hitThing is Building)
             {
-                float percentage_HP = (float)hitThing.HitPoints / hitThing.MaxHitPoints;
+                var percentage_HP = (float)hitThing.HitPoints / hitThing.MaxHitPoints;
                 //Log.Message($"Hit thing HP percentage : {percentage_HP}");
                     
                 Material thingMat = DetermineMaterial(hitThing);
@@ -234,7 +232,7 @@ namespace CombatEffectsCE
                     return ImpactType.STOP;
                 }
 
-                int[] indices = new int[2] {materialOrder.FindIndex(delegate (Material mat)
+                var indices = new int[2] {materialOrder.FindIndex(delegate (Material mat)
                 {
                     return mat == thingMat;
                 }), caliberCategoryOrder.FindIndex(delegate (CaliberCategory cat)
@@ -242,9 +240,9 @@ namespace CombatEffectsCE
                     return cat == calCat;
                 })};
 
-                float basePenChance = penChanceParamTable[indices[0], indices[1], 0];
-                float highPenChance = penChanceParamTable[indices[0], indices[1], 1];
-                float penChanceThreshold = penChanceParamTable[indices[0], indices[1], 2];
+                var basePenChance = penChanceParamTable[indices[0], indices[1], 0];
+                var highPenChance = penChanceParamTable[indices[0], indices[1], 1];
+                var penChanceThreshold = penChanceParamTable[indices[0], indices[1], 2];
 
                 //Log.Message($"Params to pen function : {basePenChance} {highPenChance} {penChanceThreshold}");
                 
@@ -256,7 +254,7 @@ namespace CombatEffectsCE
                     //Log.Message($"AP modified Params to pen function : {basePenChance} {highPenChance} {penChanceThreshold}");
                 }
 
-                float penChance = 0f;
+                var penChance = 0f;
 
                 // NOTE : Chances are stored in nominal percentages. So 80% is 80 and not 0.8. Easier to type.
                 if (percentage_HP <= penChanceThreshold*0.01f)
@@ -267,25 +265,25 @@ namespace CombatEffectsCE
                 else
                 {
                     //Linear function 
-                    penChance = basePenChance + (1 - percentage_HP) / (1 - penChanceThreshold) * (highPenChance - basePenChance);
+                    penChance = basePenChance + ((1 - percentage_HP) / (1 - penChanceThreshold) * (highPenChance - basePenChance));
                     //Log.Message($"Interpolated penChance : {penChance}");
                 }
                 penChance += Rand.Gaussian(0f, 5f);
                 penChance = penChance * (energy*0.01f) * 0.01f;
-                float score = Rand.Value;
+                var score = Rand.Value;
                 if (penChance > 0f && (penChance >= 1f || score < penChance))
                 {
                     //Log.Message("Stuff penetrated.");
 
-                    float exponent = 1f;
-                    float maxEnergy = 0.8f;
+                    var exponent = 1f;
+                    var maxEnergy = 0.8f;
                     if (ConsideredAPType(bulletProps.ammoType))
                     {
                         exponent = 0.5f;
                         maxEnergy = 0.9f;
                     }
 
-                    float limit = penChance; // Use penchance as a limit of total energy loss
+                    var limit = penChance; // Use penchance as a limit of total energy loss
                     energy *= ComputeEnergyRemainingAfterPen(exponent, maxEnergy, limit, score);
                     return ImpactType.PEN;
                 }

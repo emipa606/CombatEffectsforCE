@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CombatEffectsCE;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -8,7 +9,7 @@ using Verse.Sound;
 
 namespace CombatExtended
 {
-    
+
 
     // Token: 0x02000070 RID: 112
     public class BulletCESparky : ProjectileCE
@@ -19,7 +20,7 @@ namespace CombatExtended
             if (pawn.RaceProps.Humanlike)
             {
                 List<Apparel> wornApparel = pawn.apparel.WornApparel;
-                for (int i = 0; i < wornApparel.Count; i++)
+                for (var i = 0; i < wornApparel.Count; i++)
                 {
                     if (wornApparel[i] is ShieldBelt shieldBelt2)
                     {
@@ -36,7 +37,7 @@ namespace CombatExtended
                 if (faction != (thing?.Faction) && (shieldBelt == null || (shieldBelt != null && shieldBelt.ShieldState == ShieldState.Resetting)))
                 {
                     suppressionAmount = def.projectile.GetDamageAmount(1f, null);
-                    float num = (!(def.projectile is ProjectilePropertiesCE projectilePropertiesCE)) ? 0f : projectilePropertiesCE.GetArmorPenetration(1f, null);
+                    var num = (!(def.projectile is ProjectilePropertiesCE projectilePropertiesCE)) ? 0f : projectilePropertiesCE.GetArmorPenetration(1f, null);
                     suppressionAmount *= 1f - Mathf.Clamp(pawn.GetStatValue(CE_StatDefOf.AverageSharpArmor, true) * 0.5f / num, 0f, 1f);
                     compSuppressable.AddSuppression(suppressionAmount, OriginIV3);
                 }
@@ -66,15 +67,15 @@ namespace CombatExtended
             }
             else
             {
-                lastThingHit = hitThing;                
+                lastThingHit = hitThing;
             }
 
 
-            bool flag = launcher is AmmoThing;
+            var flag = launcher is AmmoThing;
             Map map = Map;
             LogEntry_DamageResult logEntry_DamageResult = null;
-            
-            bool isDeflectedByPawn = false;
+
+            var isDeflectedByPawn = false;
 
             if ((logMisses || (!logMisses && hitThing != null && (hitThing is Pawn || hitThing is Building_Turret))) && !flag)
             {
@@ -82,11 +83,11 @@ namespace CombatExtended
             }
             if (hitThing != null)
             {
-                float angleY = ExactRotation.eulerAngles.y; // This is the bullet heading angle in respect to the north vector around the up vector
+                var angleY = ExactRotation.eulerAngles.y; // This is the bullet heading angle in respect to the north vector around the up vector
 
                 if (hitThing is Building)
-                {                 
-                    float shotAngle = angleY - 180f;
+                {
+                    var shotAngle = angleY - 180f;
 
                     if (hitThing.def.MadeFromStuff == true)
                     {
@@ -116,7 +117,7 @@ namespace CombatExtended
                         Color hitThingColor = hitThing.Stuff.graphic.color;
                         hitThingColor.a = 0.6f;
                         projectileProperties.effectBuildingBits.children[0].moteDef.graphicData.color = hitThingColor;
-                    }                    
+                    }
                     projectileProperties.effectBuildingBits.children[0].angle = new FloatRange(shotAngle - 45f, shotAngle + 45f);
                     Effecter effecter = projectileProperties.effectBuildingBits.Spawn();
                     effecter.Trigger(hitThing, hitThing);
@@ -125,12 +126,12 @@ namespace CombatExtended
                     effecter.Trigger(this, hitThing);
 
                 }
-                int damageAmount = def.projectile.GetDamageAmount(1f, null);
+                var damageAmount = def.projectile.GetDamageAmount(1f, null);
                 DamageDefExtensionCE damageDefExtensionCE = def.projectile.damageDef.GetModExtension<DamageDefExtensionCE>() ?? new DamageDefExtensionCE();
-                ProjectilePropertiesCE projectilePropertiesCE = (ProjectilePropertiesCE)def.projectile;
-                bool flag2 = this.def.projectile.damageDef.armorCategory == DamageArmorCategoryDefOf.Sharp;
-                float armorPenetration = (!flag2) ? projectilePropertiesCE.armorPenetrationBlunt : projectilePropertiesCE.armorPenetrationSharp;
-                DamageInfo dinfo = new DamageInfo(def.projectile.damageDef, damageAmount, armorPenetration, ExactRotation.eulerAngles.y, launcher, null, def, DamageInfo.SourceCategory.ThingOrUnknown, null);
+                var projectilePropertiesCE = (ProjectilePropertiesCE)def.projectile;
+                var flag2 = this.def.projectile.damageDef.armorCategory == DamageArmorCategoryDefOf.Sharp;
+                var armorPenetration = (!flag2) ? projectilePropertiesCE.armorPenetrationBlunt : projectilePropertiesCE.armorPenetrationSharp;
+                var dinfo = new DamageInfo(def.projectile.damageDef, damageAmount, armorPenetration, ExactRotation.eulerAngles.y, launcher, null, def, DamageInfo.SourceCategory.ThingOrUnknown, null);
                 BodyPartDepth depth = (damageDefExtensionCE != null && damageDefExtensionCE.harmOnlyOutsideLayers) ? BodyPartDepth.Outside : BodyPartDepth.Undefined;
                 BodyPartHeight collisionBodyHeight = new CollisionVertical(hitThing).GetCollisionBodyHeight(ExactPosition.y);
                 dinfo.SetBodyRegion(collisionBodyHeight, depth);
@@ -146,45 +147,42 @@ namespace CombatExtended
 
                 DamageWorker.DamageResult dmgRes = hitThing.TakeDamage(dinfo);
                 //Log.Message($"is it deflected? : {dmgRes.deflected}");
-                if (!dmgRes.deflected)
+                if (CombatEffectsCEMod.instance.Settings.ExtraBlood && !dmgRes.deflected && hitThing is Pawn && projectileProperties.effectBloodHit != null)
                 {
-                    if (hitThing is Pawn && projectileProperties.effectBloodHit != null)
+                    //Log.Message("Hit someone!");
+                    //string m = $"It's meat color : {hitThing.def.race.meatColor.ToString()}";
+                    //Log.Message("Show extra blood");                       
+                    if (hitThing.def.race.IsMechanoid)
                     {
-                        //Log.Message("Hit someone!");
-                        //string m = $"It's meat color : {hitThing.def.race.meatColor.ToString()}";
-                        //Log.Message(m);                        
-                        if (hitThing.def.race.IsMechanoid)
-                        {
-                            Color bloodColor = new Color(0.04f, 0.04f, 0.04f, 0.7f);
-                            projectileProperties.effectBloodHit.children[0].moteDef.graphicData.color = bloodColor;
-                            ((CombatEffectsCE.MyGraphicData)((CombatEffectsCE.MotePropertiesFilthy)projectileProperties.effectBloodHit.children[0].moteDef.mote).filthTrace.graphicData).ChangeGraphicColor(bloodColor);
-                        }
-                        else
-                        {
-                            Color bloodColor = hitThing.def.race.meatColor;                            
-                            if (bloodColor == Color.white)
-                            {
-                                //Log.Message("Blood color changing!");
-                                bloodColor = new Color(0.5f, 0.1f, 0.1f);
-                            }
-                            //bloodColor.a = 1f;
-                            //m = $"Requested color : {bloodColor.ToString()}";
-                            //Log.Message(m);
-                            //((SparksMod.MyGraphicData)this.projectileProperties.effectBloodHit.children[0].moteDef.graphicData).changeGraphicColor(bloodColor);
-                            //((SparksMod.MyGraphicData)((SparksMod.MotePropertiesFilthy)this.projectileProperties.effectBloodHit.children[0].moteDef.mote).filthTrace.graphicData).changeGraphicColor(bloodColor);
-
-                            projectileProperties.effectBloodHit.children[0].moteDef.graphicData.color = bloodColor;
-                            ((CombatEffectsCE.MyGraphicData)((CombatEffectsCE.MotePropertiesFilthy)projectileProperties.effectBloodHit.children[0].moteDef.mote).filthTrace.graphicData).ChangeGraphicColor(bloodColor);
-                        }
-                        Effecter bloodEffect = ((ProjectilePropertiesWithEffectsCE)def.projectile).effectBloodHit.Spawn();
-                        bloodEffect.Trigger(hitThing, hitThing);
+                        var bloodColor = new Color(0.04f, 0.04f, 0.04f, 0.7f);
+                        projectileProperties.effectBloodHit.children[0].moteDef.graphicData.color = bloodColor;
+                        ((MyGraphicData)((MotePropertiesFilthy)projectileProperties.effectBloodHit.children[0].moteDef.mote).filthTrace.graphicData).ChangeGraphicColor(bloodColor);
                     }
+                    else
+                    {
+                        Color bloodColor = hitThing.def.race.meatColor;
+                        if (bloodColor == Color.white)
+                        {
+                            //Log.Message("Blood color changing!");
+                            bloodColor = new Color(0.5f, 0.1f, 0.1f);
+                        }
+                        //bloodColor.a = 1f;
+                        //m = $"Requested color : {bloodColor.ToString()}";
+                        //Log.Message(m);
+                        //((SparksMod.MyGraphicData)this.projectileProperties.effectBloodHit.children[0].moteDef.graphicData).changeGraphicColor(bloodColor);
+                        //((SparksMod.MyGraphicData)((SparksMod.MotePropertiesFilthy)this.projectileProperties.effectBloodHit.children[0].moteDef.mote).filthTrace.graphicData).changeGraphicColor(bloodColor);
+
+                        projectileProperties.effectBloodHit.children[0].moteDef.graphicData.color = bloodColor;
+                        ((MyGraphicData)((MotePropertiesFilthy)projectileProperties.effectBloodHit.children[0].moteDef.mote).filthTrace.graphicData).ChangeGraphicColor(bloodColor);
+                    }
+                    Effecter bloodEffect = ((ProjectilePropertiesWithEffectsCE)def.projectile).effectBloodHit.Spawn();
+                    bloodEffect.Trigger(hitThing, hitThing);
                 }
                 isDeflectedByPawn = dmgRes.deflected;
 
                 //Log the result of the hit!
                 dmgRes.AssociateWithLog(logEntry_DamageResult);
-                if (hitThing is Pawn || projectilePropertiesCE == null || projectilePropertiesCE.secondaryDamage.NullOrEmpty<SecondaryDamage>())
+                if (hitThing is Pawn || projectilePropertiesCE == null || projectilePropertiesCE.secondaryDamage.NullOrEmpty())
                 {
                     goto IL_2A6;
                 }
@@ -197,27 +195,27 @@ namespace CombatExtended
                         {
                             break;
                         }
-                        DamageInfo dinfo2 = new DamageInfo(secondaryDamage.def, secondaryDamage.amount, projectilePropertiesCE.GetArmorPenetration(1f, null), ExactRotation.eulerAngles.y, launcher, null, def, DamageInfo.SourceCategory.ThingOrUnknown, null);
+                        var dinfo2 = new DamageInfo(secondaryDamage.def, secondaryDamage.amount, projectilePropertiesCE.GetArmorPenetration(1f, null), ExactRotation.eulerAngles.y, launcher, null, def, DamageInfo.SourceCategory.ThingOrUnknown, null);
                         hitThing.TakeDamage(dinfo2).AssociateWithLog(logEntry_DamageResult);
                     }
                     goto IL_2A6;
                 }
             }
-            
+
             SoundDefOf.BulletImpact_Ground.PlayOneShot(new TargetInfo(Position, map, false));
             if (castShadow)
             {
                 MoteMaker.MakeStaticMote(ExactPosition, map, ThingDefOf.Mote_ShotHit_Dirt, 1f);
                 Effecter effect = projectileProperties.effectGroundHit.Spawn();
-                effect.Trigger(this,this);
+                effect.Trigger(this, this);
                 if (Position.GetTerrain(map).takeSplashes)
                 {
                     MoteMaker.MakeWaterSplash(ExactPosition, map, Mathf.Sqrt(def.projectile.GetDamageAmount(launcher, null)) * 1f, 4f);
                 }
             }
-            IL_2A6:
+        IL_2A6:
             // Either PENETRATION or RICOCHET or STOP can happen.
-            CombatEffectsCE.ImpactType impactType = CombatEffectsCE.ImpactHelper.DetermineImpactType(this, hitThing, ref energyRemaining, isDeflectedByPawn);
+            ImpactType impactType = CombatEffectsCE.ImpactHelper.DetermineImpactType(this, hitThing, ref energyRemaining, isDeflectedByPawn);
 
             // DECREASE ENERGY
             if (impactType == CombatEffectsCE.ImpactType.PEN && energyRemaining > 0f)
@@ -228,7 +226,7 @@ namespace CombatExtended
                 {
                     shotSpeed *= 0.9f;
                     ImpactSpeedChanged();
-                    
+
                 }
                 else
                 {
@@ -238,11 +236,11 @@ namespace CombatExtended
             }
 
             // EITHER STOP or GROUND HIT
-            landed = (impactType == CombatEffectsCE.ImpactType.STOP || (ticksToImpact <= 0) || energyRemaining <= 0f);
+            landed = impactType == CombatEffectsCE.ImpactType.STOP || (ticksToImpact <= 0) || energyRemaining <= 0f;
 
             ImpactBase(hitThing, landed);
         }
-        
+
         private void ImpactBase(Thing hitThing, bool destroyBullet = true)
         {
             CompExplosiveCE compExplosiveCE = this.TryGetComp<CompExplosiveCE>();
@@ -259,7 +257,7 @@ namespace CombatExtended
                 }
                 else if (Controller.settings.ReuseNeolithicProjectiles)
                 {
-                    Thing thing = ThingMaker.MakeThing(preExplosionSpawnThingDef, null);                    
+                    Thing thing = ThingMaker.MakeThing(preExplosionSpawnThingDef, null);
                     thing.stackCount = 1;
                     thing.SetForbidden(true, false);
                     GenPlace.TryPlaceThing(thing, Position, Map, ThingPlaceMode.Near, null, null);
@@ -285,25 +283,25 @@ namespace CombatExtended
 
         private bool CheckCellForCollision(IntVec3 cell)
         {
-            bool flag = false;
-            bool justWallsRoofs = false;
+            var flag = false;
+            var justWallsRoofs = false;
             float num = (cell - OriginIV3).LengthHorizontalSquared;
             if ((!def.projectile.alwaysFreeIntercept && minCollisionSqr <= 1f) ? (num < 1f) : (num < Mathf.Min(144f, minCollisionSqr / 4f)))
             {
                 justWallsRoofs = true;
             }
-            List<Thing> list = new List<Thing>(Map.thingGrid.ThingsListAtFast(cell)).Where(delegate (Thing t)
+            var list = new List<Thing>(Map.thingGrid.ThingsListAtFast(cell)).Where(delegate (Thing t)
             {
                 if (!justWallsRoofs)
                 {
                     return t is Pawn || t.def.Fillage > FillCategory.None;
                 }
                 return t.def.Fillage == FillCategory.Full;
-            }).ToList<Thing>();
+            }).ToList();
             if (!justWallsRoofs)
             {
-                List<IntVec3> list2 = new List<IntVec3>();
-                list2.AddRange(GenAdj.CellsAdjacentCardinal(cell, Rot4.FromAngleFlat(shotRotation), new IntVec2(5, 0)).ToList<IntVec3>());
+                var list2 = new List<IntVec3>();
+                list2.AddRange(GenAdj.CellsAdjacentCardinal(cell, Rot4.FromAngleFlat(shotRotation), new IntVec2(5, 0)).ToList());
                 foreach (IntVec3 intVec in list2)
                 {
                     if (intVec != cell && intVec.InBounds(Map))
@@ -326,7 +324,7 @@ namespace CombatExtended
                 }
                 flag = true;
             }
-            foreach (Thing thing in from x in list.Distinct<Thing>() orderby (x.DrawPos - LastPos).sqrMagnitude select x)
+            foreach (Thing thing in from x in list.Distinct() orderby (x.DrawPos - LastPos).sqrMagnitude select x)
             {
                 // Modify : Added check to check if we hit this thing already than keep searching. Probably I will end up removing the similar check from Impact()
                 if ((thing != launcher && thing != mount) || canTargetSelf)
@@ -349,8 +347,8 @@ namespace CombatExtended
 
         private bool CheckForCollisionBetween()
         {
-            IntVec3 intVec = LastPos.ToIntVec3();
-            IntVec3 intVec2 = ExactPosition.ToIntVec3();
+            var intVec = LastPos.ToIntVec3();
+            var intVec2 = ExactPosition.ToIntVec3();
             if (!intVec.InBounds(Map) || !intVec2.InBounds(Map))
             {
                 return false;
@@ -363,7 +361,7 @@ namespace CombatExtended
             {
                 intVec,
                 intVec2
-            }).Distinct<IntVec3>()
+            }).Distinct()
                                         orderby (x.ToVector3Shifted() - LastPos).MagnitudeHorizontalSquared()
                                         select x)
             {
@@ -389,7 +387,7 @@ namespace CombatExtended
 
             // Try to bypass the ProjectileCE.Tick() which is overriden here.
             // Since it's first thing is to check if landed is true and just returns if it IS we try to trick it.
-            bool real_landed_val = landed;
+            var real_landed_val = landed;
             landed = true;
             base.Tick();
             landed = real_landed_val;
@@ -403,7 +401,7 @@ namespace CombatExtended
                 }
                 return;
             }
-            LastPos = ExactPosition;            
+            LastPos = ExactPosition;
             ticksToImpact--; // this increments our position along the trajectory!
             if (!ExactPosition.InBounds(Map))
             {
@@ -434,12 +432,12 @@ namespace CombatExtended
         private bool TryCollideWith(Thing thing)
         {
             // if hit thing is it's own launcher and can't hit it self -> No hit!
-            if (thing == launcher && !canTargetSelf || thing == lastThingHit)
+            if ((thing == launcher && !canTargetSelf) || thing == lastThingHit)
             {
                 return false;
             }
             // IntersectRay method of a Bound intersects the bounding box with the ray and gives us the distance to that point. If it returns false or null .. the ray missed the bound entirely
-            if (!CE_Utility.GetBoundsFor(thing).IntersectRay(ShotLine, out float num))
+            if (!CE_Utility.GetBoundsFor(thing).IntersectRay(ShotLine, out var num))
             {
                 return false;
             }
@@ -453,8 +451,8 @@ namespace CombatExtended
                 // Compute the chance that projectile hits the plant. Based on fillPercentage of plant and something.
                 // this.OriginIV3 is the origin of the shot the gun it self.
                 // I think [((thing.Position - this.OriginIV3).LengthHorizontal / 40f * this.AccuracyFactor] wanted a parentheses around (40f * this.AccuracyFactor) because now accuracy increases the chance
-                float num2 = def.projectile.alwaysFreeIntercept ? 1f : ((thing.Position - OriginIV3).LengthHorizontal / (40f * AccuracyFactor));
-                float chance = thing.def.fillPercent * num2;
+                var num2 = def.projectile.alwaysFreeIntercept ? 1f : ((thing.Position - OriginIV3).LengthHorizontal / (40f * AccuracyFactor));
+                var chance = thing.def.fillPercent * num2;
                 if (Controller.settings.DebugShowTreeCollisionChance)
                 {
                     MoteMaker.ThrowText(thing.Position.ToVector3Shifted(), thing.Map, chance.ToString(), -1f);
@@ -504,7 +502,7 @@ namespace CombatExtended
             {
                 return false;
             }
-            if (!CE_Utility.GetBoundsFor(cell, cell.GetRoof(Map)).IntersectRay(ShotLine, out float num))
+            if (!CE_Utility.GetBoundsFor(cell, cell.GetRoof(Map)).IntersectRay(ShotLine, out var num))
             {
                 return false;
             }
@@ -526,7 +524,7 @@ namespace CombatExtended
 
         private void ImpactSomething()
         {
-            IntVec3 intVec = ExactPosition.ToIntVec3();
+            var intVec = ExactPosition.ToIntVec3();
             if (def.projectile.flyOverhead)
             {
                 RoofDef roofDef = Map.roofGrid.RoofAt(intVec);
@@ -549,9 +547,9 @@ namespace CombatExtended
             {
                 return;
             }
-            List<Thing> list = (from t in Map.thingGrid.ThingsListAt(intVec)
-                                where t is Pawn || t.def.Fillage > FillCategory.None
-                                select t).ToList<Thing>();
+            var list = (from t in Map.thingGrid.ThingsListAt(intVec)
+                        where t is Pawn || t.def.Fillage > FillCategory.None
+                        select t).ToList();
             if (list.Count > 0)
             {
                 foreach (Thing thing in list)
@@ -591,14 +589,14 @@ namespace CombatExtended
             equipmentDef = (equipment?.def);
             if (!def.projectile.soundAmbient.NullOrUndefined())
             {
-                SoundInfo info = SoundInfo.InMap(this, MaintenanceType.PerTick);
+                var info = SoundInfo.InMap(this, MaintenanceType.PerTick);
                 ambientSustainer = def.projectile.soundAmbient.TrySpawnSustainer(info);
             }
         }
 
         private void ImpactSpeedChanged()
         {
-            origin = new Vector2(impactPosition.x,impactPosition.z);            
+            origin = new Vector2(impactPosition.x, impactPosition.z);
             shotHeight = Height;
             ticksToImpact = 0;
             intTicksToImpact = -1;
@@ -624,32 +622,26 @@ namespace CombatExtended
             set
             {
                 impactPosition = new Vector3(value.x, value.y, value.z);
-                Position = impactPosition.ToIntVec3();                
+                Position = impactPosition.ToIntVec3();
             }
         }
 
         public override Vector3 DrawPos
-{
-	get
-	{
-		Vector2 drawPosV = DrawPosV2;
-		return new Vector3(drawPosV.x, def.Altitude, drawPosV.y);
-	}
-}
-
-        public new Vector2 DrawPosV2
         {
             get
             {
-                return Vec2Position(-1f) + new Vector2(0f, Height - shotHeight * ((StartingTicksToImpact - fTicks) / StartingTicksToImpact));
+                Vector2 drawPosV = DrawPosV2;
+                return new Vector3(drawPosV.x, def.Altitude, drawPosV.y);
             }
         }
+
+        public new Vector2 DrawPosV2 => Vec2Position(-1f) + new Vector2(0f, Height - (shotHeight * ((StartingTicksToImpact - fTicks) / StartingTicksToImpact)));
 
         private Vector2 Vec2Position(float ticks = -1f)
         {
             if (ticks < 0f)
             {
-                ticks = fTicks;                
+                ticks = fTicks;
             }
             if (ticks != StartingTicksToImpact)
             {
@@ -662,13 +654,7 @@ namespace CombatExtended
             }
         }
 
-        protected new int FlightTicks
-        {
-            get
-            {
-                return IntTicksToImpact - ticksToImpact;
-            }
-        }
+        protected new int FlightTicks => IntTicksToImpact - ticksToImpact;
 
         protected new float fTicks
         {
@@ -723,13 +709,13 @@ namespace CombatExtended
 
         private float GetFlightTime()
         {
-            return (Mathf.Sin(shotAngle) * shotSpeed + Mathf.Sqrt(Mathf.Pow(Mathf.Sin(shotAngle) * shotSpeed, 2f) + 2f * GravityFactor * shotHeight)) / GravityFactor;
+            return ((Mathf.Sin(shotAngle) * shotSpeed) + Mathf.Sqrt(Mathf.Pow(Mathf.Sin(shotAngle) * shotSpeed, 2f) + (2f * GravityFactor * shotHeight))) / GravityFactor;
         }
 
         private float GetHeightAtTicks(int ticks)
         {
-            float num = ticks / 60f;
-            return (float)Math.Round(shotHeight + shotSpeed * Mathf.Sin(shotAngle) * num - GravityFactor * num * num / 2f, 3);
+            var num = ticks / 60f;
+            return (float)Math.Round(shotHeight + (shotSpeed * Mathf.Sin(shotAngle) * num) - (GravityFactor * num * num / 2f), 3);
         }
 
         public new float Height
@@ -738,7 +724,7 @@ namespace CombatExtended
             {
                 if (lastHeightTick != FlightTicks)
                 {
-                    heightInt = ((ticksToImpact > 0) ? GetHeightAtTicks(FlightTicks) : 0f);
+                    heightInt = (ticksToImpact > 0) ? GetHeightAtTicks(FlightTicks) : 0f;
                     lastHeightTick = FlightTicks;
                 }
                 return heightInt;
@@ -772,12 +758,9 @@ namespace CombatExtended
                 }
                 return lastExactPos;
             }
-            set
-            {
-                lastExactPos = value;
-            }
+            set => lastExactPos = value;
         }
-               
+
 
         // Token: 0x040001BE RID: 446
         private const float StunChance = 0.1f;

@@ -24,9 +24,9 @@ namespace CombatEffectsCE
             }
 
             subGraphics = new Graphic[cachedTextures.Count];
-            for (int i=0; i < cachedTextures.Count; i++)
+            for (var i=0; i < cachedTextures.Count; i++)
             {
-                string path = cachedReq.path + "/" + cachedTextures[i].name;
+                var path = cachedReq.path + "/" + cachedTextures[i].name;
                 subGraphics[i] = GraphicDatabase.Get(typeof(Graphic_Single), path, cachedReq.shader, drawSize, prevColor, ColorTwo, null, cachedReq.shaderParameters);
             }
         }
@@ -47,13 +47,13 @@ namespace CombatEffectsCE
             color = req.color;
             colorTwo = req.colorTwo;
             drawSize = req.drawSize;
-            List<Texture2D> list = (from x in ContentFinder<Texture2D>.GetAllInFolder(req.path)
+            var list = (from x in ContentFinder<Texture2D>.GetAllInFolder(req.path)
                                     where !x.name.EndsWith(Graphic_Single.MaskSuffix)
                                     orderby x.name
-                                    select x).ToList<Texture2D>();
+                                    select x).ToList();
             cachedTextures = list;
 
-            if (list.NullOrEmpty<Texture2D>())
+            if (list.NullOrEmpty())
             {
                 Log.Error("Collection cannot init: No textures found at path " + req.path, false);
                 subGraphics = new Graphic[]
@@ -63,9 +63,9 @@ namespace CombatEffectsCE
                 return;
             }
             subGraphics = new Graphic[list.Count];
-            for (int i = 0; i < list.Count; i++)
+            for (var i = 0; i < list.Count; i++)
             {
-                string path = req.path + "/" + list[i].name;
+                var path = req.path + "/" + list[i].name;
                 subGraphics[i] = GraphicDatabase.Get(typeof(Graphic_Single), path, req.shader, drawSize, color, colorTwo, null, req.shaderParameters);
             }
         }

@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using Verse;
 using Verse.Sound;
 using RimWorld;
@@ -29,7 +28,7 @@ namespace CombatEffectsCE
                 return;
             }
             Vector3 vector = NextExactPosition(deltaTime);
-            IntVec3 intVec = new IntVec3(vector);
+            var intVec = new IntVec3(vector);
             if (intVec != Position)
             {
                 if (!intVec.InBounds(Map))
@@ -56,7 +55,7 @@ namespace CombatEffectsCE
             velocity += def.mote.acceleration * deltaTime;
             if (def.mote.speedPerTime != 0f)
             {
-                Speed = Mathf.Max(Speed + def.mote.speedPerTime * deltaTime, 0f);
+                Speed = Mathf.Max(Speed + (def.mote.speedPerTime * deltaTime), 0f);
             }
             if (airTimeLeft > 0f)
             {
@@ -78,7 +77,7 @@ namespace CombatEffectsCE
                 {
                     Speed = 0f;
                 }
-                float rng = UnityEngine.Random.Range(0f, 1f);
+                var rng = UnityEngine.Random.Range(0f, 1f);
                 if (rng < 0.3f)
                 {
                     FilthMaker.TryMakeFilth(intVec, Map, ((MotePropertiesFilthy)def.mote).filthTrace, 1);
