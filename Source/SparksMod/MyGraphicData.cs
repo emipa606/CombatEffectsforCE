@@ -7,16 +7,64 @@ namespace CombatEffectsCE
 {
     public class MyGraphicData : GraphicData
     {
+        // Token: 0x04002975 RID: 10613
+        [NoTranslate]
+        //public string texPath;
+
+        // Token: 0x04002976 RID: 10614
+        //public Type graphicClass;
+
+        // Token: 0x04002977 RID: 10615
+        //public ShaderTypeDef shaderType;
+
+        // Token: 0x04002978 RID: 10616
+        //public List<ShaderParameter> shaderParameters;
+
+        // Token: 0x04002979 RID: 10617
+        //public Color color = Color.white;
+
+        // Token: 0x0400297A RID: 10618
+        //public Color colorTwo = Color.white;
+
+        // Token: 0x0400297B RID: 10619
+        //public Vector2 drawSize = Vector2.one;
+
+        //// Token: 0x0400297C RID: 10620
+        //public float onGroundRandomRotateAngle;
+
+        //// Token: 0x0400297D RID: 10621
+        //public bool drawRotated = true;
+
+        //// Token: 0x0400297E RID: 10622
+        //public bool allowFlip = true;
+
+        //// Token: 0x0400297F RID: 10623
+        //public float flipExtraRotation;
+
+        //// Token: 0x04002980 RID: 10624
+        //public ShadowData shadowData;
+
+        //// Token: 0x04002981 RID: 10625
+        //public DamageGraphicData damageData;
+
+        //// Token: 0x04002982 RID: 10626
+        //public LinkDrawerType linkType;
+
+        //// Token: 0x04002983 RID: 10627
+        //public LinkFlags linkFlags;
+
+        // Token: 0x04002984 RID: 10628
+        [Unsaved]
+        private Graphic cachedGraphic;
 
         private void ChangeClusterGraphicsColor(Color newColor)
         {
-            ((MyGraphicCluster)Graphic).ChangeGraphicColor(newColor);
-            return;
+            ((MyGraphicCluster) Graphic).ChangeGraphicColor(newColor);
         }
 
         public void ChangeGraphicColor(Color newColor)
         {
-            if(color == newColor)
+            if (color == newColor)
             {
                 return;
             }
@@ -36,19 +84,22 @@ namespace CombatEffectsCE
             //    string m = this.cachedGraphic.ToString();
             //    Log.Message(m);
             //}            
-            ShaderTypeDef cutout = shaderType;
+            var cutout = shaderType;
             if (cutout == null)
             {
                 cutout = ShaderTypeDefOf.Cutout;
             }
-            Shader shader = cutout.Shader;
-                        
-            cachedGraphic = GraphicDatabase.Get(graphicClass, texPath, shader, drawSize, color, color, this, shaderParameters);
-            
+
+            var shader = cutout.Shader;
+
+            cachedGraphic = GraphicDatabase.Get(graphicClass, texPath, shader, drawSize, color, color, this,
+                shaderParameters);
+
             if (onGroundRandomRotateAngle > 0.01f)
             {
                 cachedGraphic = new Graphic_RandomRotated(cachedGraphic, onGroundRandomRotateAngle);
             }
+
             if (Linked)
             {
                 cachedGraphic = GraphicUtility.WrapLinked(cachedGraphic, linkType);
@@ -104,17 +155,21 @@ namespace CombatEffectsCE
                 cachedGraphic = null;
                 return;
             }
-            ShaderTypeDef cutout = shaderType;
+
+            var cutout = shaderType;
             if (cutout == null)
             {
                 cutout = ShaderTypeDefOf.Cutout;
             }
-            Shader shader = cutout.Shader;
-            cachedGraphic = GraphicDatabase.Get(graphicClass, texPath, shader, drawSize, color, colorTwo, this, shaderParameters);
+
+            var shader = cutout.Shader;
+            cachedGraphic = GraphicDatabase.Get(graphicClass, texPath, shader, drawSize, color, colorTwo, this,
+                shaderParameters);
             if (onGroundRandomRotateAngle > 0.01f)
             {
                 cachedGraphic = new Graphic_RandomRotated(cachedGraphic, onGroundRandomRotateAngle);
             }
+
             if (Linked)
             {
                 cachedGraphic = GraphicUtility.WrapLinked(cachedGraphic, linkType);
@@ -147,70 +202,25 @@ namespace CombatEffectsCE
             {
                 yield return "graphicClass is null";
             }
+
             if (texPath.NullOrEmpty())
             {
                 yield return "texPath is null or empty";
             }
+
             if (thingDef != null && thingDef.drawerType == DrawerType.RealtimeOnly && Linked)
             {
-                yield return "does not add to map mesh but has a link drawer. Link drawers can only work on the map mesh.";
+                yield return
+                    "does not add to map mesh but has a link drawer. Link drawers can only work on the map mesh.";
             }
-            if ((shaderType == ShaderTypeDefOf.Cutout || shaderType == ShaderTypeDefOf.CutoutComplex) && thingDef.mote != null && (thingDef.mote.fadeInTime > 0f || thingDef.mote.fadeOutTime > 0f))
+
+            if (thingDef != null &&
+                (shaderType == ShaderTypeDefOf.Cutout || shaderType == ShaderTypeDefOf.CutoutComplex) &&
+                thingDef.mote != null && (thingDef.mote.fadeInTime > 0f || thingDef.mote.fadeOutTime > 0f))
             {
-                yield return "mote fades but uses cutout shader type. It will abruptly disappear when opacity falls under the cutout threshold.";
+                yield return
+                    "mote fades but uses cutout shader type. It will abruptly disappear when opacity falls under the cutout threshold.";
             }
-            yield break;
         }
-
-        // Token: 0x04002975 RID: 10613
-        [NoTranslate]
-        //public string texPath;
-
-        // Token: 0x04002976 RID: 10614
-        //public Type graphicClass;
-
-        // Token: 0x04002977 RID: 10615
-        //public ShaderTypeDef shaderType;
-
-        // Token: 0x04002978 RID: 10616
-        //public List<ShaderParameter> shaderParameters;
-
-        // Token: 0x04002979 RID: 10617
-        //public Color color = Color.white;
-
-        // Token: 0x0400297A RID: 10618
-        //public Color colorTwo = Color.white;
-
-        // Token: 0x0400297B RID: 10619
-        //public Vector2 drawSize = Vector2.one;
-
-        //// Token: 0x0400297C RID: 10620
-        //public float onGroundRandomRotateAngle;
-
-        //// Token: 0x0400297D RID: 10621
-        //public bool drawRotated = true;
-
-        //// Token: 0x0400297E RID: 10622
-        //public bool allowFlip = true;
-
-        //// Token: 0x0400297F RID: 10623
-        //public float flipExtraRotation;
-
-        //// Token: 0x04002980 RID: 10624
-        //public ShadowData shadowData;
-
-        //// Token: 0x04002981 RID: 10625
-        //public DamageGraphicData damageData;
-
-        //// Token: 0x04002982 RID: 10626
-        //public LinkDrawerType linkType;
-
-        //// Token: 0x04002983 RID: 10627
-        //public LinkFlags linkFlags;
-
-        // Token: 0x04002984 RID: 10628
-        [Unsaved]
-        private Graphic cachedGraphic;
-
     }
 }
