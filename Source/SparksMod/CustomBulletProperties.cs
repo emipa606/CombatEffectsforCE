@@ -156,7 +156,7 @@ namespace CombatEffectsCE
                     label = mostlyMadeOf.label;
                 }
 
-                if (string.IsNullOrEmpty(label) && hitThing.SmeltProducts(1f) != null)
+                if (string.IsNullOrEmpty(label) && hitThing.SmeltProducts(1f).Any())
                 {
                     var mostlyMadeOf = hitThing.SmeltProducts(1f).First();
                     //Log.Message($"Hit {hitThing.Label}, will smelt to {mostlyMadeOf.def.label}");
