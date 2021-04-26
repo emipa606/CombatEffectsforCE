@@ -18,7 +18,7 @@ namespace CombatExtended
         public const float gravityConst = 9.8f;
 
         // Token: 0x0400021F RID: 543
-        public static List<ThingDef> allWeaponDefs = new();
+        public static List<ThingDef> allWeaponDefs = new List<ThingDef>();
 
         // Token: 0x060002D7 RID: 727 RVA: 0x00017EF0 File Offset: 0x000160F0
         private static Texture2D Blit(this Texture2D texture, Rect blitRect, int[] rtSize)
@@ -321,8 +321,8 @@ namespace CombatExtended
 
             return shotSpeed * Mathf.Cos(shotAngle) / gravityFactor * ((shotSpeed * Mathf.Sin(shotAngle)) +
                                                                        Mathf.Sqrt(Mathf.Pow(
-                                                                               shotSpeed * Mathf.Sin(shotAngle), 2f) +
-                                                                           (2f * gravityFactor * shotHeight)));
+                                                                                      shotSpeed * Mathf.Sin(shotAngle), 2f) +
+                                                                                  (2f * gravityFactor * shotHeight)));
         }
 
         // Token: 0x060002E8 RID: 744 RVA: 0x00018634 File Offset: 0x00016834

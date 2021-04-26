@@ -8,7 +8,7 @@ namespace CombatEffectsCE
     internal class CombatEffectsCESettings : ModSettings
     {
         public bool ExtraBlood = true;
-        public bool PenetrationMechanics = true;
+        private bool PenetrationMechanics = true;
 
         /// <summary>
         ///     Saving and loading the values

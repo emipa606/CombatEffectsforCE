@@ -1,7 +1,5 @@
 ﻿using Verse;
 
-
-
 namespace CombatEffectsCE
 {
     // Token: 0x02000B52 RID: 2898

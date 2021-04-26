@@ -14,7 +14,7 @@ namespace CombatExtended
     {
         // Token: 0x040001BE RID: 446
         private const float StunChance = 0.1f;
-        private static readonly List<IntVec3> checkedCells = new();
+        private static readonly List<IntVec3> checkedCells = new List<IntVec3>();
         private readonly bool debugDrawIntercepts = false;
         private readonly int lastShotLine = -1;
         private float _gravityFactor = -1f;
@@ -24,11 +24,11 @@ namespace CombatExtended
         public float id = Rand.Value;
         private Vector3 impactPosition;
         private int intTicksToImpact = -1;
-        private Vector3 lastExactPos = new(-1000f, 0f, 0f);
+        private Vector3 lastExactPos = new Vector3(-1000f, 0f, 0f);
         private int lastHeightTick = -1;
 
         private Thing lastThingHit;
-        private IntVec3 originInt = new(0, -1000, 0);
+        private IntVec3 originInt = new IntVec3(0, -1000, 0);
         public ProjectilePropertiesWithEffectsCE projectileProperties;
 
         private float startingTicksToImpactInt = -1f;
@@ -67,7 +67,7 @@ namespace CombatExtended
 
         private new int FlightTicks => IntTicksToImpact - ticksToImpact;
 
-        public new float fTicks
+        private new float fTicks
         {
             get
             {
@@ -489,9 +489,9 @@ namespace CombatExtended
             var flag = false;
             var justWallsRoofs = false;
             float num = (cell - OriginIV3).LengthHorizontalSquared;
-            if (!def.projectile.alwaysFreeIntercept && minCollisionSqr <= 1f
+            if (!def.projectile.alwaysFreeIntercept && minCollisionDistance <= 1f
                 ? num < 1f
-                : num < Mathf.Min(144f, minCollisionSqr / 4f))
+                : num < Mathf.Min(144f, minCollisionDistance / 4f))
             {
                 justWallsRoofs = true;
             }
@@ -818,11 +818,13 @@ namespace CombatExtended
             this.launcher = launcher;
             this.origin = origin;
             equipmentDef = equipment?.def;
-            if (!def.projectile.soundAmbient.NullOrUndefined())
+            if (def.projectile.soundAmbient.NullOrUndefined())
             {
-                var info = SoundInfo.InMap(this, MaintenanceType.PerTick);
-                ambientSustainer = def.projectile.soundAmbient.TrySpawnSustainer(info);
+                return;
             }
+
+            var info = SoundInfo.InMap(this, MaintenanceType.PerTick);
+            ambientSustainer = def.projectile.soundAmbient.TrySpawnSustainer(info);
         }
 
         private void ImpactSpeedChanged()
