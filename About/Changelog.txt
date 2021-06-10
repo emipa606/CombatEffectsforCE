@@ -1,5 +1,8 @@
 # Changelog for CombatEffectsforCE
 
+1.0.8.0 - Projectiles should no longer hit embrasures/sandbags/similar within touch-range
+
+
 1.0.7.0 - Updated to work with the latest CE-release
 
 

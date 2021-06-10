@@ -486,71 +486,68 @@ namespace CombatExtended
 
         private bool CheckCellForCollision(IntVec3 cell)
         {
-            var flag = false;
-            var justWallsRoofs = false;
-            float num = (cell - OriginIV3).LengthHorizontalSquared;
-            if (!def.projectile.alwaysFreeIntercept && minCollisionDistance <= 1f
-                ? num < 1f
-                : num < Mathf.Min(144f, minCollisionDistance / 4f))
-            {
-                justWallsRoofs = true;
-            }
+            var collisionCheckSize = 5;
+            var SuppressionRadius = 3;
+            var roofChecked = false;
 
-            var list = new List<Thing>(Map.thingGrid.ThingsListAtFast(cell)).Where(delegate(Thing t)
+            var mainThingList = new List<Thing>(Map.thingGrid.ThingsListAtFast(cell))
+                .Where(t => t is Pawn || t.def.Fillage != FillCategory.None).ToList();
+
+            //Find pawns in adjacent cells and append them to main list
+            var adjList = new List<IntVec3>();
+            adjList.AddRange(GenAdj
+                .CellsAdjacentCardinal(cell, Rot4.FromAngleFlat(shotRotation), new IntVec2(collisionCheckSize, 0))
+                .ToList());
+
+            //Iterate through adjacent cells and find all the pawns
+            foreach (var curCell in adjList)
             {
-                if (!justWallsRoofs)
+                if (curCell == cell || !curCell.InBounds(Map))
                 {
-                    return t is Pawn || t.def.Fillage > FillCategory.None;
+                    continue;
                 }
 
-                return t.def.Fillage == FillCategory.Full;
-            }).ToList();
-            if (!justWallsRoofs)
-            {
-                var list2 = new List<IntVec3>();
-                list2.AddRange(GenAdj.CellsAdjacentCardinal(cell, Rot4.FromAngleFlat(shotRotation), new IntVec2(5, 0))
-                    .ToList());
-                foreach (var intVec in list2)
-                {
-                    if (intVec == cell || !intVec.InBounds(Map))
-                    {
-                        continue;
-                    }
+                mainThingList.AddRange(Map.thingGrid.ThingsListAtFast(curCell)
+                    .Where(x => x is Pawn));
 
-                    list.AddRange(from x in Map.thingGrid.ThingsListAtFast(intVec)
-                        where x is Pawn
-                        select x);
-                    if (debugDrawIntercepts)
-                    {
-                        Map.debugDrawer.FlashCell(intVec, 0.7f);
-                    }
+                if (Controller.settings.DebugDrawInterceptChecks)
+                {
+                    Map.debugDrawer.FlashCell(curCell, 0.7f);
                 }
             }
 
-            if (LastPos.y > 2f)
+            //If the last position is above the wallCollisionHeight, we should check for roof intersections first
+            if (LastPos.y > CollisionVertical.WallCollisionHeight)
             {
                 if (TryCollideWithRoof(cell))
                 {
                     return true;
                 }
 
-                flag = true;
+                roofChecked = true;
             }
 
-            foreach (var thing in from x in list.Distinct() orderby (x.DrawPos - LastPos).sqrMagnitude select x)
+            foreach (var thing in mainThingList.Distinct().OrderBy(x => (x.DrawPos - LastPos).sqrMagnitude))
             {
-                // Modify : Added check to check if we hit this thing already than keep searching. Probably I will end up removing the similar check from Impact()
                 if ((thing == launcher || thing == mount) && !canTargetSelf)
                 {
                     continue;
                 }
 
-                if (TryCollideWith(thing))
+                // Check for collision
+                if (thing == intendedTarget || def.projectile.alwaysFreeIntercept ||
+                    thing.Position.DistanceTo(OriginIV3) >= minCollisionDistance)
                 {
-                    return true;
+                    if (TryCollideWith(thing))
+                    {
+                        return true;
+                    }
                 }
 
-                if (justWallsRoofs || !(ExactPosition.y < 3f))
+                // Apply suppression. The height here is NOT that of the bullet in CELL,
+                // it is the height at the END OF THE PATH. This is because SuppressionRadius
+                // is not considered an EXACT limit.
+                if (!(ExactPosition.y < SuppressionRadius))
                 {
                     continue;
                 }
@@ -561,7 +558,108 @@ namespace CombatExtended
                 }
             }
 
-            return !flag && TryCollideWithRoof(cell);
+            //Finally check for intersecting with a roof (again).
+            if (!roofChecked && TryCollideWithRoof(cell))
+            {
+                return true;
+            }
+
+            return false;
+
+            //   var flag = false;
+            //   var justWallsRoofs = false;
+            //   float num = (cell - OriginIV3).LengthHorizontalSquared;
+            //   if (!def.projectile.alwaysFreeIntercept && minCollisionDistance <= 1f
+            //       ? num < 1f
+            //       : num < Mathf.Min(144f, minCollisionDistance / 4f))
+            //   {
+            //       justWallsRoofs = true;
+            //   }
+            //int collisionCheckSize = 5;
+            //   var mainThingList = new List<Thing>(Map.thingGrid.ThingsListAtFast(cell)).Where(t => t is Pawn || t.def.Fillage != FillCategory.None).ToList();
+            //   var adjList = new List<IntVec3>();
+            //   adjList.AddRange(GenAdj.CellsAdjacentCardinal(cell, Rot4.FromAngleFlat(shotRotation), new IntVec2(collisionCheckSize, 0)).ToList());
+            //   foreach (var curCell in adjList)
+            //   {
+            //       if (curCell != cell && curCell.InBounds(Map))
+            //       {
+            //           mainThingList.AddRange(Map.thingGrid.ThingsListAtFast(curCell)
+            //               .Where(x => x is Pawn));
+
+            //           if (Controller.settings.DebugDrawInterceptChecks)
+            //           {
+            //               Map.debugDrawer.FlashCell(curCell, 0.7f);
+            //           }
+            //       }
+            //   }
+
+
+            //   var list = new List<Thing>(Map.thingGrid.ThingsListAtFast(cell)).Where(delegate(Thing t)
+            //   {
+            //       if (!justWallsRoofs)
+            //       {
+            //           return t is Pawn || t.def.Fillage > FillCategory.None;
+            //       }
+
+            //       return t.def.Fillage == FillCategory.Full;
+            //   }).ToList();
+            //   if (!justWallsRoofs)
+            //   {
+            //       var list2 = new List<IntVec3>();
+            //       list2.AddRange(GenAdj.CellsAdjacentCardinal(cell, Rot4.FromAngleFlat(shotRotation), new IntVec2(5, 0))
+            //           .ToList());
+            //       foreach (var intVec in list2)
+            //       {
+            //           if (intVec == cell || !intVec.InBounds(Map))
+            //           {
+            //               continue;
+            //           }
+
+            //           list.AddRange(from x in Map.thingGrid.ThingsListAtFast(intVec)
+            //               where x is Pawn
+            //               select x);
+            //           if (debugDrawIntercepts)
+            //           {
+            //               Map.debugDrawer.FlashCell(intVec, 0.7f);
+            //           }
+            //       }
+            //   }
+
+            //   if (LastPos.y > 2f)
+            //   {
+            //       if (TryCollideWithRoof(cell))
+            //       {
+            //           return true;
+            //       }
+
+            //       flag = true;
+            //   }
+
+            //   foreach (var thing in from x in list.Distinct() orderby (x.DrawPos - LastPos).sqrMagnitude select x)
+            //   {
+            //       // Modify : Added check to check if we hit this thing already than keep searching. Probably I will end up removing the similar check from Impact()
+            //       if ((thing == launcher || thing == mount) && !canTargetSelf)
+            //       {
+            //           continue;
+            //       }
+
+            //       if (TryCollideWith(thing))
+            //       {
+            //           return true;
+            //       }
+
+            //       if (justWallsRoofs || !(ExactPosition.y < 3f))
+            //       {
+            //           continue;
+            //       }
+
+            //       if (thing is Pawn pawn)
+            //       {
+            //           ApplySuppression(pawn);
+            //       }
+            //   }
+
+            //   return !flag && TryCollideWithRoof(cell);
         }
 
         private bool CheckForCollisionBetween()

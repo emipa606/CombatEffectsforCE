@@ -321,8 +321,8 @@ namespace CombatExtended
 
             return shotSpeed * Mathf.Cos(shotAngle) / gravityFactor * ((shotSpeed * Mathf.Sin(shotAngle)) +
                                                                        Mathf.Sqrt(Mathf.Pow(
-                                                                                      shotSpeed * Mathf.Sin(shotAngle), 2f) +
-                                                                                  (2f * gravityFactor * shotHeight)));
+                                                                               shotSpeed * Mathf.Sin(shotAngle), 2f) +
+                                                                           (2f * gravityFactor * shotHeight)));
         }
 
         // Token: 0x060002E8 RID: 744 RVA: 0x00018634 File Offset: 0x00016834
