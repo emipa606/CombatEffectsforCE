@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using CombatEffectsCE;
 using RimWorld;
 using UnityEngine;
@@ -667,6 +668,31 @@ namespace CombatExtended
             var intVec = LastPos.ToIntVec3();
             var intVec2 = ExactPosition.ToIntVec3();
             if (!intVec.InBounds(Map) || !intVec2.InBounds(Map))
+            {
+                return false;
+            }
+
+            var baseType = GetType().BaseType;
+
+            var methodInfo = baseType?.GetMethod("CheckIntercept", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (methodInfo != null)
+            {
+                var list = Map.listerThings.ThingsInGroup(ThingRequestGroup.ProjectileInterceptor);
+
+                foreach (var thing in list)
+                {
+                    if (!(bool) methodInfo.Invoke(this,
+                        new object[] {thing, thing.TryGetComp<CompProjectileInterceptor>(), false}))
+                    {
+                        continue;
+                    }
+
+                    Destroy();
+                    return true;
+                }
+            }
+
+            if (ticksToImpact < 0 || def.projectile.flyOverhead)
             {
                 return false;
             }
