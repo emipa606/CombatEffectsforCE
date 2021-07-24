@@ -208,7 +208,7 @@ namespace CombatEffectsCE
                 yield return "texPath is null or empty";
             }
 
-            if (thingDef != null && thingDef.drawerType == DrawerType.RealtimeOnly && Linked)
+            if (thingDef is {drawerType: DrawerType.RealtimeOnly} && Linked)
             {
                 yield return
                     "does not add to map mesh but has a link drawer. Link drawers can only work on the map mesh.";

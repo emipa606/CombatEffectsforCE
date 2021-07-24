@@ -104,7 +104,7 @@ namespace CombatExtended
         public static float GetMoveSpeed(Pawn pawn)
         {
             var num = 60f / pawn.GetStatValue(StatDefOf.MoveSpeed, false);
-            num += pawn.Map.pathGrid.CalculatedCostAt(pawn.Position, false, pawn.Position);
+            num += pawn.Map.pathing.For(pawn).pathGrid.CalculatedCostAt(pawn.Position, false, pawn.Position);
             var edifice = pawn.Position.GetEdifice(pawn.Map);
             if (edifice != null)
             {
@@ -183,7 +183,7 @@ namespace CombatExtended
             }
 
             var hediffComp_Stabilize = hediffWithComps.TryGetComp<HediffComp_Stabilize>();
-            return hediffComp_Stabilize != null && !hediffComp_Stabilize.Stabilized;
+            return hediffComp_Stabilize is {Stabilized: false};
         }
 
         // Token: 0x060002E0 RID: 736 RVA: 0x000182CC File Offset: 0x000164CC
@@ -291,18 +291,18 @@ namespace CombatExtended
             }
 
             var curJob = pawn.CurJob;
-            bool? flag;
+            bool? crouchJob;
             if (curJob == null)
             {
-                flag = null;
+                crouchJob = null;
             }
             else
             {
                 var modExtension = curJob.def.GetModExtension<JobDefExtensionCE>();
-                flag = modExtension != null ? new bool?(modExtension.isCrouchJob) : null;
+                crouchJob = modExtension != null ? new bool?(modExtension.isCrouchJob) : null;
             }
 
-            return flag ?? false;
+            return crouchJob ?? false;
         }
 
         // Token: 0x060002E6 RID: 742 RVA: 0x000185BB File Offset: 0x000167BB

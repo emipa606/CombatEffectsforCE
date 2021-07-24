@@ -225,7 +225,7 @@ namespace CombatExtended
         }
 
         // Token: 0x0600025A RID: 602 RVA: 0x00014A58 File Offset: 0x00012C58
-        protected override void Impact(Thing hitThing)
+        public override void Impact(Thing hitThing)
         {
             // Okay this is not entirely good
             // I removed the timer since it's not really needed.
@@ -239,14 +239,13 @@ namespace CombatExtended
             lastThingHit = hitThing;
 
 
-            var flag = launcher is AmmoThing;
             var map = Map;
             LogEntry_DamageResult logEntry_DamageResult = null;
 
             var isDeflectedByPawn = false;
 
             if ((logMisses || !logMisses && hitThing != null && (hitThing is Pawn || hitThing is Building_Turret)) &&
-                !flag)
+                !(launcher is AmmoThing))
             {
                 LogImpact(hitThing, out logEntry_DamageResult);
             }
@@ -310,8 +309,7 @@ namespace CombatExtended
                 var damageDefExtensionCE = def.projectile.damageDef.GetModExtension<DamageDefExtensionCE>() ??
                                            new DamageDefExtensionCE();
                 var projectilePropertiesCE = (ProjectilePropertiesCE) def.projectile;
-                var flag2 = def.projectile.damageDef.armorCategory == DamageArmorCategoryDefOf.Sharp;
-                var armorPenetration = !flag2
+                var armorPenetration = def.projectile.damageDef.armorCategory != DamageArmorCategoryDefOf.Sharp
                     ? projectilePropertiesCE.armorPenetrationBlunt
                     : projectilePropertiesCE.armorPenetrationSharp;
                 var dinfo = new DamageInfo(def.projectile.damageDef, damageAmount, armorPenetration,
@@ -326,7 +324,7 @@ namespace CombatExtended
                     dinfo.SetBodyRegion(BodyPartHeight.Undefined, BodyPartDepth.Outside);
                 }
 
-                if (flag && hitThing is Pawn pawn)
+                if (launcher is AmmoThing && hitThing is Pawn pawn)
                 {
                     logEntry_DamageResult = new BattleLogEntry_DamageTaken(pawn,
                         DefDatabase<RulePackDef>.GetNamed("DamageEvent_CookOff"));
@@ -387,7 +385,7 @@ namespace CombatExtended
                             break;
                         }
 
-                        var dinfo2 = new DamageInfo(secondaryDamage.def, secondaryDamage.amount,
+                        var dinfo2 = new DamageInfo(secondaryDamage?.def, secondaryDamage.amount,
                             projectilePropertiesCE.GetArmorPenetration(1f), ExactRotation.eulerAngles.y, launcher, null,
                             def);
                         hitThing.TakeDamage(dinfo2).AssociateWithLog(logEntry_DamageResult);
@@ -402,12 +400,12 @@ namespace CombatExtended
                 SoundDefOf.BulletImpact_Ground.PlayOneShot(new TargetInfo(Position, map));
                 if (castShadow)
                 {
-                    MoteMaker.MakeStaticMote(ExactPosition, map, ThingDefOf.Mote_ShotHit_Dirt);
+                    FleckMaker.Static(ExactPosition, map, FleckDefOf.ShotHit_Dirt);
                     var effect = projectileProperties.effectGroundHit.Spawn();
                     effect.Trigger(this, this);
                     if (Position.GetTerrain(map).takeSplashes)
                     {
-                        MoteMaker.MakeWaterSplash(ExactPosition, map,
+                        FleckMaker.WaterSplash(ExactPosition, map,
                             Mathf.Sqrt(def.projectile.GetDamageAmount(launcher)) * 1f, 4f);
                     }
                 }

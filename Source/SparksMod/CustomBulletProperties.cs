@@ -308,8 +308,7 @@ namespace CombatEffectsCE
                             maxEnergy = 0.9f;
                         }
 
-                        var limit = penChance; // Use penchance as a limit of total energy loss
-                        energy *= ComputeEnergyRemainingAfterPen(exponent, maxEnergy, limit, score);
+                        energy *= ComputeEnergyRemainingAfterPen(exponent, maxEnergy, penChance, score);
                         return ImpactType.PEN;
                     }
 
@@ -380,8 +379,7 @@ namespace CombatEffectsCE
                             maxEnergy = 0.9f;
                         }
 
-                        var limit = penChance; // Use penchance as a limit of total energy loss
-                        energy *= ComputeEnergyRemainingAfterPen(exponent, maxEnergy, limit, score);
+                        energy *= ComputeEnergyRemainingAfterPen(exponent, maxEnergy, penChance, score);
                         return ImpactType.PEN;
                     }
                     // TODO : The penetration should use the angle of impact. Also here should come the Ricoche computation}
