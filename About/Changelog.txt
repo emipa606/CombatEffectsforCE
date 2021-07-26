@@ -1,5 +1,8 @@
 # Changelog for CombatEffectsforCE
 
+1.0.11.0 - Log-entry method changed recently, recompiled
+
+
 1.0.10.0 - Updated for 1.3
 
 

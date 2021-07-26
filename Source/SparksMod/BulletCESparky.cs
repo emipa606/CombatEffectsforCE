@@ -217,7 +217,13 @@ namespace CombatExtended
         // Token: 0x06000259 RID: 601 RVA: 0x00014A1B File Offset: 0x00012C1B
         private void LogImpact(Thing hitThing, out LogEntry_DamageResult logEntry)
         {
-            logEntry = new BattleLogEntry_RangedImpact(launcher, hitThing, intendedTarget, equipmentDef, def, null);
+            var targetThing = (Thing) intendedTarget.Pawn;
+            if (targetThing == null)
+            {
+                targetThing = intendedTarget.Thing;
+            }
+
+            logEntry = new BattleLogEntry_RangedImpact(launcher, hitThing, targetThing, equipmentDef, def, null);
             if (!(launcher is AmmoThing))
             {
                 Find.BattleLog.Add(logEntry);
