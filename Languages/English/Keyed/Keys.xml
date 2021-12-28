@@ -2,4 +2,5 @@
 <LanguageData>
   <SettingExtraBlood>Show extra blood</SettingExtraBlood>
   <SettingExtraBloodDescription>Adds extra blood-spatter</SettingExtraBloodDescription>
+  <CurrentModVersion_Label>Installed mod-version: {currentVersion}</CurrentModVersion_Label>
 </LanguageData>

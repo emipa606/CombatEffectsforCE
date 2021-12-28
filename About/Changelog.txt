@@ -1,5 +1,8 @@
 # Changelog for CombatEffectsforCE
 
+1.0.12.0 - Fixed some nullchecks when using non-standard ammo (VWE Crossbow for example)
+
+
 1.0.11.0 - Log-entry method changed recently, recompiled
 
 
