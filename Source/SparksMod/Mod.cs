@@ -14,6 +14,7 @@ internal class CombatEffectsCEMod : Mod
 
     private static string currentVersion;
 
+
     /// <summary>
     ///     The private settings
     /// </summary>
@@ -78,6 +79,19 @@ internal class CombatEffectsCEMod : Mod
             GUI.contentColor = Color.white;
         }
 
+        //var labelRect = listing_Standard.Label("CEAmmoSelector_Label".Translate());
+        //var frameRect = rect;
+        //frameRect.x = 0;
+        //frameRect.y = labelRect.y + 20;
+        //frameRect.height = rect.height - (labelRect.y - frameRect.y);
+
+        //var contentRect = frameRect;
+        //contentRect.x = 0;
+        //contentRect.y = labelRect.y + 20;
+        //contentRect.width -= 20;
+
+        //contentRect.height = (noneCategoryMembers.Count * 24f) + 40f;
+        //Widgets.BeginScrollView(frameRect, ref optionsScrollPosition, contentRect);
         listing_Standard.End();
         Settings.Write();
     }
