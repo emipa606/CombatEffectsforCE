@@ -49,6 +49,17 @@ internal class CombatEffectsCEMod : Mod
         set => settings = value;
     }
 
+
+    public static void LogMessage(string message, bool forced = false)
+    {
+        if (!forced && !instance.Settings.VerboseLogging)
+        {
+            return;
+        }
+
+        Log.Message($"[CombatEffectsCE]: {message}");
+    }
+
     /// <summary>
     ///     The title for the mod-settings
     /// </summary>
@@ -69,6 +80,8 @@ internal class CombatEffectsCEMod : Mod
         listing_Standard.Begin(rect);
         listing_Standard.CheckboxLabeled("SettingExtraBlood".Translate(), ref Settings.ExtraBlood,
             "SettingExtraBloodDescription".Translate());
+        listing_Standard.CheckboxLabeled("SparksModVerboseLogging".Translate(), ref Settings.VerboseLogging,
+            "SparksModVerboseLoggingDescription".Translate());
         //listing_Standard.CheckboxLabeled("SettingPenetrationMechanics".Translate(),
         //    ref Settings.PenetrationMechanics, "SettingPenetrationMechanicsDescription".Translate());
         if (currentVersion != null)

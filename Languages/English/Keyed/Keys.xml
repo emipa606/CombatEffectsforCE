@@ -2,5 +2,7 @@
 <LanguageData>
   <SettingExtraBlood>Show extra blood</SettingExtraBlood>
   <SettingExtraBloodDescription>Adds extra blood-spatter</SettingExtraBloodDescription>
-  <CurrentModVersion_Label>Installed mod-version: {currentVersion}</CurrentModVersion_Label>
+  <SparksModVerboseLogging>Verbose logging</SparksModVerboseLogging>
+  <SparksModVerboseLoggingDescription>For debugging errors, will log a lot</SparksModVerboseLoggingDescription>
+  <CurrentModVersion_Label>Installed mod-version: {0}</CurrentModVersion_Label>
 </LanguageData>

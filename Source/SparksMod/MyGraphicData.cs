@@ -61,7 +61,7 @@ public class MyGraphicData : GraphicData
         // If this is a Graphic_Cluster we mustnt change it's this.color or else we get an error
         color = newColor;
 
-        //Log.Message("Correct function called");
+        CombatEffectsCEMod.LogMessage("Correct function called");
         //if (this.cachedGraphic != null)
         //{
         //    string m = this.cachedGraphic.ToString();

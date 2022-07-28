@@ -2,68 +2,42 @@
 <Patch>
   <Operation Class="PatchOperationSequence">
     <operations>
-      <!-- <li Class="PatchOperationAttributeSet">
-				<xpath>/Defs/ThingDef[@Name="BaseBullet"]/projectile</xpath>
-				<attribute>Class</attribute>
-				<value>CombatExtended.ProjectilePropertiesWithEffectsCE</value>
-			</li>
-			<li Class="PatchOperationAttributeSet">
-				<xpath>/Defs/ThingDef[@Name="BaseFragment"]/projectile</xpath>
-				<attribute>Class</attribute>
-				<value>CombatExtended.ProjectilePropertiesWithEffectsCE</value>
-			</li>
-			<li Class="PatchOperationAttributeSet">
-				<xpath>/Defs/ThingDef[@Name="Base12GaugeBullet"]/projectile</xpath>
-				<attribute>Class</attribute>
-				<value>CombatExtended.ProjectilePropertiesWithEffectsCE</value>
-			</li> -->
       <li Class="PatchOperationAttributeSet">
         <xpath>/Defs/ThingDef[contains(@Name,"Base") and contains(@Name,"Bullet")]/projectile[@Class="CombatExtended.ProjectilePropertiesCE"]</xpath>
         <attribute>Class</attribute>
         <value>CombatExtended.ProjectilePropertiesWithEffectsCE</value>
       </li>
-      <!-- <li Class="PatchOperationAttributeSet">
-				<xpath>/Defs/ThingDef[contains(defName, "Bullet_")]/projectile[@Class="CombatExtended.ProjectilePropertiesCE"]</xpath>
-				<attribute>Class</attribute>
-				<value>CombatExtended.ProjectilePropertiesWithEffectsCE</value>
-			</li> -->
       <li Class="PatchOperationAttributeSet">
-        <xpath>/Defs/ThingDef[contains(defName, "Bullet_") or (contains(defName, "Projectile_") and contains(defName,"Arrow")) or contains(defName,"Fragment_")]/projectile[@Class="CombatExtended.ProjectilePropertiesCE"]</xpath>
+        <xpath>/Defs/ThingDef[contains(defName, "Bullet_") or (contains(defName, "Projectile_") or contains(defName,"Arrow")) or contains(defName,"Fragment_")]/projectile[@Class="CombatExtended.ProjectilePropertiesCE"]</xpath>
         <attribute>Class</attribute>
         <value>CombatExtended.ProjectilePropertiesWithEffectsCE</value>
       </li>
-      <!-- <li Class="PatchOperationAdd">
-				<xpath>/Defs/ThingDef[contains(@Name,"Base") and contains(@Name,"Bullet")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
-				<value>
-					<effectWallHit>BulletRicochetA</effectWallHit>
-				</value>
-			</li>			 -->
       <li Class="PatchOperationAdd">
-        <xpath>/Defs/ThingDef[contains(defName, "Bullet_") or (contains(defName, "Projectile_") and contains(defName,"Arrow")) or contains(defName,"Fragment_")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <xpath>/Defs/ThingDef[contains(defName, "Bullet_") or (contains(defName, "Projectile_") or contains(defName,"Arrow")) or contains(defName,"Fragment_")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
         <value>
           <effectStoneWallHit>BulletRicochetStoneWall</effectStoneWallHit>
         </value>
       </li>
       <li Class="PatchOperationAdd">
-        <xpath>/Defs/ThingDef[contains(defName, "Bullet_") or (contains(defName, "Projectile_") and contains(defName,"Arrow")) or contains(defName,"Fragment_")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <xpath>/Defs/ThingDef[contains(defName, "Bullet_") or (contains(defName, "Projectile_") or contains(defName,"Arrow")) or contains(defName,"Fragment_")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
         <value>
           <effectWoodWallHit>BulletRicochetWoodWall</effectWoodWallHit>
         </value>
       </li>
       <li Class="PatchOperationAdd">
-        <xpath>/Defs/ThingDef[contains(defName, "Bullet_") or (contains(defName, "Projectile_") and contains(defName,"Arrow")) or contains(defName,"Fragment_")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <xpath>/Defs/ThingDef[contains(defName, "Bullet_") or (contains(defName, "Projectile_") or contains(defName,"Arrow")) or contains(defName,"Fragment_")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
         <value>
           <effectGroundHit>BulletRicochetGround</effectGroundHit>
         </value>
       </li>
       <li Class="PatchOperationAdd">
-        <xpath>/Defs/ThingDef[contains(defName, "Bullet_") or (contains(defName, "Projectile_") and contains(defName,"Arrow")) or contains(defName,"Fragment_")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <xpath>/Defs/ThingDef[contains(defName, "Bullet_") or (contains(defName, "Projectile_") or contains(defName,"Arrow")) or contains(defName,"Fragment_")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
         <value>
           <effectBuildingBits>BulletHitWallBuildingBits</effectBuildingBits>
         </value>
       </li>
       <li Class="PatchOperationAdd">
-        <xpath>/Defs/ThingDef[contains(defName, "Bullet_") or (contains(defName, "Projectile_") and contains(defName,"Arrow")) or contains(defName,"Fragment_")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <xpath>/Defs/ThingDef[contains(defName, "Bullet_") or (contains(defName, "Projectile_") or contains(defName,"Arrow")) or contains(defName,"Fragment_")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
         <value>
           <effectPuff>BulletRicochetPuff</effectPuff>
         </value>
@@ -121,6 +95,18 @@
         <xpath>/Defs/ThingDef[contains(label,"(AP-I)")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
         <value>
           <ammoType>API</ammoType>
+        </value>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[contains(label,"(Incendiary)")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <ammoType>INC</ammoType>
+        </value>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>/Defs/ThingDef[contains(label,"(Smoke)")]/projectile[@Class="CombatExtended.ProjectilePropertiesWithEffectsCE"]</xpath>
+        <value>
+          <ammoType>SMOKE</ammoType>
         </value>
       </li>
       <!-- SHOTGUN PELLETS NEED SPECIAL TREATMENT -->

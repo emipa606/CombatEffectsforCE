@@ -107,6 +107,8 @@ public class BulletCESparky : ProjectileCE
                 {
                     destinationInt = origin;
                     startingTicksToImpactInt = 0f;
+
+                    CombatEffectsCEMod.LogMessage($"{def.LabelCap} has negative height and angle, impacting");
                     ImpactSomething();
                     return 0f;
                 }
@@ -117,6 +119,8 @@ public class BulletCESparky : ProjectileCE
             }
 
             startingTicksToImpactInt = GetFlightTime() * 60f;
+
+            CombatEffectsCEMod.LogMessage($"{def.LabelCap} has {startingTicksToImpactInt} starting ticks to impact");
             return startingTicksToImpactInt;
         }
     }
@@ -145,7 +149,7 @@ public class BulletCESparky : ProjectileCE
                 return _gravityFactor;
             }
 
-            _gravityFactor = 9.8f;
+            _gravityFactor = 1.96f;
             if (def.projectile is ProjectilePropertiesCE projectilePropertiesCE)
             {
                 _gravityFactor = projectilePropertiesCE.Gravity;
@@ -340,13 +344,13 @@ public class BulletCESparky : ProjectileCE
             }
 
             var dmgRes = hitThing.TakeDamage(dinfo);
-            //Log.Message($"is it deflected? : {dmgRes.deflected}");
+            CombatEffectsCEMod.LogMessage($"{def.LabelCap} is it deflected? : {dmgRes.deflected}");
             if (CombatEffectsCEMod.instance.Settings.ExtraBlood && !dmgRes.deflected && hitThing is Pawn &&
                 projectileProperties?.effectBloodHit != null)
             {
-                //Log.Message("Hit someone!");
-                //string m = $"It's meat color : {hitThing.def.race.meatColor.ToString()}";
-                //Log.Message("Show extra blood");    
+                CombatEffectsCEMod.LogMessage($"{def.LabelCap} Hit someone!");
+                var m = $"It's meat color : {hitThing.def.race.meatColor.ToString()}";
+                CombatEffectsCEMod.LogMessage($"{def.LabelCap} Show extra blood");
                 if (hitThing.def.race.IsMechanoid)
                 {
                     var bloodColor = new Color(0.04f, 0.04f, 0.04f, 0.7f);
@@ -359,12 +363,13 @@ public class BulletCESparky : ProjectileCE
                     var bloodColor = hitThing.def.race.meatColor;
                     if (bloodColor == Color.white)
                     {
-                        //Log.Message("Blood color changing!");
+                        CombatEffectsCEMod.LogMessage($"{def.LabelCap} Blood color changing!");
                         bloodColor = new Color(0.5f, 0.1f, 0.1f);
                     }
+
                     //bloodColor.a = 1f;
-                    //m = $"Requested color : {bloodColor.ToString()}";
-                    //Log.Message(m);
+                    m = $"Requested color : {bloodColor.ToString()}";
+                    CombatEffectsCEMod.LogMessage(m);
                     //((SparksMod.MyGraphicData)this.projectileProperties.effectBloodHit.children[0].moteDef.graphicData).changeGraphicColor(bloodColor);
                     //((SparksMod.MyGraphicData)((SparksMod.MotePropertiesFilthy)this.projectileProperties.effectBloodHit.children[0].moteDef.mote).filthTrace.graphicData).changeGraphicColor(bloodColor);
 
@@ -745,6 +750,7 @@ public class BulletCESparky : ProjectileCE
         // This is the same check mention above
         if (landed)
         {
+            CombatEffectsCEMod.LogMessage($"{def.LabelCap} landed");
             if (!Destroyed)
             {
                 Destroy();
@@ -755,15 +761,19 @@ public class BulletCESparky : ProjectileCE
 
         LastPos = ExactPosition;
         ticksToImpact--; // this increments our position along the trajectory!
+        CombatEffectsCEMod.LogMessage($"{def.LabelCap} ticks to impact: {ticksToImpact}");
+
         if (!ExactPosition.InBounds(Map))
         {
             Position = LastPos.ToIntVec3();
+            CombatEffectsCEMod.LogMessage($"{def.LabelCap} out of bounds");
             Destroy();
             return;
         }
 
         if (ticksToImpact >= 0 && !def.projectile.flyOverhead && CheckForCollisionBetween())
         {
+            CombatEffectsCEMod.LogMessage($"{def.LabelCap} intercepted");
             return;
         }
 
@@ -775,6 +785,7 @@ public class BulletCESparky : ProjectileCE
 
         if (ticksToImpact <= 0)
         {
+            CombatEffectsCEMod.LogMessage($"{def.LabelCap} should impact now");
             ImpactSomething();
             return;
         }
@@ -838,11 +849,6 @@ public class BulletCESparky : ProjectileCE
         {
             MoteMaker.ThrowText(thing.Position.ToVector3Shifted(), thing.Map, "x", Color.red);
         }
-
-        //if (!(thing is Pawn))
-        //{
-        //    Log.Message($"{CombatEffectsCE.ImpactHelper.determineMaterial(thing)}");
-        //}
 
         Impact(thing);
         return true;
@@ -939,6 +945,9 @@ public class BulletCESparky : ProjectileCE
         }
 
         ticksToImpact = IntTicksToImpact;
+
+        CombatEffectsCEMod.LogMessage(
+            $"{def.LabelCap} launched, shotAngle: {shotAngle}, shotHeight: {shotHeight}, shotRotation: {shotRotation}, shotSpeed {shotSpeed}, ticksToImpact: {ticksToImpact}");
     }
 
     public override void Launch(Thing launcher, Vector2 origin, Thing equipment = null)
@@ -954,6 +963,8 @@ public class BulletCESparky : ProjectileCE
 
         var info = SoundInfo.InMap(this, MaintenanceType.PerTick);
         ambientSustainer = def.projectile.soundAmbient.TrySpawnSustainer(info);
+        CombatEffectsCEMod.LogMessage(
+            $"{def.LabelCap} launched, equipmentDef: {equipmentDef}, launcher: {launcher}, origin: {origin}, shotSpeed {shotSpeed}");
     }
 
     private void ImpactSpeedChanged()
@@ -968,6 +979,8 @@ public class BulletCESparky : ProjectileCE
         Vec2Position();
         // Note : For some reason if I use IntTicksToImpact after an impact the new intTicks
         ticksToImpact = IntTicksToImpact;
+        CombatEffectsCEMod.LogMessage(
+            $"{def.LabelCap} ImpactSpeedChanged, origin: {origin}, shotHeight: {shotHeight}, ticksToImpact: {ticksToImpact}");
     }
 
     private Vector2 Vec2Position(float ticks = -1f)

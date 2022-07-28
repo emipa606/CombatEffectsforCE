@@ -1,5 +1,8 @@
 # Changelog for CombatEffectsforCE
 
+1.3.1 - Fixed the issues with some of the mortar-ammo that did not use the CE-explosive class. Also added verbose logging option for future debugging.
+
+
 1.0.12.0 - Fixed some nullchecks when using non-standard ammo (VWE Crossbow for example)
 
 

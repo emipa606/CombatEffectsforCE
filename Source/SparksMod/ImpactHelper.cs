@@ -7,78 +7,6 @@ using Verse;
 
 namespace CombatEffectsCE;
 
-public enum AmmoType
-{
-    HP = 0,
-    FMJ,
-    AP,
-    API,
-    HE,
-    CHARGED,
-    CONC,
-    ION,
-    SABOT,
-    EMP,
-    BEAN,
-    BUCK,
-    SLUG,
-    UNDEFINED
-}
-
-public enum Caliber
-{
-    CAL_12x64CH = 0,
-    CAL_5x35CH,
-    CAL_6x24CH,
-    CAL_8x35CH,
-    CAL_30x29,
-    CAL_40x46,
-    CAL_145x114,
-    CAL_50,
-    CAL_44M,
-    CAL_45ACP,
-    CAL_45C,
-    CAL_9x19,
-    CAL_303,
-    CAL_545x39,
-    CAL_556x45,
-    CAL_762x39,
-    CAL_762x51,
-    CAL_762x54,
-    CAL_12G,
-    CAL_410B,
-    UNDEFINED
-}
-
-public enum CaliberCategory
-{
-    SMALL = 0,
-    MEDIUM,
-    LARGE,
-    ANTIMAT
-}
-
-public enum Material
-{
-    WOOD = 0,
-    SOFTSTONE,
-    HARDSTONE,
-    SOFTMETAL,
-    STEEL,
-    PLASTEEL,
-    URANIUM,
-    MEAT,
-    UNDEFINED,
-    IGNORABLE
-}
-
-public enum ImpactType
-{
-    STOP = 0,
-    PEN,
-    RICOCHET
-}
-
 public static class ImpactHelper
 {
     private static readonly List<Caliber> small = new List<Caliber>
@@ -145,7 +73,7 @@ public static class ImpactHelper
         string label = null;
         if (!hitThing.def.MadeFromStuff)
         {
-            //Log.Message($"Hit a {hitThing.Label}");
+            CombatEffectsCEMod.LogMessage($"Hit a {hitThing.Label}");
             if (hitThing is Plant)
             {
                 return hitThing.def.ingestible?.foodType == FoodTypeFlags.Tree ? Material.WOOD : Material.IGNORABLE;
@@ -155,14 +83,14 @@ public static class ImpactHelper
             {
                 hitThing.def.costList.SortByDescending(listItem => listItem.count);
                 var mostlyMadeOf = hitThing.def.costList.First().thingDef;
-                //Log.Message($"Hit {hitThing.Label}, mostly made of {mostlyMadeOf.label}");
+                CombatEffectsCEMod.LogMessage($"Hit {hitThing.Label}, mostly made of {mostlyMadeOf.label}");
                 label = mostlyMadeOf.label;
             }
 
             if (string.IsNullOrEmpty(label) && hitThing.SmeltProducts(1f).Any())
             {
                 var mostlyMadeOf = hitThing.SmeltProducts(1f).First();
-                //Log.Message($"Hit {hitThing.Label}, will smelt to {mostlyMadeOf.def.label}");
+                CombatEffectsCEMod.LogMessage($"Hit {hitThing.Label}, will smelt to {mostlyMadeOf.def.label}");
                 label = mostlyMadeOf.def.label;
             }
 
@@ -173,10 +101,10 @@ public static class ImpactHelper
         }
         else
         {
-            label = hitThing.Stuff.label;
+            label = hitThing.Stuff?.label;
         }
 
-        //Log.Message($"Hit stuff label : {hitThing.Stuff.label}");
+        CombatEffectsCEMod.LogMessage($"Hit stuff label : {hitThing.Stuff?.label}");
         var returnValue = Material.UNDEFINED;
         switch (label)
         {
@@ -207,10 +135,8 @@ public static class ImpactHelper
                 return Material.SOFTSTONE;
         }
 
-        //Log.Message($"Hit {hitThing.Stuff.label}, unrecognised stuff");
+        CombatEffectsCEMod.LogMessage($"Hit {hitThing.Stuff?.label}, unrecognised stuff");
         return returnValue;
-
-        //Log.Message($"Hit something {hitThing.Label}");
     }
 
     private static CaliberCategory DeterminetCaliberCategory(Caliber? caliber)
@@ -298,14 +224,14 @@ public static class ImpactHelper
             {
                 var caliberIndex = caliberCategoryOrder.FindIndex(cat => cat == calCat);
                 var penChance = penChanceParamTable[7, caliberIndex, 0];
-                //Log.Message($"Pawn hit, not deflected. Penetration chance {penChance}");
+                CombatEffectsCEMod.LogMessage($"Pawn hit, not deflected. Penetration chance {penChance}");
 
                 var score = Rand.Value;
                 penChance = penChance * (energy * 0.01f) * 0.01f;
                 if (penChance > 0f && (penChance >= 1f || score < penChance))
                 {
                     // Really energy loss should be computed around here. But for now I'll use a fix energy loss within the Bullet Impact function.
-                    //Log.Message("Pawn hit, bullet went through.");
+                    CombatEffectsCEMod.LogMessage("Pawn hit, bullet went through.");
                     var exponent = 1f;
                     var maxEnergy = 0.8f;
                     if (ConsideredAPType(bulletProps.ammoType))
@@ -323,12 +249,12 @@ public static class ImpactHelper
             default:
             {
                 var percentage_HP = (float)hitThing.HitPoints / hitThing.MaxHitPoints;
-                //Log.Message($"Hit thing HP percentage : {percentage_HP}");
+                CombatEffectsCEMod.LogMessage($"Hit thing HP percentage : {percentage_HP}");
 
                 var thingMat = DetermineMaterial(hitThing);
                 if (thingMat == Material.UNDEFINED)
                 {
-                    //Log.Message($"{hitThing.Label} if made of UNDEFINED material.");
+                    CombatEffectsCEMod.LogMessage($"{hitThing.Label} if made of UNDEFINED material.");
                     energy = 0f;
                     return ImpactType.STOP;
                 }
@@ -343,7 +269,8 @@ public static class ImpactHelper
                 var highPenChance = penChanceParamTable[indices[0], indices[1], 1];
                 var penChanceThreshold = penChanceParamTable[indices[0], indices[1], 2];
 
-                //Log.Message($"Params to pen function : {basePenChance} {highPenChance} {penChanceThreshold}");
+                CombatEffectsCEMod.LogMessage(
+                    $"Params to pen function : {basePenChance} {highPenChance} {penChanceThreshold}");
 
                 if (bulletProps.ammoType == AmmoType.AP || bulletProps.ammoType == AmmoType.API ||
                     bulletProps.ammoType == AmmoType.SLUG || bulletProps.ammoType == AmmoType.SABOT)
@@ -351,7 +278,8 @@ public static class ImpactHelper
                     basePenChance += penChanceAPModifierTable[indices[0], indices[1], 0];
                     highPenChance += penChanceAPModifierTable[indices[0], indices[1], 1];
                     penChanceThreshold += penChanceAPModifierTable[indices[0], indices[1], 2];
-                    //Log.Message($"AP modified Params to pen function : {basePenChance} {highPenChance} {penChanceThreshold}");
+                    CombatEffectsCEMod.LogMessage(
+                        $"AP modified Params to pen function : {basePenChance} {highPenChance} {penChanceThreshold}");
                 }
 
                 float penChance;
@@ -359,7 +287,7 @@ public static class ImpactHelper
                 // NOTE : Chances are stored in nominal percentages. So 80% is 80 and not 0.8. Easier to type.
                 if (percentage_HP <= penChanceThreshold * 0.01f)
                 {
-                    //Log.Message("Maximum penchance applied");
+                    CombatEffectsCEMod.LogMessage("Maximum penchance applied");
                     penChance = highPenChance;
                 }
                 else
@@ -367,7 +295,7 @@ public static class ImpactHelper
                     //Linear function 
                     penChance = basePenChance +
                                 ((1 - percentage_HP) / (1 - penChanceThreshold) * (highPenChance - basePenChance));
-                    //Log.Message($"Interpolated penChance : {penChance}");
+                    CombatEffectsCEMod.LogMessage($"Interpolated penChance : {penChance}");
                 }
 
                 penChance += Rand.Gaussian(0f, 5f);
@@ -375,7 +303,7 @@ public static class ImpactHelper
                 var score = Rand.Value;
                 if (penChance > 0f && (penChance >= 1f || score < penChance))
                 {
-                    //Log.Message("Stuff penetrated.");
+                    CombatEffectsCEMod.LogMessage("Stuff penetrated.");
 
                     var exponent = 1f;
                     var maxEnergy = 0.8f;
@@ -390,7 +318,7 @@ public static class ImpactHelper
                 }
                 // TODO : The penetration should use the angle of impact. Also here should come the Ricoche computation}
 
-                //Log.Message("Stuff stopped the bullet");
+                CombatEffectsCEMod.LogMessage("Stuff stopped the bullet");
                 energy = 0f;
                 return ImpactType.STOP;
             }
