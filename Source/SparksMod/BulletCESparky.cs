@@ -177,18 +177,18 @@ public class BulletCESparky : ProjectileCE
 
     private void ApplySuppression(Pawn pawn)
     {
-        ShieldBelt shieldBelt = null;
+        CompShield shieldBelt = null;
         if (pawn.RaceProps.Humanlike)
         {
             var wornApparel = pawn.apparel.WornApparel;
             foreach (var apparel in wornApparel)
             {
-                if (apparel is not ShieldBelt shieldBelt2)
+                if (!apparel.def.IsShieldThatBlocksRanged)
                 {
                     continue;
                 }
 
-                shieldBelt = shieldBelt2;
+                shieldBelt = apparel.GetComp<CompShield>();
                 break;
             }
         }
@@ -208,7 +208,7 @@ public class BulletCESparky : ProjectileCE
         }
 
         suppressionAmount = def.projectile.GetDamageAmount(1f);
-        var num = !(def.projectile is ProjectilePropertiesCE projectilePropertiesCE)
+        var num = def.projectile is not ProjectilePropertiesCE projectilePropertiesCE
             ? 0f
             : projectilePropertiesCE.GetArmorPenetration(1f);
         suppressionAmount *=
@@ -225,7 +225,7 @@ public class BulletCESparky : ProjectileCE
         }
 
         logEntry = new BattleLogEntry_RangedImpact(launcher, hitThing, targetThing, equipmentDef, def, null);
-        if (!(launcher is AmmoThing))
+        if (launcher is not AmmoThing)
         {
             Find.BattleLog.Add(logEntry);
         }
@@ -250,7 +250,7 @@ public class BulletCESparky : ProjectileCE
         var isDeflectedByPawn = false;
 
         if ((logMisses || !logMisses && hitThing != null && (hitThing is Pawn || hitThing is Building_Turret)) &&
-            !(launcher is AmmoThing))
+            launcher is not AmmoThing)
         {
             LogImpact(hitThing, out logEntry_DamageResult);
         }
@@ -571,107 +571,7 @@ public class BulletCESparky : ProjectileCE
         }
 
         //Finally check for intersecting with a roof (again).
-        if (!roofChecked && TryCollideWithRoof(cell))
-        {
-            return true;
-        }
-
-        return false;
-
-        //   var flag = false;
-        //   var justWallsRoofs = false;
-        //   float num = (cell - OriginIV3).LengthHorizontalSquared;
-        //   if (!def.projectile.alwaysFreeIntercept && minCollisionDistance <= 1f
-        //       ? num < 1f
-        //       : num < Mathf.Min(144f, minCollisionDistance / 4f))
-        //   {
-        //       justWallsRoofs = true;
-        //   }
-        //int collisionCheckSize = 5;
-        //   var mainThingList = new List<Thing>(Map.thingGrid.ThingsListAtFast(cell)).Where(t => t is Pawn || t.def.Fillage != FillCategory.None).ToList();
-        //   var adjList = new List<IntVec3>();
-        //   adjList.AddRange(GenAdj.CellsAdjacentCardinal(cell, Rot4.FromAngleFlat(shotRotation), new IntVec2(collisionCheckSize, 0)).ToList());
-        //   foreach (var curCell in adjList)
-        //   {
-        //       if (curCell != cell && curCell.InBounds(Map))
-        //       {
-        //           mainThingList.AddRange(Map.thingGrid.ThingsListAtFast(curCell)
-        //               .Where(x => x is Pawn));
-
-        //           if (Controller.settings.DebugDrawInterceptChecks)
-        //           {
-        //               Map.debugDrawer.FlashCell(curCell, 0.7f);
-        //           }
-        //       }
-        //   }
-
-
-        //   var list = new List<Thing>(Map.thingGrid.ThingsListAtFast(cell)).Where(delegate(Thing t)
-        //   {
-        //       if (!justWallsRoofs)
-        //       {
-        //           return t is Pawn || t.def.Fillage > FillCategory.None;
-        //       }
-
-        //       return t.def.Fillage == FillCategory.Full;
-        //   }).ToList();
-        //   if (!justWallsRoofs)
-        //   {
-        //       var list2 = new List<IntVec3>();
-        //       list2.AddRange(GenAdj.CellsAdjacentCardinal(cell, Rot4.FromAngleFlat(shotRotation), new IntVec2(5, 0))
-        //           .ToList());
-        //       foreach (var intVec in list2)
-        //       {
-        //           if (intVec == cell || !intVec.InBounds(Map))
-        //           {
-        //               continue;
-        //           }
-
-        //           list.AddRange(from x in Map.thingGrid.ThingsListAtFast(intVec)
-        //               where x is Pawn
-        //               select x);
-        //           if (debugDrawIntercepts)
-        //           {
-        //               Map.debugDrawer.FlashCell(intVec, 0.7f);
-        //           }
-        //       }
-        //   }
-
-        //   if (LastPos.y > 2f)
-        //   {
-        //       if (TryCollideWithRoof(cell))
-        //       {
-        //           return true;
-        //       }
-
-        //       flag = true;
-        //   }
-
-        //   foreach (var thing in from x in list.Distinct() orderby (x.DrawPos - LastPos).sqrMagnitude select x)
-        //   {
-        //       // Modify : Added check to check if we hit this thing already than keep searching. Probably I will end up removing the similar check from Impact()
-        //       if ((thing == launcher || thing == mount) && !canTargetSelf)
-        //       {
-        //           continue;
-        //       }
-
-        //       if (TryCollideWith(thing))
-        //       {
-        //           return true;
-        //       }
-
-        //       if (justWallsRoofs || !(ExactPosition.y < 3f))
-        //       {
-        //           continue;
-        //       }
-
-        //       if (thing is Pawn pawn)
-        //       {
-        //           ApplySuppression(pawn);
-        //       }
-        //   }
-
-        //   return !flag && TryCollideWithRoof(cell);
+        return !roofChecked && TryCollideWithRoof(cell);
     }
 
     private bool CheckForCollisionBetween()
@@ -884,7 +784,7 @@ public class BulletCESparky : ProjectileCE
         return true;
     }
 
-    private void ImpactSomething()
+    private new void ImpactSomething()
     {
         var intVec = ExactPosition.ToIntVec3();
         if (def.projectile.flyOverhead)
@@ -933,7 +833,7 @@ public class BulletCESparky : ProjectileCE
 
     /// -------------------------------------LAUNCH RELATED STUFF-------------------------------------------- ///
     public override void Launch(Thing launcher, Vector2 origin, float shotAngle, float shotRotation,
-        float shotHeight = 0f, float shotSpeed = -1f, Thing equipment = null)
+        float shotHeight = 0f, float shotSpeed = -1f, Thing equipment = null, float distance = -1f)
     {
         this.shotAngle = shotAngle;
         this.shotHeight = shotHeight;

@@ -6,6 +6,7 @@ Update of CalaveraLocas mod
 https://steamcommunity.com/sharedfiles/filedetails/?id=1756442393
 
 - Added option to disable the extra blood-spatter
+- Fixed the issues with the added mortar-ammo in later CE-versions
 
 ![Image](https://i.imgur.com/pufA0kM.png)
 

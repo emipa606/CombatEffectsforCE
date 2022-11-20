@@ -159,7 +159,7 @@ internal static class CE_Utility
 
     public static bool CanBeStabilized(this Hediff diff)
     {
-        if (!(diff is HediffWithComps hediffWithComps))
+        if (diff is not HediffWithComps hediffWithComps)
         {
             return false;
         }

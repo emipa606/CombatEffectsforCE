@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!--=============== Bases ==============-->
+  <ThingDef Name="MoteFilthyBase" Abstract="True">
+    <thingClass>CombatEffectsCE.MoteFilthy</thingClass>
+    <label>Mote</label>
+    <category>Mote</category>
+    <graphicData>
+      <graphicClass>Graphic_Mote</graphicClass>
+      <shaderType>Mote</shaderType>
+    </graphicData>
+    <altitudeLayer>MoteLow</altitudeLayer>
+    <!-- <altitudeLayer>Filth</altitudeLayer> -->
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <isSaveable>false</isSaveable>
+    <rotatable>false</rotatable>
+  </ThingDef>
+  <!--=============== Effects ==============-->
+  <ThingDef ParentName="MoteFilthyBase">
+    <defName>Mote_BloodSplashWithTrace</defName>
+    <graphicData>
+      <!-- <texPath>Things/Pawn/Wounds/WoundFleshA</texPath> -->
+      <color>(131, 34, 34, 180)</color>
+      <texPath>Things/Mote/VomitBit</texPath>
+      <!-- <color>(159, 168, 139, 180)</color>         -->
+    </graphicData>
+    <altitudeLayer>MoteLow</altitudeLayer>
+    <mote Class="CombatEffectsCE.MotePropertiesFilthy">
+      <filthTrace>Filth_Blood_Colorable</filthTrace>
+      <!-- This is the Filth reference -->
+      <fadeInTime>0.04</fadeInTime>
+      <solidTime>1</solidTime>
+      <fadeOutTime>2</fadeOutTime>
+      <growthRate>0.0</growthRate>
+      <collide>true</collide>
+      <speedPerTime>-22</speedPerTime>
+      <rotateTowardsMoveDirection>true</rotateTowardsMoveDirection>
+    </mote>
+  </ThingDef>
+  <ThingDef ParentName="MoteFilthyBase">
+    <defName>Mote_OilSplashWithTrace</defName>
+    <graphicData>
+      <!-- <texPath>Things/Pawn/Wounds/WoundFleshA</texPath> -->
+      <color>(10, 10, 10, 180)</color>
+      <texPath>Things/Mote/VomitBit</texPath>
+      <!-- <color>(159, 168, 139, 180)</color>         -->
+    </graphicData>
+    <!-- <altitudeLayer>MoteOverhead</altitudeLayer> -->
+    <altitudeLayer>MoteLow</altitudeLayer>
+    <mote Class="CombatEffectsCE.MotePropertiesFilthy">
+      <filthTrace>Filth_Blood_Colorable</filthTrace>
+      <!-- This is the Filth reference -->
+      <fadeInTime>0.04</fadeInTime>
+      <solidTime>1</solidTime>
+      <fadeOutTime>2</fadeOutTime>
+      <growthRate>0.0</growthRate>
+      <collide>true</collide>
+      <speedPerTime>-22</speedPerTime>
+      <rotateTowardsMoveDirection>true</rotateTowardsMoveDirection>
+    </mote>
+  </ThingDef>
+</Defs>

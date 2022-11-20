@@ -234,7 +234,7 @@ public static class ImpactHelper
                     CombatEffectsCEMod.LogMessage("Pawn hit, bullet went through.");
                     var exponent = 1f;
                     var maxEnergy = 0.8f;
-                    if (ConsideredAPType(bulletProps.ammoType))
+                    if (bulletProps != null && ConsideredAPType(bulletProps.ammoType))
                     {
                         exponent = 0.7f;
                         maxEnergy = 0.9f;
@@ -272,8 +272,7 @@ public static class ImpactHelper
                 CombatEffectsCEMod.LogMessage(
                     $"Params to pen function : {basePenChance} {highPenChance} {penChanceThreshold}");
 
-                if (bulletProps.ammoType == AmmoType.AP || bulletProps.ammoType == AmmoType.API ||
-                    bulletProps.ammoType == AmmoType.SLUG || bulletProps.ammoType == AmmoType.SABOT)
+                if (bulletProps?.ammoType is AmmoType.AP or AmmoType.API or AmmoType.SLUG or AmmoType.SABOT)
                 {
                     basePenChance += penChanceAPModifierTable[indices[0], indices[1], 0];
                     highPenChance += penChanceAPModifierTable[indices[0], indices[1], 1];
@@ -307,7 +306,7 @@ public static class ImpactHelper
 
                     var exponent = 1f;
                     var maxEnergy = 0.8f;
-                    if (ConsideredAPType(bulletProps.ammoType))
+                    if (bulletProps != null && ConsideredAPType(bulletProps.ammoType))
                     {
                         exponent = 0.5f;
                         maxEnergy = 0.9f;
