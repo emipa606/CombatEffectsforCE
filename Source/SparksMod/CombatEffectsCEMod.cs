@@ -18,7 +18,7 @@ internal class CombatEffectsCEMod : Mod
     /// <summary>
     ///     The private settings
     /// </summary>
-    private CombatEffectsCESettings settings;
+    public readonly CombatEffectsCESettings Settings;
 
     /// <summary>
     ///     Cunstructor
@@ -27,24 +27,10 @@ internal class CombatEffectsCEMod : Mod
     public CombatEffectsCEMod(ModContentPack content) : base(content)
     {
         currentVersion =
-            VersionFromManifest.GetVersionFromModMetaData(
-                ModLister.GetActiveModWithIdentifier("Mlie.CombatEffectsforCE"));
+            VersionFromManifest.GetVersionFromModMetaData(content.ModMetaData);
         instance = this;
         Settings = GetSettings<CombatEffectsCESettings>();
     }
-
-    /// <summary>
-    ///     The instance-settings for the mod
-    /// </summary>
-    internal CombatEffectsCESettings Settings
-    {
-        get
-        {
-            return settings;
-        }
-        set => settings = value;
-    }
-
 
     public static void LogMessage(string message, bool forced = false)
     {
@@ -78,8 +64,7 @@ internal class CombatEffectsCEMod : Mod
             "SettingExtraBloodDescription".Translate());
         listing_Standard.CheckboxLabeled("SparksModVerboseLogging".Translate(), ref Settings.VerboseLogging,
             "SparksModVerboseLoggingDescription".Translate());
-        //listing_Standard.CheckboxLabeled("SettingPenetrationMechanics".Translate(),
-        //    ref Settings.PenetrationMechanics, "SettingPenetrationMechanicsDescription".Translate());
+
         if (currentVersion != null)
         {
             listing_Standard.Gap();
@@ -88,19 +73,6 @@ internal class CombatEffectsCEMod : Mod
             GUI.contentColor = Color.white;
         }
 
-        //var labelRect = listing_Standard.Label("CEAmmoSelector_Label".Translate());
-        //var frameRect = rect;
-        //frameRect.x = 0;
-        //frameRect.y = labelRect.y + 20;
-        //frameRect.height = rect.height - (labelRect.y - frameRect.y);
-
-        //var contentRect = frameRect;
-        //contentRect.x = 0;
-        //contentRect.y = labelRect.y + 20;
-        //contentRect.width -= 20;
-
-        //contentRect.height = (noneCategoryMembers.Count * 24f) + 40f;
-        //Widgets.BeginScrollView(frameRect, ref optionsScrollPosition, contentRect);
         listing_Standard.End();
         Settings.Write();
     }

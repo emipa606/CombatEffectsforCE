@@ -6,7 +6,7 @@
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     <DebugType>None</DebugType>
     <LangVersion>latest</LangVersion>
-    <FileVersion>1.4.1</FileVersion>
+    <FileVersion>1.4.2</FileVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Krafs.Rimworld.Ref">
@@ -17,8 +17,8 @@
     <PackageReference Include="Mlie_Rimworld_VersionFromManifest" Version="*" />
     <Reference Include="CombatExtended">
       <HintPath>..\..\..\..\..\..\workshop\content\294100\2890901044\Assemblies\CombatExtended.dll</HintPath>
-		<CopyLocal>False</CopyLocal>
-		<Private>false</Private>
+      <CopyLocal>False</CopyLocal>
+      <Private>false</Private>
     </Reference>
   </ItemGroup>
 </Project>

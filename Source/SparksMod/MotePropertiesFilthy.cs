@@ -1,9 +1,8 @@
 using Verse;
 
-namespace CombatEffectsCE
+namespace CombatEffectsCE;
+
+public class MotePropertiesFilthy : MoteProperties
 {
-    public class MotePropertiesFilthy : MoteProperties
-    {
-        public ThingDef filthTrace;
-    }
+    public ThingDef filthTrace;
 }

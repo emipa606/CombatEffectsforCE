@@ -239,7 +239,7 @@ internal static class CE_Utility
             .bodyShape;
         if (bodyShape == CE_BodyShapeDefOf.Invalid)
         {
-            Log.ErrorOnce("CE returning BodyType Undefined for pawn " + pawn, 35000198 + pawn.GetHashCode());
+            Log.ErrorOnce($"CE returning BodyType Undefined for pawn {pawn}", 35000198 + pawn.GetHashCode());
         }
 
         result.x *= bodyShape.widthLaying / bodyShape.width;

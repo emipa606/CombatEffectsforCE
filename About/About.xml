@@ -28,12 +28,13 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=1756442393
 
 - Added option to disable the extra blood-spatter
 - Fixed the issues with the added mortar-ammo in later CE-versions
+- The update for the 5.2-version of CE done by Taranchuk
 
 [img]https://i.imgur.com/pufA0kM.png[/img]
 
 [table]
 	[tr]
-		[td][url=https://invite.gg/Mlie][img]https://i.imgur.com/zdzzBrc.png[/img][/url][/td]
+		[td][url=https://dsc.gg/mlie][img]https://i.imgur.com/zdzzBrc.png[/img][/url][/td]
 		[td][url=https://github.com/emipa606/CombatEffectsforCE][img]https://i.imgur.com/kTkpTOE.png[/img][/url][/td]
     [/tr]
     [tr]
@@ -102,5 +103,6 @@ Important : I had to patch and decorate a lot of ammo defs for this. For now onl
 [*] If you have the solution for a problem, please post it to the GitHub repository.
 [/list]
 
-</description>
+
+[url=https://steamcommunity.com/sharedfiles/filedetails/changelog/2172612733]Last updated 2023-07-24[/url]</description>
 </ModMetaData>

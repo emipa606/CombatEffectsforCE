@@ -7,6 +7,7 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=1756442393
 
 - Added option to disable the extra blood-spatter
 - Fixed the issues with the added mortar-ammo in later CE-versions
+- The update for the 5.2-version of CE done by Taranchuk
 
 ![Image](https://i.imgur.com/pufA0kM.png)
 
@@ -77,3 +78,4 @@ Important : I had to patch and decorate a lot of ammo defs for this. For now onl
 
 
 
+https://steamcommunity.com/sharedfiles/filedetails/changelog/2172612733]Last updated 2023-07-24

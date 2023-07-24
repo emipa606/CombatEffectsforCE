@@ -36,7 +36,7 @@ internal class MyGraphicCluster : Graphic_Cluster
         subGraphics = new Graphic[cachedTextures.Count];
         for (var i = 0; i < cachedTextures.Count; i++)
         {
-            var cachedReqPath = cachedReq.path + "/" + cachedTextures[i].name;
+            var cachedReqPath = $"{cachedReq.path}/{cachedTextures[i].name}";
             subGraphics[i] = GraphicDatabase.Get(typeof(Graphic_Single), cachedReqPath, cachedReq.shader, drawSize,
                 prevColor, ColorTwo, null, cachedReq.shaderParameters);
         }
@@ -68,7 +68,7 @@ internal class MyGraphicCluster : Graphic_Cluster
 
         if (list.NullOrEmpty())
         {
-            Log.Error("Collection cannot init: No textures found at path " + graphicRequest.path);
+            Log.Error($"Collection cannot init: No textures found at path {graphicRequest.path}");
             subGraphics = new[]
             {
                 BaseContent.BadGraphic
@@ -79,7 +79,7 @@ internal class MyGraphicCluster : Graphic_Cluster
         subGraphics = new Graphic[list.Count];
         for (var i = 0; i < list.Count; i++)
         {
-            var graphicRequestPath = graphicRequest.path + "/" + list[i].name;
+            var graphicRequestPath = $"{graphicRequest.path}/{list[i].name}";
             subGraphics[i] = GraphicDatabase.Get(typeof(Graphic_Single), graphicRequestPath, graphicRequest.shader,
                 drawSize, color, colorTwo, null, graphicRequest.shaderParameters);
         }

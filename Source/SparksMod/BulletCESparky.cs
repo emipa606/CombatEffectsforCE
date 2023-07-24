@@ -12,22 +12,17 @@ namespace CombatExtended;
 
 public class BulletCESparky : ProjectileCE
 {
-    private const float StunChance = 0.1f;
-    private static readonly List<IntVec3> checkedCells = new List<IntVec3>();
     private readonly bool debugDrawIntercepts = false;
-    private readonly int lastShotLine = -1;
     private float _gravityFactor = -1f;
     private Sustainer ambientSustainer;
     private float energyRemaining = 100f;
     private float heightInt;
-    public float id = Rand.Value;
     private Vector3 impactPosition;
     private int intTicksToImpact = -1;
     private Vector3 lastExactPos = new Vector3(-1000f, 0f, 0f);
     private int lastHeightTick = -1;
 
     private Thing lastThingHit;
-    private IntVec3 originInt = new IntVec3(0, -1000, 0);
     public ProjectilePropertiesWithEffectsCE projectileProperties;
 
     private float startingTicksToImpactInt = -1f;
@@ -249,7 +244,7 @@ public class BulletCESparky : ProjectileCE
 
         var isDeflectedByPawn = false;
 
-        if ((logMisses || !logMisses && hitThing != null && (hitThing is Pawn || hitThing is Building_Turret)) &&
+        if ((logMisses || !logMisses && hitThing != null && hitThing is Pawn or Building_Turret) &&
             launcher is not AmmoThing)
         {
             LogImpact(hitThing, out logEntry_DamageResult);
@@ -349,7 +344,6 @@ public class BulletCESparky : ProjectileCE
                 projectileProperties?.effectBloodHit != null)
             {
                 CombatEffectsCEMod.LogMessage($"{def.LabelCap} Hit someone!");
-                var m = $"It's meat color : {hitThing.def.race.meatColor.ToString()}";
                 CombatEffectsCEMod.LogMessage($"{def.LabelCap} Show extra blood");
                 if (hitThing.def.race.IsMechanoid)
                 {
@@ -367,11 +361,8 @@ public class BulletCESparky : ProjectileCE
                         bloodColor = new Color(0.5f, 0.1f, 0.1f);
                     }
 
-                    //bloodColor.a = 1f;
-                    m = $"Requested color : {bloodColor.ToString()}";
+                    var m = $"Requested color : {bloodColor.ToString()}";
                     CombatEffectsCEMod.LogMessage(m);
-                    //((SparksMod.MyGraphicData)this.projectileProperties.effectBloodHit.children[0].moteDef.graphicData).changeGraphicColor(bloodColor);
-                    //((SparksMod.MyGraphicData)((SparksMod.MotePropertiesFilthy)this.projectileProperties.effectBloodHit.children[0].moteDef.mote).filthTrace.graphicData).changeGraphicColor(bloodColor);
 
                     projectileProperties.effectBloodHit.children[0].moteDef.graphicData.color = bloodColor;
                     ((MyGraphicData)((MotePropertiesFilthy)projectileProperties.effectBloodHit.children[0].moteDef
@@ -430,9 +421,7 @@ public class BulletCESparky : ProjectileCE
         // DECREASE ENERGY
         if (impactType == ImpactType.PEN && energyRemaining > 0f)
         {
-            if (projectileProperties.ammoType == AmmoType.AP
-                || projectileProperties.ammoType == AmmoType.API
-                || projectileProperties.ammoType == AmmoType.SABOT)
+            if (projectileProperties.ammoType is AmmoType.AP or AmmoType.API or AmmoType.SABOT)
             {
                 shotSpeed *= 0.9f;
                 ImpactSpeedChanged();
@@ -498,8 +487,6 @@ public class BulletCESparky : ProjectileCE
 
     private bool CheckCellForCollision(IntVec3 cell)
     {
-        var collisionCheckSize = 5;
-        var SuppressionRadius = 3;
         var roofChecked = false;
 
         var mainThingList = new List<Thing>(Map.thingGrid.ThingsListAtFast(cell))
@@ -737,8 +724,8 @@ public class BulletCESparky : ProjectileCE
         var point = ShotLine.GetPoint(num);
         if (!point.InBounds(Map))
         {
-            Log.Error(string.Concat("TryCollideWith out of bounds point from ShotLine: obj ", thing.ThingID,
-                ", proj ", ThingID, ", dist ", num, ", point ", point));
+            Log.Error(
+                $"TryCollideWith out of bounds point from ShotLine: obj {thing.ThingID}, proj {ThingID}, dist {num}, point {point}");
         }
 
         ExactPosition = point;
@@ -890,13 +877,9 @@ public class BulletCESparky : ProjectileCE
             ticks = fTicks;
         }
 
-        if (ticks != StartingTicksToImpact)
-        {
-            return Vector2.Lerp(origin, Destination, ticks / StartingTicksToImpact);
-        }
-
-        // I had to treat this special case because of 0/0 = NaN problems
-        return Vector2.Lerp(origin, Destination, 1f);
+        return ticks != StartingTicksToImpact
+            ? Vector2.Lerp(origin, Destination, ticks / StartingTicksToImpact)
+            : Vector2.Lerp(origin, Destination, 1f);
     }
 
     private float GetFlightTime()

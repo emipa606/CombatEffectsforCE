@@ -162,13 +162,9 @@ public static class ImpactHelper
             return CaliberCategory.LARGE;
         }
 
-        if (antimat.Contains(knownCaliber))
-        {
-            return CaliberCategory.ANTIMAT;
-        }
-
-        // if unknown
-        return CaliberCategory.SMALL;
+        return antimat.Contains(knownCaliber)
+            ? CaliberCategory.ANTIMAT
+            : CaliberCategory.SMALL;
     }
 
     private static float ComputeEnergyRemainingAfterPen(float exponent, float scale, float limit, float score)
@@ -189,8 +185,7 @@ public static class ImpactHelper
 
     private static bool ConsideredAPType(AmmoType ammoType)
     {
-        return ammoType == AmmoType.AP || ammoType == AmmoType.API || ammoType == AmmoType.SLUG ||
-               ammoType == AmmoType.SABOT;
+        return ammoType is AmmoType.AP or AmmoType.API or AmmoType.SLUG or AmmoType.SABOT;
     }
 
     /*

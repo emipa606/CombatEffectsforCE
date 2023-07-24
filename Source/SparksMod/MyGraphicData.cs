@@ -7,38 +7,7 @@ namespace CombatEffectsCE;
 
 public class MyGraphicData : GraphicData
 {
-    [NoTranslate]
-    //public string texPath;
-
-    //public Type graphicClass;
-
-    //public ShaderTypeDef shaderType;
-
-    //public List<ShaderParameter> shaderParameters;
-
-    //public Color color = Color.white;
-
-    //public Color colorTwo = Color.white;
-
-    //public Vector2 drawSize = Vector2.one;
-
-    //public float onGroundRandomRotateAngle;
-
-    //public bool drawRotated = true;
-
-    //public bool allowFlip = true;
-
-    //public float flipExtraRotation;
-
-    //public ShadowData shadowData;
-
-    //public DamageGraphicData damageData;
-
-    //public LinkDrawerType linkType;
-
-    //public LinkFlags linkFlags;
-    [Unsaved]
-    private Graphic cachedGraphic;
+    [NoTranslate] [Unsaved] private Graphic cachedGraphic;
 
     private void ChangeClusterGraphicsColor(Color newColor)
     {
@@ -62,11 +31,6 @@ public class MyGraphicData : GraphicData
         color = newColor;
 
         CombatEffectsCEMod.LogMessage("Correct function called");
-        //if (this.cachedGraphic != null)
-        //{
-        //    string m = this.cachedGraphic.ToString();
-        //    Log.Message(m);
-        //}            
         var cutout = shaderType;
         if (cutout == null)
         {
@@ -88,44 +52,6 @@ public class MyGraphicData : GraphicData
             cachedGraphic = GraphicUtility.WrapLinked(cachedGraphic, linkType);
         }
     }
-
-    //public bool Linked
-    //{
-    //    get
-    //    {
-    //        return this.linkType != LinkDrawerType.None;
-    //    }
-    //}
-
-    //public Graphic Graphic
-    //{
-    //    get
-    //    {
-    //        if (this.cachedGraphic == null)
-    //        {
-    //            this.Init();
-    //        }
-    //        return this.cachedGraphic;
-    //    }
-    //}
-
-    //public void CopyFrom(GraphicData other)
-    //{
-    //    this.texPath = other.texPath;
-    //    this.graphicClass = other.graphicClass;
-    //    this.shaderType = other.shaderType;
-    //    this.color = other.color;
-    //    this.colorTwo = other.colorTwo;
-    //    this.drawSize = other.drawSize;
-    //    this.onGroundRandomRotateAngle = other.onGroundRandomRotateAngle;
-    //    this.drawRotated = other.drawRotated;
-    //    this.allowFlip = other.allowFlip;
-    //    this.flipExtraRotation = other.flipExtraRotation;
-    //    this.shadowData = other.shadowData;
-    //    this.damageData = other.damageData;
-    //    this.linkType = other.linkType;
-    //    this.linkFlags = other.linkFlags;
-    //}
 
     private void Init()
     {
@@ -154,23 +80,6 @@ public class MyGraphicData : GraphicData
             cachedGraphic = GraphicUtility.WrapLinked(cachedGraphic, linkType);
         }
     }
-
-    //public void ResolveReferencesSpecial()
-    //{
-    //    if (this.damageData != null)
-    //    {
-    //        this.damageData.ResolveReferencesSpecial();
-    //    }
-    //}
-
-    //public Graphic GraphicColoredFor(Thing t)
-    //{
-    //    if (t.DrawColor.IndistinguishableFrom(this.Graphic.Color) && t.DrawColorTwo.IndistinguishableFrom(this.Graphic.ColorTwo))
-    //    {
-    //        return this.Graphic;
-    //    }
-    //    return this.Graphic.GetColoredVersion(this.Graphic.Shader, t.DrawColor, t.DrawColorTwo);
-    //}
 
     internal IEnumerable<string> ConfigErrors(ThingDef thingDef)
     {
