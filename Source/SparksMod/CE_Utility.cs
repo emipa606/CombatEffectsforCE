@@ -16,23 +16,6 @@ internal static class CE_Utility
 
     public static List<ThingDef> allWeaponDefs = new List<ThingDef>();
 
-    private static Texture2D Blit(this Texture2D texture, Rect blitRect, int[] rtSize)
-    {
-        var filterMode = texture.filterMode;
-        texture.filterMode = FilterMode.Point;
-        var temporary = RenderTexture.GetTemporary(rtSize[0], rtSize[1], 0, RenderTextureFormat.Default,
-            RenderTextureReadWrite.Default, 1);
-        temporary.filterMode = FilterMode.Point;
-        RenderTexture.active = temporary;
-        Graphics.Blit(texture, temporary);
-        var texture2D = new Texture2D((int)blitRect.width, (int)blitRect.height);
-        texture2D.ReadPixels(blitRect, 0, 0);
-        texture2D.Apply();
-        RenderTexture.active = null;
-        texture.filterMode = filterMode;
-        return texture2D;
-    }
-
     public static Color[] GetColorSafe(this Texture2D texture, out int width, out int height)
     {
         width = texture.width;

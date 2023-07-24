@@ -30,6 +30,7 @@ internal class CombatEffectsCEMod : Mod
             VersionFromManifest.GetVersionFromModMetaData(
                 ModLister.GetActiveModWithIdentifier("Mlie.CombatEffectsforCE"));
         instance = this;
+        Settings = GetSettings<CombatEffectsCESettings>();
     }
 
     /// <summary>
@@ -39,11 +40,6 @@ internal class CombatEffectsCEMod : Mod
     {
         get
         {
-            if (settings == null)
-            {
-                settings = GetSettings<CombatEffectsCESettings>();
-            }
-
             return settings;
         }
         set => settings = value;
