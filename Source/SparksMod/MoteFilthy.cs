@@ -7,7 +7,7 @@ namespace CombatEffectsCE;
 
 public class MoteFilthy : MoteThrown
 {
-    protected override void TimeInterval(float deltaTime)
+    public override void TimeInterval(float deltaTime)
     {
         base.TimeInterval(deltaTime);
         //float alpha = this.Alpha;

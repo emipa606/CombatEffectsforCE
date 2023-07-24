@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Patch>
   <Operation Class="PatchOperationReplace">
-    <xpath>/Defs/ThingDef[@Name="BaseBullet"]/thingClass</xpath>
+    <xpath>/Defs/ThingDef[@Name="BaseBulletCE"]/thingClass</xpath>
     <value>
       <thingClass>CombatExtended.BulletCESparky</thingClass>
     </value>
