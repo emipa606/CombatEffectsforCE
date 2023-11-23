@@ -345,8 +345,10 @@ public class BulletCESparky : ProjectileCE
             {
                 CombatEffectsCEMod.LogMessage($"{def.LabelCap} Hit someone!");
                 CombatEffectsCEMod.LogMessage($"{def.LabelCap} Show extra blood");
-                if (hitThing.def.race.IsMechanoid)
+                if (hitThing.def.race.IsMechanoid ||
+                    Main.VehiclesLoaded && hitThing.def.thingClass.Name.EndsWith("VehiclePawn"))
                 {
+                    CombatEffectsCEMod.LogMessage($"{hitThing.def} is not a humanoid, using oil color");
                     var bloodColor = new Color(0.04f, 0.04f, 0.04f, 0.7f);
                     projectileProperties.effectBloodHit.children[0].moteDef.graphicData.color = bloodColor;
                     ((MyGraphicData)((MotePropertiesFilthy)projectileProperties.effectBloodHit.children[0].moteDef
@@ -355,6 +357,11 @@ public class BulletCESparky : ProjectileCE
                 else
                 {
                     var bloodColor = hitThing.def.race.meatColor;
+                    if (bloodColor == Color.white && hitThing.def.race.BloodDef?.graphicData?.color != null)
+                    {
+                        bloodColor = hitThing.def.race.BloodDef.graphicData.color;
+                    }
+
                     if (bloodColor == Color.white)
                     {
                         CombatEffectsCEMod.LogMessage($"{def.LabelCap} Blood color changing!");
@@ -577,8 +584,10 @@ public class BulletCESparky : ProjectileCE
         {
             var list = Map.listerThings.ThingsInGroup(ThingRequestGroup.ProjectileInterceptor);
 
-            foreach (var thing in list)
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var index = 0; index < list.Count; index++)
             {
+                var thing = list[index];
                 if (!(bool)methodInfo.Invoke(this,
                         new object[] { thing, thing.TryGetComp<CompProjectileInterceptor>(), false }))
                 {
@@ -804,8 +813,10 @@ public class BulletCESparky : ProjectileCE
             select t).ToList();
         if (list.Count > 0)
         {
-            foreach (var thing in list)
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var index = 0; index < list.Count; index++)
             {
+                var thing = list[index];
                 if (TryCollideWith(thing))
                 {
                     return;

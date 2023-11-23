@@ -1,5 +1,8 @@
 # Changelog for CombatEffectsforCE
 
+1.4.3 - Will now use mechanoid-logic for the blood-splatter for vehicles. Will also use race custom bloodsplatter color if defined
+
+
 1.4.2 - Fixed for the latest CE-version, thanks to Taranchuk!
 
 
