@@ -306,19 +306,9 @@ public class BulletCESparky : ProjectileCE
     private void ImpactSpeedChanged()
     {
         origin = new Vector2(impactPosition.x, impactPosition.z);
-        shotHeight = Height;
-        ticksToImpact = 0;
-        intTicksToImpact = -1;
-        startingTicksToImpactInt = -1;
-        lastHeightTick = -1;
-        destinationInt = new Vector3(0f, 0f, -1f);
-        Vec2Position();
-        // Note : For some reason if I use IntTicksToImpact after an impact the new intTicks
-        ticksToImpact = IntTicksToImpact;
-        CombatEffectsCEMod.LogMessage(
-            $"{def.LabelCap} ImpactSpeedChanged, origin: {origin}, shotHeight: {shotHeight}, ticksToImpact: {ticksToImpact}");
-
+        shotHeight = impactPosition.y;
+        Launch(launcher, origin, shotAngle, shotRotation, shotHeight, shotSpeed, equipment);
     }
 
 
-}
+}}
