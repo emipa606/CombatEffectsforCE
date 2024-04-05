@@ -47,15 +47,6 @@ public class BulletCESparky : ProjectileCE
 
     public override void Impact(Thing hitThing)
     {
-        // Okay this is not entirely good
-        // I removed the timer since it's not really needed.
-        // But when ticksToImpact is zero it can still hit the target a second time!
-        if (hitThing == lastThingHit && ticksToImpact > 0 && impactPosition.y > 0)
-        {
-            //After penetration the bullet can hit the same target multiple times. This tries to prevent that.
-            return;
-        }
-
         lastThingHit = hitThing;
 
         var map = Map;
