@@ -47,6 +47,7 @@ public class BulletCESparky : ProjectileCE
 
     public override void Impact(Thing hitThing)
     {
+        impactPosition = ExactPosition;
         lastThingHit = hitThing;
 
         var map = Map;
