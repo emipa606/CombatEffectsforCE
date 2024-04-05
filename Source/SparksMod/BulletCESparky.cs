@@ -10,8 +10,24 @@ using Verse.Sound;
 
 namespace CombatExtended;
 
+[StaticConstructorOnStartup]
 public class BulletCESparky : ProjectileCE
 {
+    static BulletCESparky()
+    {
+        BlockerRegistry.RegisterBeforeCollideWithCallback(beforeCollideWithCallback);
+    }
+    private static bool beforeCollideWithCallback(ProjectileCE projectile, Thing hitThing)
+    {
+        if (projectile is BulletCESparky sparky)
+        {
+            if (sparky.lastThingHit == hitThing)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
     private float energyRemaining = 100f;
     private Vector3 impactPosition;
 
