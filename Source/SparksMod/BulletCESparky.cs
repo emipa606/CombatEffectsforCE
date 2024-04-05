@@ -36,11 +36,7 @@ public class BulletCESparky : ProjectileCE
 
     private void LogImpact(Thing hitThing, out LogEntry_DamageResult logEntry)
     {
-        var targetThing = (Thing)intendedTarget.Pawn;
-        if (targetThing == null)
-        {
-            targetThing = intendedTarget.Thing;
-        }
+        var targetThing = (Thing)intendedTarget.Pawn ?? intendedTarget.Thing;
 
         logEntry = new BattleLogEntry_RangedImpact(launcher, hitThing, targetThing, equipmentDef, def, null);
         if (launcher is not AmmoThing)
