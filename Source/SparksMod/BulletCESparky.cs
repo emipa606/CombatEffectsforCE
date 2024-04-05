@@ -123,7 +123,7 @@ public class BulletCESparky : ProjectileCE
                 effecter?.Trigger(this, hitThing);
             }
 
-            var damageAmount = def.projectile.GetDamageAmount(1f);
+            var damageAmount = DamageAmount;
             var damageDefExtensionCE = def.projectile.damageDef.GetModExtension<DamageDefExtensionCE>() ??
                                        new DamageDefExtensionCE();
             var projectilePropertiesCE = (ProjectilePropertiesCE)def.projectile;
