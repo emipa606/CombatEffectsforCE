@@ -33,7 +33,7 @@ public class BulletCESparky : ProjectileCE
     private Vector3 impactPosition;
 
     private Thing lastThingHit;
-    public ProjectilePropertiesWithEffectsCE projectileProperties;
+    public ProjectilePropertiesWithEffectsCE projectileProperties => def.projectile as ProjectilePropertiesWithEffectsCE;
 
     private void LogImpact(Thing hitThing, out LogEntry_DamageResult logEntry)
     {
@@ -308,7 +308,9 @@ public class BulletCESparky : ProjectileCE
     {
         origin = new Vector2(impactPosition.x, impactPosition.z);
         shotHeight = impactPosition.y;
-        Launch(launcher, origin, shotAngle, shotRotation, shotHeight, shotSpeed, equipment);
+        ExactPosition = impactPosition;
+        Destination = origin + Vector2.up.RotatedBy(shotRotation) * global::CombatExtended.CE_Utility.MaxProjectileRange(shotHeight, shotSpeed, shotAngle, projectileProperties.Gravity);
+        lerpPosition = false;
     }
 
 
