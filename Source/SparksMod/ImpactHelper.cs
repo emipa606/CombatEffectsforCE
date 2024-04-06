@@ -9,20 +9,18 @@ namespace CombatEffectsCE;
 
 public static class ImpactHelper
 {
-    private static readonly List<Caliber> small = new List<Caliber>
-        { Caliber.CAL_9x19, Caliber.CAL_45C, Caliber.CAL_45ACP };
+    private static readonly List<Caliber> small = [Caliber.CAL_9x19, Caliber.CAL_45C, Caliber.CAL_45ACP];
 
-    private static readonly List<Caliber> medium = new List<Caliber>
-        { Caliber.CAL_762x39, Caliber.CAL_556x45, Caliber.CAL_545x39, Caliber.CAL_44M };
+    private static readonly List<Caliber> medium =
+        [Caliber.CAL_762x39, Caliber.CAL_556x45, Caliber.CAL_545x39, Caliber.CAL_44M];
 
-    private static readonly List<Caliber> large = new List<Caliber>
-        { Caliber.CAL_12G, Caliber.CAL_762x54, Caliber.CAL_762x51 };
+    private static readonly List<Caliber> large = [Caliber.CAL_12G, Caliber.CAL_762x54, Caliber.CAL_762x51];
 
-    private static readonly List<Caliber> antimat = new List<Caliber> { Caliber.CAL_145x114, Caliber.CAL_50 };
+    private static readonly List<Caliber> antimat = [Caliber.CAL_145x114, Caliber.CAL_50];
 
 
-    private static readonly List<Material> materialOrder = new List<Material>
-    {
+    private static readonly List<Material> materialOrder =
+    [
         Material.IGNORABLE,
         Material.WOOD,
         Material.SOFTSTONE,
@@ -33,10 +31,10 @@ public static class ImpactHelper
         Material.URANIUM,
         Material.MEAT,
         Material.UNDEFINED
-    };
+    ];
 
-    private static readonly List<CaliberCategory> caliberCategoryOrder = new List<CaliberCategory>
-        { CaliberCategory.SMALL, CaliberCategory.MEDIUM, CaliberCategory.LARGE, CaliberCategory.ANTIMAT };
+    private static readonly List<CaliberCategory> caliberCategoryOrder =
+        [CaliberCategory.SMALL, CaliberCategory.MEDIUM, CaliberCategory.LARGE, CaliberCategory.ANTIMAT];
 
     // This encompasses all threeparamteres for every caliber material matchup. [Material, CaliberCatergory, (BaseChance, HighestChance, HP threshold)]
     // For example the [2,2,:] cell tells us that : If the hitThing is at 100% health We have a 20% to pen, and at 60%HP we have 80% to pen.
@@ -310,7 +308,7 @@ public static class ImpactHelper
                     energy *= ComputeEnergyRemainingAfterPen(exponent, maxEnergy, penChance, score);
                     return ImpactType.PEN;
                 }
-                // TODO : The penetration should use the angle of impact. Also here should come the Ricoche computation}
+                // TODO : The penetration should use the angle of impact. Also, here should come the Ricoche computation
 
                 CombatEffectsCEMod.LogMessage("Stuff stopped the bullet");
                 energy = 0f;

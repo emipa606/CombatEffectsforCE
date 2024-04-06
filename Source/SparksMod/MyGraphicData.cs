@@ -27,7 +27,7 @@ public class MyGraphicData : GraphicData
             return;
         }
 
-        // If this is a Graphic_Cluster we mustnt change it's this.color or else we get an error
+        // If this is a Graphic_Cluster we mustn't change it's this.color or else we get an error
         color = newColor;
 
         CombatEffectsCEMod.LogMessage("Correct function called");

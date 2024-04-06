@@ -14,7 +14,7 @@ internal static class CE_Utility
 
     public const float gravityConst = 9.8f;
 
-    public static List<ThingDef> allWeaponDefs = new List<ThingDef>();
+    public static List<ThingDef> allWeaponDefs = [];
 
     public static Color[] GetColorSafe(this Texture2D texture, out int width, out int height)
     {
@@ -60,11 +60,10 @@ internal static class CE_Utility
 
     public static Texture2D BlitCrop(this Texture2D texture, Rect blitRect)
     {
-        return texture.Blit(blitRect, new[]
-        {
+        return texture.Blit(blitRect, [
             texture.width,
             texture.height
-        });
+        ]);
     }
 
     public static Vector2 GenRandInCircle(float radius)
@@ -136,7 +135,7 @@ internal static class CE_Utility
     public static bool HasAmmo(this ThingWithComps gun)
     {
         var compAmmoUser = gun.TryGetComp<CompAmmoUser>();
-        return compAmmoUser == null || !compAmmoUser.UseAmmo || compAmmoUser.CurMagCount > 0 ||
+        return compAmmoUser is not { UseAmmo: true } || compAmmoUser.CurMagCount > 0 ||
                compAmmoUser.HasAmmo;
     }
 

@@ -10,6 +10,7 @@
     <li>1.2</li>
     <li>1.3</li>
     <li>1.4</li>
+    <li>1.5</li>
   </supportedVersions>
   <modDependencies>
     <li>
@@ -105,4 +106,5 @@ Important : I had to patch and decorate a lot of ammo defs for this. For now onl
 [/list]
 
 [url=https://steamcommunity.com/sharedfiles/filedetails/changelog/2172612733][img]https://img.shields.io/github/v/release/emipa606/CombatEffectsforCE?label=latest%20version&amp;style=plastic&amp;color=9f1111&amp;labelColor=black[/img][/url]</description>
+  <modVersion IgnoreIfNoMatchingField="True">1.5.0</modVersion>
 </ModMetaData>

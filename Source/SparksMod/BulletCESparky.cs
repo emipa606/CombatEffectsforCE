@@ -1,39 +1,37 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using CombatEffectsCE;
+using CombatExtended.Compatibility;
 using RimWorld;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
-using CombatExtended.Compatibility;
 
 namespace CombatExtended;
 
 [StaticConstructorOnStartup]
 public class BulletCESparky : ProjectileCE
 {
-    static BulletCESparky()
-    {
-        BlockerRegistry.RegisterBeforeCollideWithCallback(beforeCollideWithCallback);
-    }
-    private static bool beforeCollideWithCallback(ProjectileCE projectile, Thing hitThing)
-    {
-        if (projectile is BulletCESparky sparky)
-        {
-            if (sparky.lastThingHit == hitThing)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
     private float energyRemaining = 100f;
     private Vector3 impactPosition;
 
     private Thing lastThingHit;
-    public ProjectilePropertiesWithEffectsCE projectileProperties => def.projectile as ProjectilePropertiesWithEffectsCE;
+
+    static BulletCESparky()
+    {
+        BlockerRegistry.RegisterBeforeCollideWithCallback(beforeCollideWithCallback);
+    }
+
+    public ProjectilePropertiesWithEffectsCE projectileProperties =>
+        def.projectile as ProjectilePropertiesWithEffectsCE;
+
+    private static bool beforeCollideWithCallback(ProjectileCE projectile, Thing hitThing)
+    {
+        if (projectile is not BulletCESparky sparky)
+        {
+            return false;
+        }
+
+        return sparky.lastThingHit == hitThing;
+    }
 
     private void LogImpact(Thing hitThing, out LogEntry_DamageResult logEntry)
     {
@@ -56,7 +54,7 @@ public class BulletCESparky : ProjectileCE
 
         var isDeflectedByPawn = false;
 
-        if ((logMisses || !logMisses && hitThing != null && hitThing is Pawn or Building_Turret) &&
+        if ((logMisses || !logMisses && hitThing is Pawn or Building_Turret) &&
             launcher is not AmmoThing)
         {
             LogImpact(hitThing, out logEntry_DamageResult);
@@ -124,14 +122,14 @@ public class BulletCESparky : ProjectileCE
                 effecter?.Trigger(this, hitThing);
             }
 
-            var damageAmount = DamageAmount;
+            var amount = DamageAmount;
             var damageDefExtensionCE = def.projectile.damageDef.GetModExtension<DamageDefExtensionCE>() ??
                                        new DamageDefExtensionCE();
             var projectilePropertiesCE = (ProjectilePropertiesCE)def.projectile;
             var armorPenetration = def.projectile.damageDef.armorCategory != DamageArmorCategoryDefOf.Sharp
                 ? projectilePropertiesCE.armorPenetrationBlunt
                 : projectilePropertiesCE.armorPenetrationSharp;
-            var dinfo = new DamageInfo(def.projectile.damageDef, damageAmount, armorPenetration,
+            var dinfo = new DamageInfo(def.projectile.damageDef, amount, armorPenetration,
                 ExactRotation.eulerAngles.y, launcher, null, def);
             var depth = damageDefExtensionCE.harmOnlyOutsideLayers
                 ? BodyPartDepth.Outside
@@ -309,9 +307,9 @@ public class BulletCESparky : ProjectileCE
         origin = new Vector2(impactPosition.x, impactPosition.z);
         shotHeight = impactPosition.y;
         ExactPosition = impactPosition;
-        Destination = origin + Vector2.up.RotatedBy(shotRotation) * global::CombatExtended.CE_Utility.MaxProjectileRange(shotHeight, shotSpeed, shotAngle, projectileProperties.Gravity);
+        Destination = origin + (Vector2.up.RotatedBy(shotRotation) *
+                                CE_Utility.MaxProjectileRange(shotHeight, shotSpeed, shotAngle,
+                                    projectileProperties.Gravity));
         lerpPosition = false;
     }
-
-
-}}
+}

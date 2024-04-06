@@ -69,10 +69,10 @@ internal class MyGraphicCluster : Graphic_Cluster
         if (list.NullOrEmpty())
         {
             Log.Error($"Collection cannot init: No textures found at path {graphicRequest.path}");
-            subGraphics = new[]
-            {
+            subGraphics =
+            [
                 BaseContent.BadGraphic
-            };
+            ];
             return;
         }
 
