@@ -1,4 +1,4 @@
-# CombatEffectsforCE
+# [Combat Effects for Combat Extended (Continued)](https://steamcommunity.com/sharedfiles/filedetails/?id=2172612733)
 
 ![Image](https://i.imgur.com/buuPQel.png)
 
@@ -8,12 +8,11 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=1756442393
 - Added option to disable the extra blood-spatter
 - Fixed the issues with the added mortar-ammo in later CE-versions
 - The update for the 5.2-version of CE done by Taranchuk
+- The update for the 5.8-version of CE done by perkinslr
 
 ![Image](https://i.imgur.com/pufA0kM.png)
-
 	
 ![Image](https://i.imgur.com/Z4GOv8H.png)
-
 
 This mod adds sparks to bullets impacting hard surfaces and blood effects for hitting pawns.
 Now also allows bullets to penetrate materials.
@@ -24,7 +23,7 @@ IMPORTANT : Load it AFTER the Combat Extended mod.
 - Bugfixes (Hanging projectiles, NaN projectile position, inconsistent projectile position for logic and graphics)
 
 Plans: 
-[strike]-Add a few more effects (like dust/smoke puffs to impacts) - DONE [/strike]
+~~-Add a few more effects (like dust/smoke puffs to impacts) - DONE ~~
 - If possible add bullet ricochet and material penetration. :
 - - - Penetration initial implementation done. Details below.
 - Vanilla version.
@@ -63,20 +62,18 @@ Important : I had to patch and decorate a lot of ammo defs for this. For now onl
 ![Image](https://media.giphy.com/media/Tcgk85vK91UEzLoc1R/giphy.gif)
 
 
-
 ![Image](https://i.imgur.com/PwoNOj4.png)
 
 
 
 -  See if the the error persists if you just have this mod and its requirements active.
 -  If not, try adding your other mods until it happens again.
--  Post your error-log using https://steamcommunity.com/workshop/filedetails/?id=818773962]HugsLib or the standalone https://steamcommunity.com/sharedfiles/filedetails/?id=2873415404]Uploader and command Ctrl+F12
+-  Post your error-log using [HugsLib](https://steamcommunity.com/workshop/filedetails/?id=818773962) or the standalone [Uploader](https://steamcommunity.com/sharedfiles/filedetails/?id=2873415404) and command Ctrl+F12
 -  For best support, please use the Discord-channel for error-reporting.
 -  Do not report errors by making a discussion-thread, I get no notification of that.
 -  If you have the solution for a problem, please post it to the GitHub repository.
--  Use https://github.com/RimSort/RimSort/releases/latest]RimSort to sort your mods
+-  Use [RimSort](https://github.com/RimSort/RimSort/releases/latest) to sort your mods
 
 
 
-https://steamcommunity.com/sharedfiles/filedetails/changelog/2172612733]![Image](https://img.shields.io/github/v/release/emipa606/CombatEffectsforCE?label=latest%20version&style=plastic&color=9f1111&labelColor=black)
-
+[![Image](https://img.shields.io/github/v/release/emipa606/CombatEffectsforCE?label=latest%20version&style=plastic&color=9f1111&labelColor=black)](https://steamcommunity.com/sharedfiles/filedetails/changelog/2172612733)

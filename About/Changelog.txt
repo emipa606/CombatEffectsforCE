@@ -1,5 +1,8 @@
 # Changelog for CombatEffectsforCE
 
+1.5.0 - Updated for 1.5
+
+
 1.4.5 - Wrong tags
 
 
