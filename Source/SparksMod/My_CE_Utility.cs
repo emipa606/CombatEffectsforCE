@@ -8,7 +8,7 @@ using Random = System.Random;
 
 namespace CombatExtended;
 
-internal static class CE_Utility
+internal static class My_CE_Utility
 {
     private const int blitMaxDimensions = 64;
 

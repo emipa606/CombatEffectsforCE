@@ -254,8 +254,8 @@ public static class ImpactHelper
 
                 var indices = new[]
                 {
-                    materialOrder.FindIndex(mat => mat == thingMat), caliberCategoryOrder.FindIndex(
-                        cat => cat == calCat)
+                    materialOrder.FindIndex(mat => mat == thingMat),
+                    caliberCategoryOrder.FindIndex(cat => cat == calCat)
                 };
 
                 var basePenChance = penChanceParamTable[indices[0], indices[1], 0];

@@ -1,5 +1,8 @@
 # Changelog for CombatEffectsforCE
 
+1.5.2 - Updated for the latest release of CE
+
+
 1.5.1 - Reupload with the correct version-tag
 
 

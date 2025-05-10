@@ -241,13 +241,13 @@ public class BulletCESparky : ProjectileCE
             if (projectileProperties.ammoType is AmmoType.AP or AmmoType.API or AmmoType.SABOT)
             {
                 shotSpeed *= 0.9f;
-                ImpactSpeedChanged();
             }
             else
             {
                 shotSpeed *= 0.8f;
-                ImpactSpeedChanged();
             }
+
+            ImpactSpeedChanged();
         }
 
         // EITHER STOP or GROUND HIT
@@ -308,8 +308,7 @@ public class BulletCESparky : ProjectileCE
         shotHeight = impactPosition.y;
         ExactPosition = impactPosition;
         Destination = origin + (Vector2.up.RotatedBy(shotRotation) *
-                                CE_Utility.MaxProjectileRange(shotHeight, shotSpeed, shotAngle,
+                                My_CE_Utility.MaxProjectileRange(shotHeight, shotSpeed, shotAngle,
                                     projectileProperties.Gravity));
-        lerpPosition = false;
     }
 }
