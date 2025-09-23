@@ -66,7 +66,7 @@ public static class ImpactHelper
         { { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 } }
     };
 
-    private static Material DetermineMaterial(Thing hitThing)
+    private static Material determineMaterial(Thing hitThing)
     {
         string label = null;
         if (!hitThing.def.MadeFromStuff)
@@ -137,7 +137,7 @@ public static class ImpactHelper
         return returnValue;
     }
 
-    private static CaliberCategory DeterminetCaliberCategory(Caliber? caliber)
+    private static CaliberCategory determineCaliberCategory(Caliber? caliber)
     {
         if (caliber == null)
         {
@@ -165,7 +165,7 @@ public static class ImpactHelper
             : CaliberCategory.SMALL;
     }
 
-    private static float ComputeEnergyRemainingAfterPen(float exponent, float scale, float limit, float score)
+    private static float computeEnergyRemainingAfterPen(float exponent, float scale, float limit, float score)
     {
         /*
          * This is a power function. 'Exponents' smaller than one raise the function above the linear values that make sense (0,...,2]
@@ -181,7 +181,7 @@ public static class ImpactHelper
         return (float)Math.Pow((limit - score) / limit, exponent) * scale;
     }
 
-    private static bool ConsideredAPType(AmmoType ammoType)
+    private static bool consideredAPType(AmmoType ammoType)
     {
         return ammoType is AmmoType.AP or AmmoType.API or AmmoType.SLUG or AmmoType.SABOT;
     }
@@ -205,7 +205,7 @@ public static class ImpactHelper
         }
 
         var bulletProps = bullet.projectileProperties;
-        var calCat = DeterminetCaliberCategory(bulletProps?.caliber);
+        var calCat = determineCaliberCategory(bulletProps?.caliber);
         switch (hitThing)
         {
             case Pawn when deflectedByPawn:
@@ -227,13 +227,13 @@ public static class ImpactHelper
                     CombatEffectsCEMod.LogMessage("Pawn hit, bullet went through.");
                     var exponent = 1f;
                     var maxEnergy = 0.8f;
-                    if (bulletProps != null && ConsideredAPType(bulletProps.ammoType))
+                    if (bulletProps != null && consideredAPType(bulletProps.ammoType))
                     {
                         exponent = 0.7f;
                         maxEnergy = 0.9f;
                     }
 
-                    energy *= ComputeEnergyRemainingAfterPen(exponent, maxEnergy, penChance, score);
+                    energy *= computeEnergyRemainingAfterPen(exponent, maxEnergy, penChance, score);
                     return ImpactType.PEN;
                 }
 
@@ -244,7 +244,7 @@ public static class ImpactHelper
                 var percentage_HP = (float)hitThing.HitPoints / hitThing.MaxHitPoints;
                 CombatEffectsCEMod.LogMessage($"Hit thing HP percentage : {percentage_HP}");
 
-                var thingMat = DetermineMaterial(hitThing);
+                var thingMat = determineMaterial(hitThing);
                 if (thingMat == Material.UNDEFINED)
                 {
                     CombatEffectsCEMod.LogMessage($"{hitThing.Label} if made of UNDEFINED material.");
@@ -299,13 +299,13 @@ public static class ImpactHelper
 
                     var exponent = 1f;
                     var maxEnergy = 0.8f;
-                    if (bulletProps != null && ConsideredAPType(bulletProps.ammoType))
+                    if (bulletProps != null && consideredAPType(bulletProps.ammoType))
                     {
                         exponent = 0.5f;
                         maxEnergy = 0.9f;
                     }
 
-                    energy *= ComputeEnergyRemainingAfterPen(exponent, maxEnergy, penChance, score);
+                    energy *= computeEnergyRemainingAfterPen(exponent, maxEnergy, penChance, score);
                     return ImpactType.PEN;
                 }
                 // TODO : The penetration should use the angle of impact. Also, here should come the Ricoche computation

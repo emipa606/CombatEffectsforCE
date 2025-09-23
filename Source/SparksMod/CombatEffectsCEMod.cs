@@ -10,7 +10,7 @@ internal class CombatEffectsCEMod : Mod
     /// <summary>
     ///     The instance of the settings to be read by the mod
     /// </summary>
-    public static CombatEffectsCEMod instance;
+    public static CombatEffectsCEMod Instance;
 
     private static string currentVersion;
 
@@ -28,13 +28,13 @@ internal class CombatEffectsCEMod : Mod
     {
         currentVersion =
             VersionFromManifest.GetVersionFromModMetaData(content.ModMetaData);
-        instance = this;
+        Instance = this;
         Settings = GetSettings<CombatEffectsCESettings>();
     }
 
     public static void LogMessage(string message, bool forced = false)
     {
-        if (!forced && !instance.Settings.VerboseLogging)
+        if (!forced && !Instance.Settings.VerboseLogging)
         {
             return;
         }
@@ -58,22 +58,22 @@ internal class CombatEffectsCEMod : Mod
     /// <param name="rect"></param>
     public override void DoSettingsWindowContents(Rect rect)
     {
-        var listing_Standard = new Listing_Standard();
-        listing_Standard.Begin(rect);
-        listing_Standard.CheckboxLabeled("SettingExtraBlood".Translate(), ref Settings.ExtraBlood,
+        var listingStandard = new Listing_Standard();
+        listingStandard.Begin(rect);
+        listingStandard.CheckboxLabeled("SettingExtraBlood".Translate(), ref Settings.ExtraBlood,
             "SettingExtraBloodDescription".Translate());
-        listing_Standard.CheckboxLabeled("SparksModVerboseLogging".Translate(), ref Settings.VerboseLogging,
+        listingStandard.CheckboxLabeled("SparksModVerboseLogging".Translate(), ref Settings.VerboseLogging,
             "SparksModVerboseLoggingDescription".Translate());
 
         if (currentVersion != null)
         {
-            listing_Standard.Gap();
+            listingStandard.Gap();
             GUI.contentColor = Color.gray;
-            listing_Standard.Label("CurrentModVersion_Label".Translate(currentVersion));
+            listingStandard.Label("CurrentModVersion_Label".Translate(currentVersion));
             GUI.contentColor = Color.white;
         }
 
-        listing_Standard.End();
+        listingStandard.End();
         Settings.Write();
     }
 }

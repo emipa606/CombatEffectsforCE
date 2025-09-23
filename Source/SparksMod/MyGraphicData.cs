@@ -31,11 +31,7 @@ public class MyGraphicData : GraphicData
         color = newColor;
 
         CombatEffectsCEMod.LogMessage("Correct function called");
-        var cutout = shaderType;
-        if (cutout == null)
-        {
-            cutout = ShaderTypeDefOf.Cutout;
-        }
+        var cutout = shaderType ?? ShaderTypeDefOf.Cutout;
 
         var shader = cutout.Shader;
 
@@ -61,11 +57,7 @@ public class MyGraphicData : GraphicData
             return;
         }
 
-        var cutout = shaderType;
-        if (cutout == null)
-        {
-            cutout = ShaderTypeDefOf.Cutout;
-        }
+        var cutout = shaderType ?? ShaderTypeDefOf.Cutout;
 
         var shader = cutout.Shader;
         cachedGraphic = GraphicDatabase.Get(graphicClass, texPath, shader, drawSize, color, colorTwo, this,

@@ -11,7 +11,7 @@ public class Main
 
     static Main()
     {
-        VehiclesLoaded = ModLister.GetActiveModWithIdentifier("SmashPhil.VehicleFramework") != null;
+        VehiclesLoaded = ModLister.GetActiveModWithIdentifier("SmashPhil.VehicleFramework", true) != null;
 
         foreach (var thingDef in DefDatabase<ThingDef>.AllDefsListForReading.Where(def =>
                      def.thingClass == typeof(BulletCESparky) &&

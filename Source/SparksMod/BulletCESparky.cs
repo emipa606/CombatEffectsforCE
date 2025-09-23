@@ -33,7 +33,7 @@ public class BulletCESparky : ProjectileCE
         return sparky.lastThingHit == hitThing;
     }
 
-    private void LogImpact(Thing hitThing, out LogEntry_DamageResult logEntry)
+    private void logImpact(Thing hitThing, out LogEntry_DamageResult logEntry)
     {
         var targetThing = (Thing)intendedTarget.Pawn ?? intendedTarget.Thing;
 
@@ -57,7 +57,7 @@ public class BulletCESparky : ProjectileCE
         if ((logMisses || !logMisses && hitThing is Pawn or Building_Turret) &&
             launcher is not AmmoThing)
         {
-            LogImpact(hitThing, out logEntry_DamageResult);
+            logImpact(hitThing, out logEntry_DamageResult);
         }
 
         var skipSound = false;
@@ -150,7 +150,7 @@ public class BulletCESparky : ProjectileCE
 
             var dmgRes = hitThing.TakeDamage(dinfo);
             CombatEffectsCEMod.LogMessage($"{def.LabelCap} is it deflected? : {dmgRes.deflected}");
-            if (CombatEffectsCEMod.instance.Settings.ExtraBlood && !dmgRes.deflected && hitThing is Pawn &&
+            if (CombatEffectsCEMod.Instance.Settings.ExtraBlood && !dmgRes.deflected && hitThing is Pawn &&
                 projectileProperties?.effectBloodHit != null)
             {
                 CombatEffectsCEMod.LogMessage($"{def.LabelCap} Hit someone!");
@@ -207,7 +207,8 @@ public class BulletCESparky : ProjectileCE
                     }
 
                     var dinfo2 = new DamageInfo(secondaryDamage?.def, secondaryDamage.amount,
-                        projectilePropertiesCE.GetArmorPenetration(1f), ExactRotation.eulerAngles.y, launcher, null,
+                        projectilePropertiesCE.GetArmorPenetration(launcher), ExactRotation.eulerAngles.y, launcher,
+                        null,
                         def);
                     hitThing.TakeDamage(dinfo2).AssociateWithLog(logEntry_DamageResult);
                 }
@@ -247,16 +248,16 @@ public class BulletCESparky : ProjectileCE
                 shotSpeed *= 0.8f;
             }
 
-            ImpactSpeedChanged();
+            impactSpeedChanged();
         }
 
         // EITHER STOP or GROUND HIT
         landed = impactType == ImpactType.STOP || ticksToImpact <= 0 || energyRemaining <= 0f;
 
-        ImpactBase(landed);
+        impactBase(landed);
     }
 
-    private void ImpactBase(bool destroyBullet = true)
+    private void impactBase(bool destroyBullet = true)
     {
         var compExplosiveCE = this.TryGetComp<CompExplosiveCE>();
         if (compExplosiveCE != null && ExactPosition.ToIntVec3().IsValid)
@@ -302,7 +303,7 @@ public class BulletCESparky : ProjectileCE
         }
     }
 
-    private void ImpactSpeedChanged()
+    private void impactSpeedChanged()
     {
         origin = new Vector2(impactPosition.x, impactPosition.z);
         shotHeight = impactPosition.y;
