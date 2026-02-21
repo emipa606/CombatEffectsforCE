@@ -1,6 +1,6 @@
 # [Combat Effects for Combat Extended (Continued)](https://steamcommunity.com/sharedfiles/filedetails/?id=2172612733)
 
-![Image](https://i.imgur.com/buuPQel.png)
+![Image](https://img.litet.net/logos/Info.png)
 
 Update of CalaveraLocas mod
 https://steamcommunity.com/sharedfiles/filedetails/?id=1756442393
@@ -10,9 +10,9 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=1756442393
 - The update for the 5.2-version of CE done by Taranchuk
 - The update for the 5.8-version of CE done by perkinslr
 
-![Image](https://i.imgur.com/pufA0kM.png)
+![Image](https://img.litet.net/logos/Notice.png)
 	
-![Image](https://i.imgur.com/Z4GOv8H.png)
+![Image](https://img.litet.net/logos/OriginalDescription.png)
 
 This mod adds sparks to bullets impacting hard surfaces and blood effects for hitting pawns.
 Now also allows bullets to penetrate materials.
@@ -62,7 +62,7 @@ Important : I had to patch and decorate a lot of ammo defs for this. For now onl
 ![Image](https://media.giphy.com/media/Tcgk85vK91UEzLoc1R/giphy.gif)
 
 
-![Image](https://i.imgur.com/PwoNOj4.png)
+![Image](https://img.litet.net/logos/ReportingIssues.png)
 
 
 
@@ -76,4 +76,4 @@ Important : I had to patch and decorate a lot of ammo defs for this. For now onl
 
  
 
-[![Image](https://img.shields.io/github/v/release/emipa606/CombatEffectsforCE?label=latest%20version&style=plastic&color=9f1111&labelColor=black)](https://steamcommunity.com/sharedfiles/filedetails/changelog/2172612733) | tags:  blood effects,  debris effects
+[![Image](https://img.shields.io/github/v/release/emipa606/CombatEffectsforCE?label=latest%20version&style=plastic&color=9f1111&labelColor=black)](https://steamcommunity.com/sharedfiles/filedetails/changelog/2172612733) | tags: debris effects, blood effects

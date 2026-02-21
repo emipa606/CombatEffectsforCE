@@ -1,5 +1,9 @@
 # Changelog for CombatEffectsforCE
 
+1.6.1 - Uses defnames instead of labels, to support translated strings. 
+Added support for modded stone-blocks, metals and woods.
+
+
 1.6.0 - Mod updated for 1.6 and passed autotests
 
 

@@ -68,7 +68,7 @@ public static class ImpactHelper
 
     private static Material determineMaterial(Thing hitThing)
     {
-        string label = null;
+        ThingDef madeOf = null;
         if (!hitThing.def.MadeFromStuff)
         {
             CombatEffectsCEMod.LogMessage($"Hit a {hitThing.Label}");
@@ -82,55 +82,79 @@ public static class ImpactHelper
                 hitThing.def.costList.SortByDescending(listItem => listItem.count);
                 var mostlyMadeOf = hitThing.def.costList.First().thingDef;
                 CombatEffectsCEMod.LogMessage($"Hit {hitThing.Label}, mostly made of {mostlyMadeOf.label}");
-                label = mostlyMadeOf.label;
+                madeOf = mostlyMadeOf;
             }
 
-            if (string.IsNullOrEmpty(label) && hitThing.SmeltProducts(1f).Any())
+            if (madeOf == null && hitThing.SmeltProducts(1f).Any())
             {
                 var mostlyMadeOf = hitThing.SmeltProducts(1f).First();
                 CombatEffectsCEMod.LogMessage($"Hit {hitThing.Label}, will smelt to {mostlyMadeOf.def.label}");
-                label = mostlyMadeOf.def.label;
+                madeOf = mostlyMadeOf.def;
             }
 
-            if (string.IsNullOrEmpty(label))
+            if (madeOf == null)
             {
                 return Material.UNDEFINED;
             }
         }
         else
         {
-            label = hitThing.Stuff?.label;
+            madeOf = hitThing.Stuff;
         }
 
         CombatEffectsCEMod.LogMessage($"Hit stuff label : {hitThing.Stuff?.label}");
         var returnValue = Material.UNDEFINED;
-        switch (label)
+        switch (madeOf.defName)
         {
-            case "wood":
+            case "WoodLog":
                 return Material.WOOD;
-            case "gold":
-            case "silver":
+            case "Gold":
+            case "Silver":
                 return Material.SOFTMETAL;
-            case "steel":
+            case "Steel":
                 return Material.STEEL;
-            case "plasteel":
+            case "Plasteel":
                 return Material.PLASTEEL;
-            case "uranium":
+            case "Uranium":
                 return Material.URANIUM;
-            case "jade":
-            case "jade blocks":
-            case "granite":
-            case "granite blocks":
-            case "slate":
-            case "slate blocks":
+            case "Jade":
+            case "Granite":
+            case "BlocksGranite":
+            case "Slate":
+            case "SlateBlocks":
                 return Material.HARDSTONE;
-            case "sandstone":
-            case "sandstone blocks":
-            case "limestone":
-            case "limestone blocks":
-            case "marble":
-            case "marble blocks":
+            case "Sandstone":
+            case "BlocksSandstone":
+            case "Limestone":
+            case "BlocksLimestone":
+            case "Marble":
+            case "BlocksMarble":
                 return Material.SOFTSTONE;
+        }
+
+        if (madeOf.FirstThingCategory == ThingCategoryDefOf.StoneBlocks ||
+            madeOf.stuffProps.categories?.Any(def => def == StuffCategoryDefOf.Stony) == true)
+        {
+            CombatEffectsCEMod.LogMessage($"Hit {hitThing.Label}, categorized as stone blocks");
+            return Material.SOFTSTONE;
+        }
+
+        if (madeOf.stuffProps.categories?.Any(def => def == StuffCategoryDefOf.Metallic) == true)
+        {
+            if (madeOf.smallVolume)
+            {
+                CombatEffectsCEMod.LogMessage($"Hit {hitThing.Label}, categorized as softmetal");
+                return Material.SOFTMETAL;
+            }
+
+            CombatEffectsCEMod.LogMessage($"Hit {hitThing.Label}, categorized as steel");
+            return Material.STEEL;
+        }
+
+        if (madeOf.stuffProps.categories?.Any(def => def == StuffCategoryDefOf.Woody) == true)
+        {
+            CombatEffectsCEMod.LogMessage($"Hit {hitThing.Label}, categorized as wood");
+            return Material.WOOD;
         }
 
         CombatEffectsCEMod.LogMessage($"Hit {hitThing.Stuff?.label}, unrecognised stuff");
@@ -245,9 +269,9 @@ public static class ImpactHelper
                 CombatEffectsCEMod.LogMessage($"Hit thing HP percentage : {percentage_HP}");
 
                 var thingMat = determineMaterial(hitThing);
+                CombatEffectsCEMod.LogMessage($"{hitThing.Label} if made of {thingMat} material.");
                 if (thingMat == Material.UNDEFINED)
                 {
-                    CombatEffectsCEMod.LogMessage($"{hitThing.Label} if made of UNDEFINED material.");
                     energy = 0f;
                     return ImpactType.STOP;
                 }
