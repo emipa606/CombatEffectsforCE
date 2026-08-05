@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+	<TabulaRasa.UpdateDef Abstract="true" Name="CombatEffectsforCE_UpdateInfoBase">
+		<linkUrl>https://steamcommunity.com/sharedfiles/filedetails/?id=2172612733</linkUrl>
+		<banner>UpdateInfo/CombatEffectsforCE</banner>
+	</TabulaRasa.UpdateDef>
+	<TabulaRasa.UpdateDef ParentName="CombatEffectsforCE_UpdateInfoBase" MayRequire="neronix17.toolbox">
+		<defName>CombatEffectsforCE_1_6_1</defName>
+		<date>2026/8/5</date>
+		<content>This mod will not be further updated, please use Combat Effects for Combat Extended (Continued) by Lord Felix instead.</content>
+	</TabulaRasa.UpdateDef>
+</Defs>
+

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ModMetaData>
-  <name>Combat Effects for Combat Extended (Continued)</name>
+  <name>[Deprecated] Combat Effects for Combat Extended (Continued)</name>
   <packageId>Mlie.CombatEffectsforCE</packageId>
   <author>CalaveraLoca</author>
   <url>https://github.com/emipa606/CombatEffectsforCE</url>
@@ -33,7 +33,9 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=1756442393
 - The update for the 5.2-version of CE done by Taranchuk
 - The update for the 5.8-version of CE done by perkinslr
 
-[img]https://img.litet.net/logos/Notice.png[/img]
+[img]https://img.litet.net/logos/Abandoned.png[/img]
+
+This mod has been replaced by [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3771920758]Combat Effects for Combat Extended (Continued)[/url] by Lord Felix
 
 [table]
 	[tr]
@@ -107,6 +109,6 @@ Important : I had to patch and decorate a lot of ammo defs for this. For now onl
 [*] Use [url=https://github.com/RimSort/RimSort/releases/latest]RimSort[/url] to sort your mods
 [/list] 
 
-[url=https://steamcommunity.com/sharedfiles/filedetails/changelog/2172612733][img]https://img.shields.io/github/v/release/emipa606/CombatEffectsforCE?label=latest%20version&amp;style=plastic&amp;color=9f1111&amp;labelColor=black[/img][/url] | tags: debris effects, blood effects</description>
-  <modVersion IgnoreIfNoMatchingField="True">1.6.1</modVersion>
+[url=https://steamcommunity.com/sharedfiles/filedetails/changelog/2172612733][img]https://img.shields.io/github/v/release/emipa606/CombatEffectsforCE?label=latest%20version&amp;style=plastic&amp;color=9f1111&amp;labelColor=black[/img][/url]</description>
+  <modVersion IgnoreIfNoMatchingField="True">1.6.2</modVersion>
 </ModMetaData>

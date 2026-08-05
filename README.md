@@ -1,4 +1,4 @@
-# [Combat Effects for Combat Extended (Continued)](https://steamcommunity.com/sharedfiles/filedetails/?id=2172612733)
+# [[Deprecated] Combat Effects for Combat Extended (Continued)](https://steamcommunity.com/sharedfiles/filedetails/?id=2172612733)
 
 ![Image](https://img.litet.net/logos/Info.png)
 
@@ -10,7 +10,9 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=1756442393
 - The update for the 5.2-version of CE done by Taranchuk
 - The update for the 5.8-version of CE done by perkinslr
 
-![Image](https://img.litet.net/logos/Notice.png)
+![Image](https://img.litet.net/logos/Abandoned.png)
+
+This mod has been replaced by [Combat Effects for Combat Extended (Continued)](https://steamcommunity.com/sharedfiles/filedetails/?id=3771920758) by Lord Felix
 	
 ![Image](https://img.litet.net/logos/OriginalDescription.png)
 
@@ -76,4 +78,4 @@ Important : I had to patch and decorate a lot of ammo defs for this. For now onl
 
  
 
-[![Image](https://img.shields.io/github/v/release/emipa606/CombatEffectsforCE?label=latest%20version&style=plastic&color=9f1111&labelColor=black)](https://steamcommunity.com/sharedfiles/filedetails/changelog/2172612733) | tags: debris effects, blood effects
+[![Image](https://img.shields.io/github/v/release/emipa606/CombatEffectsforCE?label=latest%20version&style=plastic&color=9f1111&labelColor=black)](https://steamcommunity.com/sharedfiles/filedetails/changelog/2172612733)

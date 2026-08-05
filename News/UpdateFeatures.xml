@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+	<HugsLib.UpdateFeatureDef Abstract="true" Name="CombatEffectsforCE_UpdateFeatureBase">
+		<modNameReadable>CombatEffectsforCE</modNameReadable>
+		<linkUrl>https://steamcommunity.com/sharedfiles/filedetails/?id=2172612733</linkUrl>
+	</HugsLib.UpdateFeatureDef>
+	<HugsLib.UpdateFeatureDef ParentName="CombatEffectsforCE_UpdateFeatureBase">
+		<defName>CombatEffectsforCE_1_6_1</defName>
+		<assemblyVersion>1.6.1</assemblyVersion>
+		<content>This mod will not be further updated, please use Combat Effects for Combat Extended (Continued) by Lord Felix instead.</content>
+	</HugsLib.UpdateFeatureDef>
+</Defs>
+
